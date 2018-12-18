@@ -21,13 +21,11 @@ VERBOSE <- function( v, ... )
 #' data(hyper) # contains objects hyperSig and hyperGsets
 #' hyperE <- hyperEnrichment(drawn=hyperSig,categories=getGeneSet(hyperGsets),ntotal=10000)
 #' head(hyperE)
-#' 
+#'
 hyper_enrichment <- function (
     drawn,          # one or more sets of 'drawn' items (e.g., genes). Basically, a list of signatures.
     categories,     # gene sets (list of gene sets)
-    ntotal=length(unique(unlist(categories))),
-    # background population, i.e., the total no. of items from which
-    # ..items are supposed to have been drawn
+    ntotal=length(unique(unlist(categories))), # background population, i.e., the total no. of items from which
     min.drawsize=4, # min no. of drawn items that must be among categories' items
     mht=TRUE,       # correct for MHT across multiple 'draws'
     verbose=FALSE
@@ -36,35 +34,36 @@ hyper_enrichment <- function (
     ## checks on inputs
     ##
     if (!is(categories, "list") ) {
-        stop( "categories expected to be a list of gene sets" )
+        stop("Error: Categories expected to be a list of gene sets\n")
     }
-    
+
     gene.names<-unique(unlist(categories))
     if ( is.list(drawn) && is.null(names(drawn)) ) {
-        stop( "drawn must have non-null names when a list" )
+        stop("Error: drawn must have non-null names when a list\n")
     }
-    
-    # Removing this because we're frequently using small background populations
-    #if ( ntotal<length(unique(unlist(categories)))) {
-    #    warning( "background population's size less than unique categories' items: ", ntotal,"<",length(gene.names))
-    #}
-    
+
+    if ( ntotal<length(unique(unlist(categories)))) {
+        VERBOSE(verbose,
+                "Warning: Background population's size less than unique categories' items:",
+                ntotal,
+                "<",
+                length(gene.names),
+                "\n")
+    }
     ##
     ## end checks
-    
-    cnames <-
-        c("pval","fdr","set annotated","set size","category annotated","total annotated","category","hits")
-    
+
+    cnames <- c("pval","fdr","set annotated","set size","category annotated","total annotated","category","hits")
+
     ## handling of multiple 'draws'
     ##
-    if ( is.list(drawn) ) 
+    if ( is.list(drawn) )
     {
         ncat <- length(categories)
         enrich <- matrix(NA,ncat*length(drawn),length(cnames)+1)
-        
-        VERBOSE(verbose,"Testing",length(drawn),"drawsets on",ncat,"categories and",
-                length(gene.names),"total items ..\n")
-        
+
+        VERBOSE(verbose,"Testing",length(drawn),"drawsets on",ncat,"categories and", length(gene.names),"total items ..\n")
+
         percent <- 0.1
         base <- 0
         ntst <- 0
@@ -80,7 +79,7 @@ hyper_enrichment <- function (
             ntst <- ntst+1
             rng <- (base+1):(base+ncat)
             if (any(!is.na(enrich[rng,]))) stop( "something wrong")
-            
+
             enrich[rng,] <- cbind(set=rep(names(drawn)[i],ncat),tmp)
             base <- base+ncat
             if (F && i>=round(length(drawn)*percent)) {
@@ -91,13 +90,13 @@ hyper_enrichment <- function (
         }
         VERBOSE(verbose,"done.\n")
         colnames(enrich) <- c("set",cnames)
-        
+
         enrich <- enrich[1:base,,drop=F]
         if (mht) {
             VERBOSE(verbose,"MHT-correction across multiple draws ..")
             enrich[,"fdr"] <- p.adjust(as.numeric(enrich[,"pval"]), method="fdr")
             VERBOSE(verbose,"done.\n")
-        }    
+        }
         VERBOSE(verbose,
                 "Categories tested: ",rjust(length(categories),4),"\n",
                 "Candidate sets:    ",rjust(length(drawn),4),"\n",
@@ -112,20 +111,20 @@ hyper_enrichment <- function (
     }
     ## handling of a single draw
     ##
-    m.idx<-drawn[drawn %in% gene.names] 
-    
+    m.idx<-drawn[drawn %in% gene.names]
+
     if ( length(m.idx)<min.drawsize ) {
         VERBOSE(verbose,"insufficient annotated genes in the drawn set: ",
                 paste(gene.names[m.idx],collapse=","),"\n")
         return(NULL)
     }
-    VERBOSE(verbose,length(m.idx),"/",length(drawn), " annotated genes found",sep="")
-    
+    VERBOSE(verbose, "Found ", length(m.idx) ,"/", length(drawn), " annotated genes", sep="")
+
     nhits <-sapply(categories, function(x,y) length(intersect(x,y)), m.idx)
     ndrawn <- length(drawn) # length(m.idx)
     ncats <- sapply(categories,length)
     nleft <- ntotal-ncats
-    
+
     ## compute P[X>=nhits]
     enrich <- suppressWarnings(phyper(q=nhits-1,m=ncats,n=nleft,k=ndrawn,lower.tail=F))
     enrich <- cbind(pval=enrich,
@@ -135,16 +134,16 @@ hyper_enrichment <- function (
                     ncats=ncats,
                     ntot=ntotal,
                     category=names(categories))
-    
+
     enrich <- cbind(enrich,
                     hits=sapply(categories,function(x,y)paste(intersect(x,y),collapse=','),m.idx))
     ord <- order(as.numeric(enrich[,"pval"]))
     enrich <- enrich[ord,,drop=F]
     enrich[,"pval"] <- signif(as.numeric(enrich[,"pval"]),2)
     enrich[,"fdr"] <- signif(as.numeric(enrich[,"fdr"]),2)
-    
+
     colnames(enrich) <- cnames
     rownames(enrich) <- names(categories)[ord]
-    
+
     return(enrich)
 }
