@@ -121,7 +121,7 @@ hyp.to.table <- function(df, file.path, sep="\t", cols=c(1:ncol(df))) {
 
 #' @import plotly
 #' @export
-plot.top <- function(df, top=10, val="fdr") {
+hyp.plot <- function(df, top=10, val="fdr") {
 
     # Top pathways
     df <- head(df, top)
