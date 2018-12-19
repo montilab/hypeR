@@ -64,7 +64,7 @@ hypeR <- function(symbols,
     return(df)
 }
 
-#' @importFrom DT
+#' @import DT
 #' @export
 hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
     if (simple) {
@@ -100,7 +100,7 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
     }
 }
 
-#' @importFrom openxlsx
+#' @import openxlsx
 #' @export
 hyp.to.excel <- function(df, file.path, cols=c(1:ncol(df))) {
     write.xlsx(x = df[,cols,drop=F],
