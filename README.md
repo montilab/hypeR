@@ -1,13 +1,14 @@
 # hypeR
 Geneset enrichment analysis based on hyper-geometric test
 
+### Install
 ```R
 library(devtools)
 
-# Will change to montilab soon
 devtools::install_github("montilab/hypeR")
 ```
 
+### Usage
 ```R
 library(hypeR)
 
