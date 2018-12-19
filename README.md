@@ -5,14 +5,16 @@ Geneset enrichment analysis based on hyper-geometric test
 library(devtools)
 
 # Will change to montilab soon
-devtools::install_github("anfederico/hypeR")
+devtools::install_github("montilab/hypeR")
 ```
 
 ```R
 library(hypeR)
 
-# A small vector of genes involed in the Hippo Pathway
-symbols <- c("LATS1", "LATS2", "YAP1", "TEAD4", "TEAD2", "WWTR1")
+# Genes involed in tricarboxylic acid cycle
+symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+             "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+             "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Gensets available
 db.info()
@@ -20,7 +22,15 @@ db.info()
 # Grab all curated genesets
 C2 <- db.get("C2")
 
-df <- hypeR(symbols, C2, bg=1504, fdr=0.05)
+# Perform hyper enrichment
+hyp <- hypeR(symbols, C2, bg=2522, fdr=0.05)
 
-head(df)
+# Interactive table
+hyp.show(hyp)
+
+# Save enriched pathways
+hyp.to.excel(hyp, file.path="pathways.xlsx")
+
+# Visualize
+hyp.plot(hyp, top=13)
 ```
