@@ -46,7 +46,7 @@ hypeR <- function(symbols,
     df <- data.frame(matrix(ncol=8, nrow=0))
     colnames(df) <- c("pval","fdr","set.annotated","set.size","category.annotated","total.annotated","category","hits")
 
-    hyp <- hyper_enrichment(drawn=symbols,
+    hyp <- hyper.enrichment(drawn=symbols,
                             categories=gsets,
                             ntotal=bg,
                             min.drawsize=min.drawsize,

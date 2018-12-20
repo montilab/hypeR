@@ -19,10 +19,10 @@ VERBOSE <- function( v, ... )
 #' # and run hyper-enrichment test
 #'
 #' data(hyper) # contains objects hyperSig and hyperGsets
-#' hyperE <- hyperEnrichment(drawn=hyperSig,categories=getGeneSet(hyperGsets),ntotal=10000)
+#' hyperE <- hyper.enrichment(drawn=hyperSig,categories=getGeneSet(hyperGsets),ntotal=10000)
 #' head(hyperE)
 #'
-hyper_enrichment <- function (
+hyper.enrichment <- function (
     drawn,          # one or more sets of 'drawn' items (e.g., genes). Basically, a list of signatures.
     categories,     # gene sets (list of gene sets)
     ntotal=length(unique(unlist(categories))), # background population, i.e., the total no. of items from which
@@ -71,7 +71,7 @@ hyper_enrichment <- function (
         {
             VERBOSE(verbose,"*** Testing", names(drawn)[i], ".. " )
             dset <- drawn[[i]]
-            tmp <- hyperEnrichment(dset,categories,ntotal=ntotal,verbose=verbose)
+            tmp <- hyper.enrichment(dset,categories,ntotal=ntotal,verbose=verbose)
             if (is.null(tmp)) {
                 VERBOSE(verbose,"not enough items drawn\n")
                 next
