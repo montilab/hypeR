@@ -41,6 +41,7 @@ hypeR <- function(symbols,
     cat("Number of genes = ", length(symbols), "\n")
     cat("Number of gene sets = ", length(gsets), "\n")
     cat("Background population = ", bg, "\n")
+    cat("P-Value cutoff = ", pval.cutoff, "\n")
     cat("FDR cutoff = ", fdr.cutoff, "\n")
 
     df <- data.frame(matrix(ncol=8, nrow=0))
