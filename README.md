@@ -1,6 +1,10 @@
 # hypeR
 Geneset enrichment analysis based on hyper-geometric test
 
+[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master)
+[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+
+
 ### Install
 ```R
 library(devtools)
@@ -20,11 +24,11 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 # Gensets available
 db.info()
 
-# Grab all curated genesets
-C2 <- db.get("C2")
+# Get genesets
+REACTOME <- db.get("C2.CP.REACTOME")
 
 # Perform hyper enrichment
-hyp <- hypeR(symbols, C2, bg=2522, fdr=0.05)
+hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05, verbose=T)
 
 # Interactive table
 hyp.show(hyp)
@@ -33,5 +37,5 @@ hyp.show(hyp)
 hyp.to.excel(hyp, file.path="pathways.xlsx")
 
 # Visualize
-hyp.plot(hyp, top=13)
+hyp.plot(hyp, top=5)
 ```
