@@ -99,10 +99,10 @@ hyp.plot <- function(df, top=10, val="fdr") {
     # Subset data based on significance value
     if (val == "pval") {
         df.1 <- df[,c(7,1,5,3)]
-        val.pretty = "P-Value"
+        val.pretty <- "P-Value"
     } else if (val == "fdr") {
         df.1 <- df[,c(7,2,5,3)]
-        val.pretty = "FDR"
+        val.pretty <- "FDR"
     }
 
     # Calculate bar heights
@@ -111,7 +111,7 @@ hyp.plot <- function(df, top=10, val="fdr") {
     df.2$x <- -log10(df.1$x) # Total bar height
     df.2$x2 <- df.1$x2/df.1$x1*df.2$x # Second bar height
     df.2$x1 <- df.2$x-df.2$x2 # First bar height
-    y = factor(df.2$y, levels=df.2$y) # Force order of rownames
+    y <- factor(df.2$y, levels=df.2$y) # Force order of rownames
 
     p <- plot_ly(df.2,
                  x = ~x1,
@@ -139,7 +139,7 @@ hyp.plot <- function(df, top=10, val="fdr") {
                                      domain = c(0.16, 1)),
                         yaxis = list(title = "",
                                      categoryarray = rev(y),
-                                     categoryorder = "array",
+                                     categoryorder = 'array',
                                      showgrid = T,
                                      showline = T,
                                      showticklabels = F,
@@ -157,7 +157,7 @@ hyp.plot <- function(df, top=10, val="fdr") {
                                  y = y,
                                  xanchor = 'right',
                                  text = y,
-                                 categoryorder = "array",
+                                 categoryorder = 'array',
                                  font = list(family = 'Arial',
                                              size = 12,
                                              color = 'black'),
