@@ -67,14 +67,13 @@ gsets <- c(BIOCARTA, KEGG, REACTOME)
 #### Hyper Enrichment
 
 ``` r
-hyp <- hypeR(symbols, gsets, bg=7502, fdr=0.05, verbose=T)
+hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05, verbose=T)
 
 ## Number of genes =  24 
 ## Number of gene sets =  1077 
-## Background population =  7502 
+## Background population =  7842 
 ## P-Value cutoff =  1 
 ## FDR cutoff =  0.05 
-## Warning: Background population's size less than unique categories' items: 7502 < 7842 
 ## Found 24/24 annotated genes
 ```
 
@@ -84,7 +83,7 @@ hyp <- hypeR(symbols, gsets, bg=7502, fdr=0.05, verbose=T)
 hyp.plot(hyp)
 ```
 
-<img src="figs/README-plot.png" width="800"/>
+<img src="figs/README-plot.png" width="672" />
 
 #### Interactive Table
 
