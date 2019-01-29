@@ -1,8 +1,8 @@
 #' Function wrapper to control verbosity
 #'
-#' @param v A function
-#' @param ... Extra arguments
-#' @return A function
+#' @param v A bool
+#' @param ... What to print
+#' @return None
 #'
 VERBOSE <- function( v, ... )
 {

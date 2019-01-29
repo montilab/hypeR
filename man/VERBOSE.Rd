@@ -7,12 +7,12 @@
 VERBOSE(v, ...)
 }
 \arguments{
-\item{v}{A function}
+\item{v}{A bool}
 
-\item{...}{Extra arguments}
+\item{...}{What to print}
 }
 \value{
-A function
+None
 }
 \description{
 Function wrapper to control verbosity
