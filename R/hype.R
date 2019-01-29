@@ -1,3 +1,26 @@
+#' Perform hyper enrichment
+#'
+#' @param symbols A character vector of gene symbols
+#' @param gsets A list of gene sets
+#' @param bg Size of background population
+#' @param min.drawsize Min number of drawn items that must be among categories items
+#' @param pval.cutoff Filter results to be less than pval cutoff
+#' @param fdr.cutoff Filter results to be less than fdr cutoff
+#' @param verbose Use false to suppress logs
+#' @return A hyper dataframe
+#'
+#' @examples
+#' # Grab all curated genesets
+#' REACTOME <- db.get("C2.CP.REACTOME")
+#' 
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#' 
+#' # Perform hyper enrichment
+#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#'
 #' @export
 hypeR <- function(symbols,
                   gsets,
@@ -34,6 +57,28 @@ hypeR <- function(symbols,
     return(df)
 }
 
+#' Convert hyper dataframe to an interactive datatable
+#'
+#' @param df A hyper dataframe
+#' @param simple Use true to only include essential dataframe columns
+#' @param stylish Use true to add a bootstrap styling theme to datatable
+#' @return A datatable object
+#'
+#' @examples
+#' # Grab all curated genesets
+#' REACTOME <- db.get("C2.CP.REACTOME")
+#' 
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#' 
+#' # Perform hyper enrichment
+#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' 
+#' # Export
+#' hyp.show(hyp)
+#'
 #' @import DT
 #' @export
 hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
@@ -70,6 +115,28 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
     }
 }
 
+#' Export hyper dataframe to excel
+#'
+#' @param df A hyper dataframe
+#' @param file.path Output file path
+#' @param cols Dataframe columns to include
+#' @return None
+#'
+#' @examples
+#' # Grab all curated genesets
+#' REACTOME <- db.get("C2.CP.REACTOME")
+#' 
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#' 
+#' # Perform hyper enrichment
+#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' 
+#' # Export
+#' hyp.to.excel(hyp, file.path="pathways.xlsx")
+#'
 #' @import openxlsx
 #' @export
 hyp.to.excel <- function(df, file.path, cols=c(1:ncol(df))) {
@@ -79,6 +146,29 @@ hyp.to.excel <- function(df, file.path, cols=c(1:ncol(df))) {
                row.names = FALSE)
 }
 
+#' Export hyper dataframe to table
+#'
+#' @param df A hyper dataframe
+#' @param file.path Output file path
+#' @param sep The field separator string
+#' @param cols Dataframe columns to include
+#' @return None
+#'
+#' @examples
+#' # Grab all curated genesets
+#' REACTOME <- db.get("C2.CP.REACTOME")
+#' 
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#' 
+#' # Perform hyper enrichment
+#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' 
+#' # Export
+#' hyp.to.table(hyp, file.path="pathways.txt")
+#'
 #' @export
 hyp.to.table <- function(df, file.path, sep="\t", cols=c(1:ncol(df))) {
     write.table(x = df[,cols,drop=F],
