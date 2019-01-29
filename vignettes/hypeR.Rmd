@@ -1,0 +1,77 @@
+---
+title: "hypeR"
+author:
+- name: Anthony Federico
+  affiliation:
+  - &1 Section of Computational Biomedicine, Boston University, Boston, MA
+- name: Amy Li
+  affiliation:
+  - *1
+- name: Stefano Monti
+  affiliation:
+  - *1
+date: '`r format(Sys.Date(), "%B %e, %Y")`'
+package: hypeR
+output:
+    BiocStyle::html_document
+vignette: >
+    %\VignetteIndexEntry{hypeR}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+    chunk_output_type: console
+---
+
+### Knitr Options
+
+```{r}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+### Packages
+```{r}
+library(hypeR)
+```
+
+### Examples
+
+#### Genes involed in tricarboxylic acid cycle
+```{r}
+symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+             "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+             "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+```
+
+#### Available Genesets
+```{r}
+db.info()
+```
+
+#### Loading Genesets
+```{r}
+BIOCARTA <- db.get("C2.CP.BIOCARTA")
+KEGG     <- db.get("C2.CP.KEGG")
+REACTOME <- db.get("C2.CP.REACTOME")
+
+gsets <- c(BIOCARTA, KEGG, REACTOME)
+```
+
+#### Hyper Enrichment
+```{r}
+hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
+```
+
+#### Visualize Results
+```{r}
+hyp.plot(hyp)
+```
+
+#### Interactive Table
+```{r eval=FALSE}
+hyp.show(hyp)
+```
+
+#### Save Results
+```{r eval=FALSE}
+hyp.to.excel(hyp, file.path="pathways.xlsx")
+```
