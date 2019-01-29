@@ -1,5 +1,6 @@
 library(testthat)
 library(hypeR)
 
-test_check("hypeR")
+# devtools::test()
 
+test_check("hypeR")
