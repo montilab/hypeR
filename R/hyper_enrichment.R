@@ -13,15 +13,6 @@ VERBOSE <- function( v, ... )
 #'
 #' @return a data.frame with rows indexed by the signature(s) tested
 #'
-#' @examples
-#'
-#' # load objects hyperSig (a list of signatures) and hyperGsets (a GeneSet object)
-#' # and run hyper-enrichment test
-#'
-#' data(hyper) # contains objects hyperSig and hyperGsets
-#' hyperE <- hyper.enrichment(drawn=hyperSig,categories=getGeneSet(hyperGsets),ntotal=10000)
-#' head(hyperE)
-#'
 hyper.enrichment <- function (
     drawn,          # one or more sets of 'drawn' items (e.g., genes). Basically, a list of signatures.
     categories,     # gene sets (list of gene sets)

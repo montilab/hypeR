@@ -25,13 +25,3 @@ a data.frame with rows indexed by the signature(s) tested
 \description{
 Carry out set enrichment test based on hyper-geometric distribution
 }
-\examples{
-
-# load objects hyperSig (a list of signatures) and hyperGsets (a GeneSet object)
-# and run hyper-enrichment test
-
-data(hyper) # contains objects hyperSig and hyperGsets
-hyperE <- hyper.enrichment(drawn=hyperSig,categories=getGeneSet(hyperGsets),ntotal=10000)
-head(hyperE)
-
-}

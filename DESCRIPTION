@@ -1,18 +1,21 @@
 Package: hypeR
-Title: Geneset enrichment analysis based on hyper-geometric test
+Title: Hyper Enrichment
 Version: 0.0.0.9000
 Author:
     Anthony Federico <anfed@bu.edu>,
     Stefano Monti <smonti@bu.edu>
+Maintainer: Anthony Federico <anfed@bu.edu>
+Description: Geneset enrichment analysis based on hyper-geometric test
 Depends: R (>= 3.4.3)
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Suggests: 
-    testthat,
+Imports:
     plotly,
     DT,
     dplyr,
     openxlsx,
     msigdbr
+Suggests: 
+    testthat
