@@ -8,7 +8,7 @@ Author:
 Maintainer: Anthony Federico <anfed@bu.edu>
 Description: Geneset enrichment analysis based on hyper-geometric test.
 Depends: R (>= 3.4.3)
-License: MIT + file LICENSE
+License: GNU + file LICENSE
 URL: https://github.com/montilab/hypeR
 Encoding: UTF-8
 RoxygenNote: 6.1.1
