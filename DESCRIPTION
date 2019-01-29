@@ -1,10 +1,18 @@
 Package: hypeR
-Title: What the Package Does (one line, title case)
+Title: Geneset enrichment analysis based on hyper-geometric test
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Author:
+    Anthony Federico <anfed@bu.edu>,
+    Stefano Monti <smonti@bu.edu>
 Depends: R (>= 3.4.3)
-License: What license is it under?
+License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+Suggests: 
+    testthat,
+    plotly,
+    DT,
+    dplyr,
+    openxlsx,
+    msigdbr
