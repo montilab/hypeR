@@ -89,9 +89,34 @@ hyp.to.table <- function(df, file.path, sep="\t", cols=c(1:ncol(df))) {
                 row.names = FALSE)
 }
 
+#' Visualize top enriched pathways
+#'
+#' @param df A hyper dataframe
+#' @param top Limit number of pathways shown
+#' @param val Choose significance value e.g. c("pval", "fdr")
+#' @return A plotly object
+#'
+#' @examples
+#' # Grab all curated genesets
+#' REACTOME <- db.get("C2.CP.REACTOME")
+#' 
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#' 
+#' # Perform hyper enrichment
+#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' 
+#' # Visualize
+#' hyp.plot(hyp, top=3, val="fdr")
+#'
 #' @import plotly
 #' @export
-hyp.plot <- function(df, top=10, val="fdr") {
+hyp.plot <- function(df, top=10, val=c("fdr", "pval")) {
+
+    # Default arguments
+    val <- match.arg(val)
 
     # Top pathways
     df <- head(df, top)
