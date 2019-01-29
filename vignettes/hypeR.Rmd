@@ -4,9 +4,6 @@ author:
 - name: Anthony Federico
   affiliation:
   - &1 Section of Computational Biomedicine, Boston University, Boston, MA
-- name: Amy Li
-  affiliation:
-  - *1
 - name: Stefano Monti
   affiliation:
   - *1

@@ -3,7 +3,6 @@ Title: Hyper Enrichment
 Version: 0.0.0.9000
 Author:
     Anthony Federico <anfed@bu.edu>,
-    Amy Li <ajli@bu.edu>,
     Stefano Monti <smonti@bu.edu>
 Maintainer: Anthony Federico <anfed@bu.edu>
 Description: Geneset enrichment analysis based on hyper-geometric test.
