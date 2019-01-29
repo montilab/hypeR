@@ -1,3 +1,9 @@
+#' Function wrapper to control verbosity
+#'
+#' @param v A function
+#' @param ... Extra arguments
+#' @return A function
+#'
 VERBOSE <- function( v, ... )
 {
     if ( v ) cat( ... )
@@ -10,6 +16,7 @@ VERBOSE <- function( v, ... )
 #' @param ntotal background population, i.e., the total no. of items from which items are supposed to have been drawn
 #' @param min.drawsize min no. of drawn items that must be among categories' items
 #' @param mht correct for multiple hypothesis testing across multiple 'draws'
+#' @param verbose Use false to suppress logs
 #'
 #' @return a data.frame with rows indexed by the signature(s) tested
 #'

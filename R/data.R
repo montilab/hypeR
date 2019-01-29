@@ -1,3 +1,10 @@
+#' Fetch a gene sets from msigdb
+#'
+#' @param species A species to determine gene symbols 
+#' @param category Gene set category
+#' @param subcategory Gene set subcategory
+#' @return A list of gene sets
+#'
 #' @import dplyr msigdbr
 download.gsets <- function(species, category, subcategory) {
 
@@ -13,6 +20,11 @@ download.gsets <- function(species, category, subcategory) {
     return(gsets)
 }
 
+#' Update available gene sets from msigdb
+#'
+#' @param species A species to determine gene symbols 
+#' @return None
+#'
 #' @import dplyr msigdbr
 update.gsets <- function(species="Homo sapiens") {
 
@@ -48,6 +60,13 @@ update.gsets <- function(species="Homo sapiens") {
     }
 }
 
+#' Print available gene sets
+#'
+#' @return None
+#'
+#' @examples
+#' db.info()
+#'
 #' @export
 db.info <- function() {
     cat("|------------------------------------------------------------|\n")
@@ -74,6 +93,14 @@ db.info <- function() {
     cat("|------------------------------------------------------------|\n")
 }
 
+#' Fetch gene sets
+#'
+#' @param symbol A symbol corresponding to a gene set
+#' @return A list of gene sets
+#'
+#' @examples
+#' C1 <- db.get("C1")
+#'
 #' @export
 db.get <- function(symbol) {
     path <- paste(symbol, "v6.2.1.rds", sep=".")

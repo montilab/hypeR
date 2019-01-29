@@ -10,7 +10,7 @@
 #' @return A hyper dataframe
 #'
 #' @examples
-#' # Grab all curated genesets
+#' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
 #' 
 #' # Genes involed in tricarboxylic acid cycle
@@ -65,7 +65,7 @@ hypeR <- function(symbols,
 #' @return A datatable object
 #'
 #' @examples
-#' # Grab all curated genesets
+#' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
 #' 
 #' # Genes involed in tricarboxylic acid cycle
@@ -123,7 +123,7 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
 #' @return None
 #'
 #' @examples
-#' # Grab all curated genesets
+#' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
 #' 
 #' # Genes involed in tricarboxylic acid cycle
@@ -155,7 +155,7 @@ hyp.to.excel <- function(df, file.path, cols=c(1:ncol(df))) {
 #' @return None
 #'
 #' @examples
-#' # Grab all curated genesets
+#' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
 #' 
 #' # Genes involed in tricarboxylic acid cycle
@@ -187,7 +187,7 @@ hyp.to.table <- function(df, file.path, sep="\t", cols=c(1:ncol(df))) {
 #' @return A plotly object
 #'
 #' @examples
-#' # Grab all curated genesets
+#' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
 #' 
 #' # Genes involed in tricarboxylic acid cycle

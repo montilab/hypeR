@@ -18,6 +18,8 @@ hyper.enrichment(drawn, categories,
 \item{min.drawsize}{min no. of drawn items that must be among categories' items}
 
 \item{mht}{correct for multiple hypothesis testing across multiple 'draws'}
+
+\item{verbose}{Use false to suppress logs}
 }
 \value{
 a data.frame with rows indexed by the signature(s) tested

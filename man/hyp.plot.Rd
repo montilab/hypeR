@@ -20,7 +20,7 @@ A plotly object
 Visualize top enriched pathways
 }
 \examples{
-# Grab all curated genesets
+# Grab a list of curated gene sets
 REACTOME <- db.get("C2.CP.REACTOME")
 
 # Genes involed in tricarboxylic acid cycle
