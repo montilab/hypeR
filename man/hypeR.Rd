@@ -12,7 +12,7 @@ hypeR(symbols, gsets, bg = 23467, min.drawsize = 4, pval.cutoff = 1,
 
 \item{gsets}{A list of gene sets}
 
-\item{bg}{Size of background population}
+\item{bg}{Size or character vector of background population genes}
 
 \item{min.drawsize}{Min number of drawn items that must be among categories items}
 

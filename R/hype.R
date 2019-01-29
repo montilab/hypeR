@@ -2,7 +2,7 @@
 #'
 #' @param symbols A character vector of gene symbols
 #' @param gsets A list of gene sets
-#' @param bg Size of background population
+#' @param bg Size or character vector of background population genes
 #' @param min.drawsize Min number of drawn items that must be among categories items
 #' @param pval.cutoff Filter results to be less than pval cutoff
 #' @param fdr.cutoff Filter results to be less than fdr cutoff
@@ -30,9 +30,15 @@ hypeR <- function(symbols,
                   fdr.cutoff=1,
                   verbose=FALSE) {
 
+    # Handling a background population
+    if (class(bg) == "character") {
+        gsets <- lapply(gsets, function(x) intersect(x, bg))
+        bg <- length(bg)
+    }
+
     cat("Number of genes = ", length(symbols), "\n")
     cat("Number of gene sets = ", length(gsets), "\n")
-    cat("Background population = ", bg, "\n")
+    cat("Background population size = ", bg, "\n")
     cat("P-Value cutoff = ", pval.cutoff, "\n")
     cat("FDR cutoff = ", fdr.cutoff, "\n")
 
