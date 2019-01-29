@@ -79,7 +79,7 @@ hypeR <- function(symbols,
 #' # Export
 #' hyp.show(hyp)
 #'
-#' @import DT
+#' @importFrom DT datatable
 #' @export
 hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
     if (simple) {
@@ -137,7 +137,7 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
 #' # Export
 #' hyp.to.excel(hyp, file.path="pathways.xlsx")
 #'
-#' @import openxlsx
+#' @importFrom openxlsx write.xlsx
 #' @export
 hyp.to.excel <- function(df, file.path, cols=c(1:ncol(df))) {
     write.xlsx(x = df[,cols,drop=F],
@@ -201,7 +201,7 @@ hyp.to.table <- function(df, file.path, sep="\t", cols=c(1:ncol(df))) {
 #' # Visualize
 #' hyp.plot(hyp, top=3, val="fdr")
 #'
-#' @import plotly
+#' @importFrom plotly plot_ly add_trace add_annotations layout %>%
 #' @export
 hyp.plot <- function(df, top=10, val=c("fdr", "pval")) {
 

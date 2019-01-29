@@ -5,7 +5,9 @@
 #' @param subcategory Gene set subcategory
 #' @return A list of gene sets
 #'
-#' @import dplyr msigdbr
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select
+#' @importFrom msigdbr msigdbr
 download.gsets <- function(species, category, subcategory) {
 
     # Download genesets
@@ -25,7 +27,9 @@ download.gsets <- function(species, category, subcategory) {
 #' @param species A species to determine gene symbols 
 #' @return None
 #'
-#' @import dplyr msigdbr
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select arrange
+#' @importFrom msigdbr msigdbr
 update.gsets <- function(species="Homo sapiens") {
 
     cat("Downloading genesets...\n")
