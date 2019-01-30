@@ -127,7 +127,7 @@ text.split <- strsplit(text, "\n")[[1]]
 bg <- text.split[2:length(text.split)]
 head(bg)
 
-# The gene sets will be restricted to the genes included in the background population
-hyp <- hypeR(symbols, gsets, bg=bg, fdr=0.05)
+# Gene sets are restricted to genes included in the background population
+hyp <- hypeR(symbols, gsets, bg=bg)
 
 ```
