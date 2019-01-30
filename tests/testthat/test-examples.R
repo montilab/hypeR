@@ -29,3 +29,15 @@ test_that("Plotting visualization is working", {
     expect_s3_class(p, "plotly")
     expect_s3_class(p, "htmlwidget")
 })
+
+test_that("Hyper Dataframe can be saved as table", {
+    hyp.to.table(hyp, file.path="pathways.txt")
+    expect_true(file.exists("pathways.txt"))
+    expect_equal(df$pval, c(3.7e-28, 1.3e-26, 1.0e-18))
+    expect_equal(hyp$fdr, c(2.5e-25, 4.3e-24, 2.2e-16))
+})
+
+test_that("Hyper Dataframe can be saved as excel", {
+    hyp.to.excel(hyp, file.path="pathways.xlsx")
+    expect_true(file.exists("pathways.xlsx"))
+})
