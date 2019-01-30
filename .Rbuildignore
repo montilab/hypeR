@@ -1,7 +1,7 @@
-^\.git\*
+^\.git$
+^\dev$
+^\figs$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\dev\*
-^\figs\*
 ^README\.Rmd$
 ^\.travis\.yml$
