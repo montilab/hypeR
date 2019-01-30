@@ -33,8 +33,9 @@ test_that("Plotting visualization is working", {
 test_that("Hyper Dataframe can be saved as table", {
     hyp.to.table(hyp, file.path="pathways.txt")
     expect_true(file.exists("pathways.txt"))
+    df <- read.table("pathways.txt", header=TRUE)
     expect_equal(df$pval, c(3.7e-28, 1.3e-26, 1.0e-18))
-    expect_equal(hyp$fdr, c(2.5e-25, 4.3e-24, 2.2e-16))
+    expect_equal(df$fdr, c(2.5e-25, 4.3e-24, 2.2e-16))
 })
 
 test_that("Hyper Dataframe can be saved as excel", {
