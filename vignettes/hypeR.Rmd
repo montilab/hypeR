@@ -19,56 +19,115 @@ editor_options:
     chunk_output_type: console
 ---
 
-### Knitr Options
-
 ```{r}
 knitr::opts_chunk$set(message = FALSE)
+#library(hypeR)
+devtools::load_all(".")
 ```
 
-### Packages
+### Example Data
 ```{r}
-library(hypeR)
-```
 
-### Examples
-
-#### Genes involed in tricarboxylic acid cycle
-```{r}
+# Genes involved in tricarboxylic acid cycle
 symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+
 ```
 
-#### Available Genesets
+### Typical Workflow
+
+#### Print Available Gene Sets
 ```{r}
+
 db.info()
+
 ```
 
-#### Loading Genesets
+#### Loading Gene Sets
 ```{r}
+
 BIOCARTA <- db.get("C2.CP.BIOCARTA")
 KEGG     <- db.get("C2.CP.KEGG")
 REACTOME <- db.get("C2.CP.REACTOME")
 
 gsets <- c(BIOCARTA, KEGG, REACTOME)
+
 ```
 
 #### Hyper Enrichment
 ```{r}
+
 hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
+
 ```
 
 #### Visualize Results
 ```{r}
+
 hyp.plot(hyp)
+
 ```
 
 #### Interactive Table
-```{r eval=FALSE}
+```{r}
+
 hyp.show(hyp)
+
 ```
 
-#### Save Results
-```{r eval=FALSE}
+#### Save Results to Excel
+```{r}
+
 hyp.to.excel(hyp, file.path="pathways.xlsx")
+
+```
+
+#### Save Results to Table
+```{r}
+
+hyp.to.table(hyp, file.path="pathways.txt")
+
+```
+
+### Alternative Functionality
+
+#### Use Custom Gene Sets
+```{r}
+
+library(httr)
+
+# A publicly available gene set hosted by Enrichr
+url = "http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Cancer_Cell_Line_Encyclopedia"
+r <- GET(url)
+text <- content(r, "text", encoding="ISO-8859-1")
+text.split <- strsplit(text, "\n")[[1]]
+gsets <- sapply(text.split, function(x) {
+    genes <- strsplit(x, "\t")[[1]]
+    return(genes[3:length(genes)])
+})
+names(gsets) <- unlist(lapply(text.split, function(x) strsplit(x, "\t")[[1]][1]))
+
+# Perform hyper enrichment as normal
+hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
+
+```
+
+#### Specify a Background Population of Genes
+```{r}
+
+library(httr)
+
+# An experiment that only uses sex-linked genes
+url = "https://www.genenames.org/cgi-bin/download/custom?col=gd_app_sym&chr=X&chr=Y&format=text"
+r <- GET(url)
+text <- content(r, "text", encoding="ISO-8859-1")
+text.split <- strsplit(text, "\n")[[1]]
+
+bg <- text.split[2:length(text.split)]
+head(bg)
+
+# The gene sets will be restricted to the genes included in the background population
+hyp <- hypeR(symbols, gsets, bg=bg, fdr=0.05)
+
 ```
