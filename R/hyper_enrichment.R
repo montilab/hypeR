@@ -65,7 +65,8 @@ hyper.enrichment <- function (
         percent <- 0.1
         base <- 0
         ntst <- 0
-        for ( i in 1:length(drawn) )
+
+        for ( i in seq_len(length(drawn)) )
         {
             VERBOSE(verbose,"*** Testing", names(drawn)[i], ".. " )
             dset <- drawn[[i]]
@@ -80,7 +81,7 @@ hyper.enrichment <- function (
 
             enrich[rng,] <- cbind(set=rep(names(drawn)[i],ncat),tmp)
             base <- base+ncat
-            if (F && i>=round(length(drawn)*percent)) {
+            if (FALSE && i>=round(length(drawn)*percent)) {
                 VERBOSE(verbose, round(100*percent),"% ",sep="")
                 percent <- percent+0.1
             }
@@ -89,7 +90,7 @@ hyper.enrichment <- function (
         VERBOSE(verbose,"done.\n")
         colnames(enrich) <- c("set",cnames)
 
-        enrich <- enrich[1:base,,drop=F]
+        enrich <- enrich[seq_len(base),,drop=FALSE]
         if (mht) {
             VERBOSE(verbose,"MHT-correction across multiple draws ..")
             enrich[,"fdr"] <- p.adjust(as.numeric(enrich[,"pval"]), method="fdr")
@@ -124,7 +125,7 @@ hyper.enrichment <- function (
     nleft <- ntotal-ncats
 
     ## compute P[X>=nhits]
-    enrich <- suppressWarnings(phyper(q=nhits-1,m=ncats,n=nleft,k=ndrawn,lower.tail=F))
+    enrich <- suppressWarnings(phyper(q=nhits-1,m=ncats,n=nleft,k=ndrawn,lower.tail=FALSE))
     enrich <- cbind(pval=enrich,
                     fdr=p.adjust(enrich, method="fdr"),
                     nhits=nhits,
@@ -136,7 +137,7 @@ hyper.enrichment <- function (
     enrich <- cbind(enrich,
                     hits=sapply(categories,function(x,y)paste(intersect(x,y),collapse=','),m.idx))
     ord <- order(as.numeric(enrich[,"pval"]))
-    enrich <- enrich[ord,,drop=F]
+    enrich <- enrich[ord,,drop=FALSE]
     enrich[,"pval"] <- signif(as.numeric(enrich[,"pval"]),2)
     enrich[,"fdr"] <- signif(as.numeric(enrich[,"fdr"]),2)
 

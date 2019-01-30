@@ -31,7 +31,7 @@ hypeR <- function(symbols,
                   verbose=FALSE) {
 
     # Handling a background population
-    if (class(bg) == "character") {
+    if ("character" %in% is(bg) & "vector" %in% is(bg)) {
         gsets <- lapply(gsets, function(x) intersect(x, bg))
         bg <- length(bg)
     }
@@ -54,11 +54,11 @@ hypeR <- function(symbols,
 
     # If hits are found format dataframe
     if (!is.null(hyp)) {
-        df <- data.frame(hyp, stringsAsFactors=F)
-        df[,c(1:6)] <- lapply(df[,c(1:6)], as.numeric)
-        df <- df[complete.cases(df),,drop=F]
-        df <- df[df$pval <= pval.cutoff,,drop=F]
-        df <- df[df$fdr <= fdr.cutoff,,drop=F]
+        df <- data.frame(hyp, stringsAsFactors=FALSE)
+        df[,seq_len(6)] <- lapply(df[,seq_len(6)], as.numeric)
+        df <- df[complete.cases(df),,drop=FALSE]
+        df <- df[df$pval <= pval.cutoff,,drop=FALSE]
+        df <- df[df$fdr <= fdr.cutoff,,drop=FALSE]
     }
     return(df)
 }
@@ -91,13 +91,13 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
     if (simple) {
         cols <- c(1,2,7,8)
     } else {
-        cols <- c(1:ncol(df))
+        cols <- seq_len(ncol(df))
     }
 
     # Gene symbols converted to hyperlinks
     url <- "https://www.genecards.org/cgi-bin/carddisp.pl?gene="
     df$hits <- lapply(df$hits, function(x) {
-                   sapply(symbols, function(x) {
+                   vapply(symbols, function(x) {
                        paste('<a href="',
                              url,
                              x,
@@ -105,17 +105,17 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
                              x,
                              '</a>',
                              sep="")
-                   })
+                   }, character(1))
                })
 
     if (stylish) {
-        datatable(data = df[,cols,drop=F],
+        datatable(data = df[,cols,drop=FALSE],
                   style = 'bootstrap',
                   class = 'table-bordered table-condensed',
                   escape = TRUE,
                   rownames = FALSE)
     } else {
-        datatable(data = df[,cols,drop=F],
+        datatable(data = df[,cols,drop=FALSE],
                   escape = TRUE,
                   rownames = FALSE)
     }
@@ -145,8 +145,8 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
 #'
 #' @importFrom openxlsx write.xlsx
 #' @export
-hyp.to.excel <- function(df, file.path, cols=c(1:ncol(df))) {
-    write.xlsx(x = df[,cols,drop=F],
+hyp.to.excel <- function(df, file.path, cols=seq_len(ncol(df))) {
+    write.xlsx(x = df[,cols,drop=FALSE],
                file = file.path,
                col.names = TRUE,
                row.names = FALSE)
@@ -176,8 +176,8 @@ hyp.to.excel <- function(df, file.path, cols=c(1:ncol(df))) {
 #' hyp.to.table(hyp, file.path="pathways.txt")
 #'
 #' @export
-hyp.to.table <- function(df, file.path, sep="\t", cols=c(1:ncol(df))) {
-    write.table(x = df[,cols,drop=F],
+hyp.to.table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
+    write.table(x = df[,cols,drop=FALSE],
                 file = file.path,
                 quote = FALSE,
                 sep = sep,
@@ -253,18 +253,18 @@ hyp.plot <- function(df, top=10, val=c("fdr", "pval")) {
                                                    val.pretty,
                                                    ")",
                                                    sep=""),
-                                     showgrid = T,
-                                     showline = T,
-                                     showticklabels = T,
-                                     zeroline = T,
+                                     showgrid = TRUE,
+                                     showline = TRUE,
+                                     showticklabels = TRUE,
+                                     zeroline = TRUE,
                                      domain = c(0.16, 1)),
                         yaxis = list(title = "",
                                      categoryarray = rev(y),
                                      categoryorder = 'array',
-                                     showgrid = T,
-                                     showline = T,
-                                     showticklabels = F,
-                                     zeroline = T),
+                                     showgrid = TRUE,
+                                     showline = TRUE,
+                                     showticklabels = FALSE,
+                                     zeroline = TRUE),
                         barmode = 'stack',
                         paper_bgcolor = 'white',
                         plot_bgcolor = 'white',

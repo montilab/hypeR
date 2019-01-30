@@ -4,7 +4,7 @@
 \alias{hyp.to.table}
 \title{Export hyper dataframe to table}
 \usage{
-hyp.to.table(df, file.path, sep = "\\t", cols = c(1:ncol(df)))
+hyp.to.table(df, file.path, sep = "\\t", cols = seq_len(ncol(df)))
 }
 \arguments{
 \item{df}{A hyper dataframe}

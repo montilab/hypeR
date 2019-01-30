@@ -1,4 +1,7 @@
+^\.git\*
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\data\*
 ^\dev\*
+^\figs\*
+^README\.Rmd$
+^\.travis\.yml$

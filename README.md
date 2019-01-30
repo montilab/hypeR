@@ -67,7 +67,7 @@ gsets <- c(BIOCARTA, KEGG, REACTOME)
 #### Hyper Enrichment
 
 ``` r
-hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05, verbose=T)
+hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
 
 ## Number of genes =  24 
 ## Number of gene sets =  1077 

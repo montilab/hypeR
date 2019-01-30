@@ -4,7 +4,7 @@
 \alias{hyp.to.excel}
 \title{Export hyper dataframe to excel}
 \usage{
-hyp.to.excel(df, file.path, cols = c(1:ncol(df)))
+hyp.to.excel(df, file.path, cols = seq_len(ncol(df)))
 }
 \arguments{
 \item{df}{A hyper dataframe}

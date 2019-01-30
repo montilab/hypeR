@@ -43,7 +43,7 @@ update.gsets <- function(species="Homo sapiens") {
     # Version of data
     version <- packageVersion("msigdbr")
 
-    for(i in 1:nrow(res)) {
+    for (i in seq_len(nrow(res))) {
         category <- as.character(res[i,1])
         subcategory <- as.character(res[i,2])
 
