@@ -12,12 +12,12 @@
 #' @examples
 #' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
-#' 
+#'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#' 
+#'
 #' # Perform hyper enrichment
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
@@ -73,15 +73,15 @@ hypeR <- function(symbols,
 #' @examples
 #' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
-#' 
+#'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#' 
+#'
 #' # Perform hyper enrichment
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#' 
+#'
 #' # Export
 #' hyp.show(hyp)
 #'
@@ -131,15 +131,15 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
 #' @examples
 #' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
-#' 
+#'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#' 
+#'
 #' # Perform hyper enrichment
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#' 
+#'
 #' # Export
 #' hyp.to.excel(hyp, file.path="pathways.xlsx")
 #'
@@ -163,15 +163,15 @@ hyp.to.excel <- function(df, file.path, cols=seq_len(ncol(df))) {
 #' @examples
 #' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
-#' 
+#'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#' 
+#'
 #' # Perform hyper enrichment
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#' 
+#'
 #' # Export
 #' hyp.to.table(hyp, file.path="pathways.txt")
 #'
@@ -195,15 +195,15 @@ hyp.to.table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
 #' @examples
 #' # Grab a list of curated gene sets
 #' REACTOME <- db.get("C2.CP.REACTOME")
-#' 
+#'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#' 
+#'
 #' # Perform hyper enrichment
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#' 
+#'
 #' # Visualize
 #' hyp.plot(hyp, top=3, val="fdr")
 #'
@@ -253,6 +253,14 @@ hyp.plot <- function(df, top=10, val=c("fdr", "pval")) {
                                                    val.pretty,
                                                    ")",
                                                    sep=""),
+                                     tickvals=c(-log10(0.05),
+                                                -log10(0.01),
+                                                -log10(0.001),
+                                                seq(5, 1000, 5)),
+                                     ticktext=c("-log(0.05)",
+                                                "-log(0.01)",
+                                                "-log(0.001)"),
+                                     tickfont=list(size=9),
                                      showgrid = TRUE,
                                      showline = TRUE,
                                      showticklabels = TRUE,
@@ -280,7 +288,7 @@ hyp.plot <- function(df, top=10, val=c("fdr", "pval")) {
                                  text = y,
                                  categoryorder = 'array',
                                  font = list(family = 'Arial',
-                                             size = 12,
+                                             size = 10,
                                              color = 'black'),
                                  showarrow = FALSE,
                                  align = 'right')
