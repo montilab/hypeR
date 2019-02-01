@@ -1,11 +1,10 @@
 
-# hypeR
+hypeR
+=====
 
-Geneset enrichment analysis based on hyper-geometric
-test
+Geneset enrichment analysis based on hyper-geometric test
 
-[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master)
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master) [![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 ### Installation
 
@@ -29,7 +28,6 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 
 ``` r
 db.info()
-
 ## |------------------------------------------------------------|
 ## | Available Gene Sets                                 v6.2.1 |
 ## |------------------------------------------------------------|
@@ -68,13 +66,11 @@ gsets <- c(BIOCARTA, KEGG, REACTOME)
 
 ``` r
 hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
-
 ## Number of genes =  24 
 ## Number of gene sets =  1077 
-## Background population =  7842 
+## Background population size =  7842 
 ## P-Value cutoff =  1 
-## FDR cutoff =  0.05 
-## Found 24/24 annotated genes
+## FDR cutoff =  0.05
 ```
 
 #### Visualize Results

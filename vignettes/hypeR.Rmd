@@ -21,7 +21,6 @@ editor_options:
 
 ```{r}
 knitr::opts_chunk$set(message = FALSE)
-#library(hypeR)
 devtools::load_all(".")
 ```
 
