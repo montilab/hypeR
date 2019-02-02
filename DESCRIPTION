@@ -1,12 +1,12 @@
 Package: hypeR
 Title: Hyper Enrichment
-Version: 0.99.2
+Version: 0.99.3
 Author:
     Anthony Federico <anfed@bu.edu>,
     Stefano Monti <smonti@bu.edu>
 Maintainer: Anthony Federico <anfed@bu.edu>
 Description: Geneset enrichment analysis based on hyper-geometric test.
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.6.0)
 License: GPL-3 + file LICENSE
 URL: https://github.com/montilab/hypeR
 Encoding: UTF-8
