@@ -19,3 +19,7 @@ A list of gene sets
 \description{
 Fetch a gene sets from msigdb
 }
+\examples{
+HALLMARK <- download.gsets("Homo sapiens", "H", "")
+
+}

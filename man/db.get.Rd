@@ -16,6 +16,6 @@ A list of gene sets
 Fetch gene sets
 }
 \examples{
-C1 <- db.get("C1")
+REACTOME <- db.get("C2.CP.REACTOME")
 
 }

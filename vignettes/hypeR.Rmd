@@ -39,6 +39,7 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #### Print Available Gene Sets
 ```{r}
 
+# All gene sets can be downloaded with hypeR::download.msigdb()
 db.info()
 
 ```

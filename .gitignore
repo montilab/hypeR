@@ -45,6 +45,7 @@ Temporary Items
 
 # RStudio files
 .Rproj.user/
+hypeR.Rproj
 
 # produced vignettes
 vignettes/*.html

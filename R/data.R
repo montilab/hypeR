@@ -8,6 +8,11 @@
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom msigdbr msigdbr
+#'
+#' @examples
+#' HALLMARK <- download.gsets("Homo sapiens", "H", "")
+#'
+#' @export
 download.gsets <- function(species, category, subcategory) {
 
     # Download genesets
@@ -30,7 +35,9 @@ download.gsets <- function(species, category, subcategory) {
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select arrange
 #' @importFrom msigdbr msigdbr
-update.gsets <- function(species="Homo sapiens") {
+#'
+#' @export
+download.msigdb <- function(species="Homo sapiens") {
 
     cat("Downloading genesets...\n")
 
@@ -103,7 +110,7 @@ db.info <- function() {
 #' @return A list of gene sets
 #'
 #' @examples
-#' C1 <- db.get("C1")
+#' REACTOME <- db.get("C2.CP.REACTOME")
 #'
 #' @export
 db.get <- function(symbol) {
