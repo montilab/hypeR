@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db.get("C2.CP.REACTOME")
+#' REACTOME <- db_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -45,12 +45,12 @@ hypeR <- function(symbols,
     df <- data.frame(matrix(ncol=8, nrow=0))
     colnames(df) <- c("pval","fdr","set.annotated","set.size","category.annotated","total.annotated","category","hits")
 
-    hyp <- hyper.enrichment(drawn=symbols,
-                            categories=gsets,
-                            ntotal=bg,
-                            min.drawsize=min.drawsize,
-                            mht=TRUE,
-                            verbose=verbose)
+    hyp <- .hyper_enrichment(drawn=symbols,
+                             categories=gsets,
+                             ntotal=bg,
+                             min.drawsize=min.drawsize,
+                             mht=TRUE,
+                             verbose=verbose)
 
     # If hits are found format dataframe
     if (!is.null(hyp)) {
@@ -72,7 +72,7 @@ hypeR <- function(symbols,
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db.get("C2.CP.REACTOME")
+#' REACTOME <- db_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -83,11 +83,11 @@ hypeR <- function(symbols,
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
 #' # Export
-#' hyp.show(hyp)
+#' hyp_show(hyp)
 #'
 #' @importFrom DT datatable
 #' @export
-hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
+hyp_show <- function(df, simple=TRUE, stylish=FALSE) {
     if (simple) {
         cols <- c(1,2,7,8)
     } else {
@@ -130,7 +130,7 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db.get("C2.CP.REACTOME")
+#' REACTOME <- db_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -141,11 +141,11 @@ hyp.show <- function(df, simple=TRUE, stylish=FALSE) {
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
 #' # Export
-#' hyp.to.excel(hyp, file.path="pathways.xlsx")
+#' hyp_to_excel(hyp, file.path="pathways.xlsx")
 #'
 #' @importFrom openxlsx write.xlsx
 #' @export
-hyp.to.excel <- function(df, file.path, cols=seq_len(ncol(df))) {
+hyp_to_excel <- function(df, file.path, cols=seq_len(ncol(df))) {
     write.xlsx(x = df[,cols,drop=FALSE],
                file = file.path,
                col.names = TRUE,
@@ -162,7 +162,7 @@ hyp.to.excel <- function(df, file.path, cols=seq_len(ncol(df))) {
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db.get("C2.CP.REACTOME")
+#' REACTOME <- db_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -173,10 +173,10 @@ hyp.to.excel <- function(df, file.path, cols=seq_len(ncol(df))) {
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
 #' # Export
-#' hyp.to.table(hyp, file.path="pathways.txt")
+#' hyp_to_table(hyp, file.path="pathways.txt")
 #'
 #' @export
-hyp.to.table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
+hyp_to_table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
     write.table(x = df[,cols,drop=FALSE],
                 file = file.path,
                 quote = FALSE,
@@ -194,7 +194,7 @@ hyp.to.table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db.get("C2.CP.REACTOME")
+#' REACTOME <- db_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -205,11 +205,11 @@ hyp.to.table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
 #' # Visualize
-#' hyp.plot(hyp, top=3, val="fdr")
+#' hyp_plot(hyp, top=3, val="fdr")
 #'
 #' @importFrom plotly plot_ly add_trace add_annotations layout %>%
 #' @export
-hyp.plot <- function(df, top=10, val=c("fdr", "pval")) {
+hyp_plot <- function(df, top=10, val=c("fdr", "pval")) {
 
     # Default arguments
     val <- match.arg(val)

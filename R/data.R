@@ -1,8 +1,8 @@
 #' Fetch a gene sets from msigdb
 #'
-#' @param species A species to determine gene symbols 
-#' @param category Gene set category
-#' @param subcategory Gene set subcategory
+#' @param species A species to determine gene symbols (refer to the msigdbr R package for available species)
+#' @param category Gene set category (refer to the msigdbr R package for available categories)
+#' @param subcategory Gene set subcategory (refer to the msigdbr R package for available subcategories)
 #' @return A list of gene sets
 #'
 #' @importFrom magrittr %>%
@@ -10,10 +10,10 @@
 #' @importFrom msigdbr msigdbr
 #'
 #' @examples
-#' HALLMARK <- download.gsets("Homo sapiens", "H", "")
+#' HALLMARK <- download_gsets("Homo sapiens", "H", "")
 #'
 #' @export
-download.gsets <- function(species, category, subcategory) {
+download_gsets <- function(species="Homo sapiens", category, subcategory) {
 
     # Download genesets
     mdf <- msigdbr(species, category, subcategory) %>%
@@ -29,7 +29,8 @@ download.gsets <- function(species, category, subcategory) {
 
 #' Update available gene sets from msigdb
 #'
-#' @param species A species to determine gene symbols 
+#' @param species A species to determine gene symbols (refer to the msigdbr R package for available species)
+#' @param output_dir A directory path where gene sets are downloaded instead of to the package location
 #' @return None
 #'
 #' @importFrom magrittr %>%
@@ -37,9 +38,17 @@ download.gsets <- function(species, category, subcategory) {
 #' @importFrom msigdbr msigdbr
 #'
 #' @export
-download.msigdb <- function(species="Homo sapiens") {
+download_msigdb <- function(species="Homo sapiens", output_dir=NULL) {
 
-    cat("Downloading genesets...\n")
+    if (is.null(output_dir)) {
+        output_dir <- system.file("extdata", package="hypeR")
+    } else {
+        dir.create(output_dir, showWarnings=FALSE)
+    }
+
+    cat("Downloading genesets to...\n")
+    cat(output_dir)
+    cat("\n")
 
     # Gene set categories
     res <- msigdbr(species=species) %>%
@@ -55,7 +64,7 @@ download.msigdb <- function(species="Homo sapiens") {
         subcategory <- as.character(res[i,2])
 
         # Download gsets
-        gsets <- download.gsets(species, category, subcategory)
+        gsets <- download_gsets(species, category, subcategory)
 
         # Filename formatting
         nm <- ifelse(subcategory == "", category, paste(category, subcategory, sep="."))
@@ -66,20 +75,20 @@ download.msigdb <- function(species="Homo sapiens") {
         # Logging
         cat(paste("-", nm, "->", length(gsets), "Gene Sets", "\n"))
 
-        db <- file.path(system.file("extdata", package="hypeR"), fn)
+        db <- file.path(output_dir, fn)
         saveRDS(gsets, db)
     }
 }
 
 #' Print available gene sets
 #'
-#' @return None
+#' @return A table of values
 #'
 #' @examples
-#' db.info()
+#' db_info()
 #'
 #' @export
-db.info <- function() {
+db_info <- function() {
     cat("|------------------------------------------------------------|\n")
     cat("| Available Gene Sets                                 v6.2.1 |\n")
     cat("|------------------------------------------------------------|\n")
@@ -106,14 +115,14 @@ db.info <- function() {
 
 #' Fetch gene sets
 #'
-#' @param symbol A symbol corresponding to a gene set
+#' @param symbol A symbol corresponding to a gene set (hypeR comes with C2.CP.BIOCARTA, C2.CP.KEGG, and C2.CP.REACTOME, see vignette to download more)
 #' @return A list of gene sets
 #'
 #' @examples
-#' REACTOME <- db.get("C2.CP.REACTOME")
+#' REACTOME <- db_get("C2.CP.REACTOME")
 #'
 #' @export
-db.get <- function(symbol) {
+db_get <- function(symbol) {
     path <- paste(symbol, "v6.2.1.rds", sep=".")
     db <- system.file("extdata", path, package="hypeR")
     gs <- readRDS(db)

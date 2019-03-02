@@ -30,7 +30,7 @@ Perform hyper enrichment
 }
 \examples{
 # Grab a list of curated gene sets
-REACTOME <- db.get("C2.CP.REACTOME")
+REACTOME <- db_get("C2.CP.REACTOME")
 
 # Genes involed in tricarboxylic acid cycle
 symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",

@@ -19,88 +19,121 @@ editor_options:
     chunk_output_type: console
 ---
 
-```{r}
-knitr::opts_chunk$set(message = FALSE)
+```{r echo=FALSE, message=FALSE}
+knitr::opts_chunk$set(message=FALSE)
 devtools::load_all(".")
 ```
 
-### Example Data
+# Introduction
+
+Geneset enrichment is an important step in many biological data analysis workflows, particularly in bioinformatics and computational biology. At a basic level, one is testing if a group of genes has a significant overlap with a series of pre-defined sets of genes, which typically signify some biological relevance. The R package hypeR enables users to easily perform this type of analysis via a hypergeometric test with default compatibility with The Molecular Signatures Database ([MSigDB](http://software.broadinstitute.org/gsea/msigdb/collections.jsp)). While hypeR is similar to other geneset enrichment programs - such as the popular [Enrichr]( http://amp.pharm.mssm.edu/Enrichr/) - it does have some unique features such as setting a specific background integer, reducing genesets to their intersection with a background set of genes, as well as useful functions designed for R markdown-style reports. Additionally, users can use custom genesets that are easily defined, extending the analysis of genes to other areas of interest such as proteins, microbes, metabolites etc. The hypeR package is designed to make routine geneset enrichment seamless for scientist working in R. 
+
+# Installation
+Download the package from Bioconductor.
+```{r get_package, eval=FALSE}
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("hypeR")
+
+```
+
+Or install the development version of the package from Github.
+```{r, eval=FALSE}
+
+BiocManager::install("montilab/hypeR")
+
+```
+
+Load the package into R session.
+```{r load, message=FALSE}
+
+library(hypeR)
+
+```
+
+Download all available MSigDB genesets to be available for hypeR::db_get().
+```{r eval=FALSE}
+
+hypeR::download_msigdb(species="Homo sapiens") 
+
+```
+
+# Workflows
+## Example Data
+Here we define our genes of interest as a group of genes known involved in tricarboxylic acid cycle.
 ```{r}
 
-# Genes involved in tricarboxylic acid cycle
 symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 ```
 
-### Typical Workflow
-
-#### Print Available Gene Sets
+## Print Available Genesets
+All genesets can be downloaded with the function hypeR::download_msigdb().
 ```{r}
 
-# All gene sets can be downloaded with hypeR::download.msigdb()
-db.info()
+db_info()
 
 ```
 
-#### Loading Gene Sets
+## Loading Gene Sets
+Use hypeR::db_get() to retrieve a downloaded geneset. By default, hypeR comes pre-loaded with the following genesets. In this example, we are interested in all three, therefore we concatenate them. A geneset is simply a list of character vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
 ```{r}
 
-BIOCARTA <- db.get("C2.CP.BIOCARTA")
-KEGG     <- db.get("C2.CP.KEGG")
-REACTOME <- db.get("C2.CP.REACTOME")
+BIOCARTA <- db_get("C2.CP.BIOCARTA")
+KEGG     <- db_get("C2.CP.KEGG")
+REACTOME <- db_get("C2.CP.REACTOME")
 
 gsets <- c(BIOCARTA, KEGG, REACTOME)
 
 ```
 
-#### Hyper Enrichment
+## Hyper Enrichment
 ```{r}
 
 hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
 
 ```
 
-#### Visualize Results
+## Visualize Results
 ```{r}
 
-hyp.plot(hyp)
+hyp_plot(hyp)
 
 ```
 
-#### Interactive Table
+## Interactive Table
 ```{r}
 
-hyp.show(hyp)
+hyp_show(hyp)
 
 ```
 
-#### Save Results to Excel
-```{r}
+## Save Results to Excel
+```{r, eval=FALSE}
 
-hyp.to.excel(hyp, file.path="pathways.xlsx")
-
-```
-
-#### Save Results to Table
-```{r}
-
-hyp.to.table(hyp, file.path="pathways.txt")
+hyp_to_excel(hyp, file.path="pathways.xlsx")
 
 ```
 
-### Alternative Functionality
+## Save Results to Table
+```{r, eval=FALSE}
 
-#### Use Custom Gene Sets
+hyp_to_table(hyp, file.path="pathways.txt")
+
+```
+
+# Alternative Functionality
+
+## Use Custom Gene Sets
+As mentioned previously, one can use custom genesets with hypeR. In this example, we download one of the many publicly available genesets hosted by Enrichr. Once downloaded, one performs hyper enrichment as normal.
 ```{r}
 
-library(httr)
-
-# A publicly available gene set hosted by Enrichr
 url = "http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Cancer_Cell_Line_Encyclopedia"
-r <- GET(url)
-text <- content(r, "text", encoding="ISO-8859-1")
+r <- httr::GET(url)
+text <- httr::content(r, "text", encoding="ISO-8859-1")
 text.split <- strsplit(text, "\n")[[1]]
 gsets <- sapply(text.split, function(x) {
     genes <- strsplit(x, "\t")[[1]]
@@ -108,26 +141,29 @@ gsets <- sapply(text.split, function(x) {
 })
 names(gsets) <- unlist(lapply(text.split, function(x) strsplit(x, "\t")[[1]][1]))
 
-# Perform hyper enrichment as normal
 hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
 
 ```
 
-#### Specify a Background Population of Genes
+## Specify a Background Population of Genes
+In cases where the background population is small it is advisable to first reduce genesets to their intersection with the background population of genes. By providing a character vector of background genes instead of an integer, hypeR will do just that. Here is an example of an experiment that only uses sex-linked genes and therefore genesets are restricted to only genes included in the background population.
 ```{r}
 
-library(httr)
-
-# An experiment that only uses sex-linked genes
 url = "https://www.genenames.org/cgi-bin/download/custom?col=gd_app_sym&chr=X&chr=Y&format=text"
-r <- GET(url)
-text <- content(r, "text", encoding="ISO-8859-1")
+r <- httr::GET(url)
+text <- httr::content(r, "text", encoding="ISO-8859-1")
 text.split <- strsplit(text, "\n")[[1]]
 
 bg <- text.split[2:length(text.split)]
 head(bg)
 
-# Gene sets are restricted to genes included in the background population
 hyp <- hypeR(symbols, gsets, bg=bg)
+
+```
+
+# Session Info
+```{r}
+
+sessionInfo()
 
 ```

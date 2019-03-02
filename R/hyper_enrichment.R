@@ -4,7 +4,7 @@
 #' @param ... What to print
 #' @return None
 #'
-VERBOSE <- function( v, ... )
+.VERBOSE <- function( v, ... )
 {
     if ( v ) cat( ... )
 }
@@ -20,7 +20,7 @@ VERBOSE <- function( v, ... )
 #'
 #' @return a data.frame with rows indexed by the signature(s) tested
 #'
-hyper.enrichment <- function (
+.hyper_enrichment <- function (
     drawn,          # one or more sets of 'drawn' items (e.g., genes). Basically, a list of signatures.
     categories,     # gene sets (list of gene sets)
     ntotal=length(unique(unlist(categories))), # background population, i.e., the total no. of items from which
@@ -41,7 +41,7 @@ hyper.enrichment <- function (
     }
 
     if ( ntotal<length(unique(unlist(categories)))) {
-        VERBOSE(verbose,
+        .VERBOSE(verbose,
                 "Warning: Background population's size less than unique categories' items:",
                 ntotal,
                 "<",
@@ -60,7 +60,7 @@ hyper.enrichment <- function (
         ncat <- length(categories)
         enrich <- matrix(NA,ncat*length(drawn),length(cnames)+1)
 
-        VERBOSE(verbose,"Testing",length(drawn),"drawsets on",ncat,"categories and", length(gene.names),"total items ..\n")
+        .VERBOSE(verbose,"Testing",length(drawn),"drawsets on",ncat,"categories and", length(gene.names),"total items ..\n")
 
         percent <- 0.1
         base <- 0
@@ -68,11 +68,11 @@ hyper.enrichment <- function (
 
         for ( i in seq_len(length(drawn)) )
         {
-            VERBOSE(verbose,"*** Testing", names(drawn)[i], ".. " )
+            .VERBOSE(verbose,"*** Testing", names(drawn)[i], ".. " )
             dset <- drawn[[i]]
-            tmp <- hyper.enrichment(dset,categories,ntotal=ntotal,verbose=verbose)
+            tmp <- .hyper_enrichment(dset,categories,ntotal=ntotal,verbose=verbose)
             if (is.null(tmp)) {
-                VERBOSE(verbose,"not enough items drawn\n")
+                .VERBOSE(verbose,"not enough items drawn\n")
                 next
             }
             ntst <- ntst+1
@@ -82,21 +82,21 @@ hyper.enrichment <- function (
             enrich[rng,] <- cbind(set=rep(names(drawn)[i],ncat),tmp)
             base <- base+ncat
             if (FALSE && i>=round(length(drawn)*percent)) {
-                VERBOSE(verbose, round(100*percent),"% ",sep="")
+                .VERBOSE(verbose, round(100*percent),"% ",sep="")
                 percent <- percent+0.1
             }
-            VERBOSE(verbose," (min fdr: ", signif(min(as.numeric(tmp[,"fdr"])),2),")\n",sep="")
+            .VERBOSE(verbose," (min fdr: ", signif(min(as.numeric(tmp[,"fdr"])),2),")\n",sep="")
         }
-        VERBOSE(verbose,"done.\n")
+        .VERBOSE(verbose,"done.\n")
         colnames(enrich) <- c("set",cnames)
 
         enrich <- enrich[seq_len(base),,drop=FALSE]
         if (mht) {
-            VERBOSE(verbose,"MHT-correction across multiple draws ..")
+            .VERBOSE(verbose,"MHT-correction across multiple draws ..")
             enrich[,"fdr"] <- p.adjust(as.numeric(enrich[,"pval"]), method="fdr")
-            VERBOSE(verbose,"done.\n")
+            .VERBOSE(verbose,"done.\n")
         }
-        VERBOSE(verbose,
+        .VERBOSE(verbose,
                 "Categories tested: ",rjust(length(categories),4),"\n",
                 "Candidate sets:    ",rjust(length(drawn),4),"\n",
                 "Sets tested:       ",rjust(ntst,4),"\n",
@@ -113,11 +113,11 @@ hyper.enrichment <- function (
     m.idx<-drawn[drawn %in% gene.names]
 
     if ( length(m.idx)<min.drawsize ) {
-        VERBOSE(verbose,"insufficient annotated genes in the drawn set: ",
+        .VERBOSE(verbose,"insufficient annotated genes in the drawn set: ",
                 paste(gene.names[m.idx],collapse=","),"\n")
         return(NULL)
     }
-    VERBOSE(verbose, "Found ", length(m.idx) ,"/", length(drawn), " annotated genes", sep="")
+    .VERBOSE(verbose, "Found ", length(m.idx) ,"/", length(drawn), " annotated genes", sep="")
 
     nhits <-sapply(categories, function(x,y) length(intersect(x,y)), m.idx)
     ndrawn <- length(drawn) # length(m.idx)

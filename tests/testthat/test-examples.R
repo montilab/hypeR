@@ -1,7 +1,7 @@
 # Grab all curated genesets
-BIOCARTA <- db.get("C2.CP.BIOCARTA")
-KEGG <- db.get("C2.CP.KEGG")
-REACTOME <- db.get("C2.CP.REACTOME")
+BIOCARTA <- db_get("C2.CP.BIOCARTA")
+KEGG <- db_get("C2.CP.KEGG")
+REACTOME <- db_get("C2.CP.REACTOME")
 
 # Genes involed in tricarboxylic acid cycle
 symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -12,7 +12,7 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 hyp <- hypeR(symbols, REACTOME, bg=2520, fdr=0.05)
 
 # Plotting
-p <- hyp.plot(hyp, val="fdr")
+p <- hyp_plot(hyp, val="fdr")
 
 test_that("Database retrieval is working", {
     expect_true(startsWith(names(BIOCARTA)[1], "BIOCARTA"))
@@ -31,7 +31,7 @@ test_that("Plotting visualization is working", {
 })
 
 test_that("Hyper Dataframe can be saved as table", {
-    hyp.to.table(hyp, file.path="pathways.txt")
+    hyp_to_table(hyp, file.path="pathways.txt")
     expect_true(file.exists("pathways.txt"))
     df <- read.table("pathways.txt", header=TRUE)
     expect_equal(df$pval, c(3.7e-28, 1.3e-26, 1.0e-18))
@@ -39,6 +39,6 @@ test_that("Hyper Dataframe can be saved as table", {
 })
 
 test_that("Hyper Dataframe can be saved as excel", {
-    hyp.to.excel(hyp, file.path="pathways.xlsx")
+    hyp_to_excel(hyp, file.path="pathways.xlsx")
     expect_true(file.exists("pathways.xlsx"))
 })
