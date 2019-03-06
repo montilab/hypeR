@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db_get("C2.CP.REACTOME")
+#' REACTOME <- ex_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -72,7 +72,7 @@ hypeR <- function(symbols,
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db_get("C2.CP.REACTOME")
+#' REACTOME <- ex_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -130,7 +130,7 @@ hyp_show <- function(df, simple=TRUE, stylish=FALSE) {
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db_get("C2.CP.REACTOME")
+#' REACTOME <- ex_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -162,7 +162,7 @@ hyp_to_excel <- function(df, file.path, cols=seq_len(ncol(df))) {
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db_get("C2.CP.REACTOME")
+#' REACTOME <- ex_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -194,7 +194,7 @@ hyp_to_table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- db_get("C2.CP.REACTOME")
+#' REACTOME <- ex_get("C2.CP.REACTOME")
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",

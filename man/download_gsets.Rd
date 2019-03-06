@@ -7,11 +7,11 @@
 download_gsets(species = "Homo sapiens", category, subcategory)
 }
 \arguments{
-\item{species}{A species to determine gene symbols (refer to the msigdbr R package for available species)}
+\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}
 
-\item{category}{Gene set category (refer to the msigdbr R package for available categories)}
+\item{category}{Gene set category (refer to ?msigdbr::msigdbr for avilable categories)}
 
-\item{subcategory}{Gene set subcategory (refer to the msigdbr R package for available subcategories)}
+\item{subcategory}{Gene set subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)}
 }
 \value{
 A list of gene sets

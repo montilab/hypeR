@@ -2,18 +2,22 @@
 % Please edit documentation in R/data.R
 \name{download_msigdb}
 \alias{download_msigdb}
-\title{Update available gene sets from msigdb}
+\title{Download all gene sets from msigdb for a given species}
 \usage{
 download_msigdb(species = "Homo sapiens", output_dir = NULL)
 }
 \arguments{
-\item{species}{A species to determine gene symbols (refer to the msigdbr R package for available species)}
+\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}
 
 \item{output_dir}{A directory path where gene sets are downloaded instead of to the package location}
 }
 \value{
-None
+A list containing the output directory and version number of gene sets
 }
 \description{
-Update available gene sets from msigdb
+Download all gene sets from msigdb for a given species
+}
+\examples{
+msigdb_info <- download_msigdb()
+
 }

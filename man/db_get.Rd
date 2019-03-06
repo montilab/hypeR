@@ -2,20 +2,25 @@
 % Please edit documentation in R/data.R
 \name{db_get}
 \alias{db_get}
-\title{Fetch gene sets}
+\title{Fetch downloaded gene sets from msigdb}
 \usage{
-db_get(symbol)
+db_get(msigdb_info, symbol = c("C1", "C2.CGP", "C2.CP", "C2.CP.BIOCARTA",
+  "C2.CP.KEGG", "C2.CP.REACTOME", "C3.MIR", "C3.TFT", "C4.CGN", "C4.CM",
+  "C5.BP", "C5.CC", "C5.MF", "C6", "C7", "H"))
 }
 \arguments{
-\item{symbol}{A symbol corresponding to a gene set (hypeR comes with C2.CP.BIOCARTA, C2.CP.KEGG, and C2.CP.REACTOME, see vignette to download more)}
+\item{msigdb_info}{A list containing the gene set directory and version number of gene sets}
+
+\item{symbol}{A symbol corresponding to a msigdb gene set}
 }
 \value{
 A list of gene sets
 }
 \description{
-Fetch gene sets
+Fetch downloaded gene sets from msigdb
 }
 \examples{
-REACTOME <- db_get("C2.CP.REACTOME")
+msigdb_info <- download_msigdb()
+REACTOME <- db_get(msigdb_info, "C2.CP.REACTOME")
 
 }

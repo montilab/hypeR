@@ -1,7 +1,7 @@
 # Grab all curated genesets
-BIOCARTA <- db_get("C2.CP.BIOCARTA")
-KEGG <- db_get("C2.CP.KEGG")
-REACTOME <- db_get("C2.CP.REACTOME")
+BIOCARTA <- ex_get("C2.CP.BIOCARTA")
+KEGG <- ex_get("C2.CP.KEGG")
+REACTOME <- ex_get("C2.CP.REACTOME")
 
 # Genes involed in tricarboxylic acid cycle
 symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
