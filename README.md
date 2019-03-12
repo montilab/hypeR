@@ -10,24 +10,31 @@ Geneset enrichment analysis based on hyper-geometric test
 
 ``` r
 library(devtools)
-devtools::install_github("montilab/hypeR")
+
+# Please use the dev branch until the next stable Bioconductor release
+devtools::install_github("montilab/hypeR", ref="dev")
 ```
 
 ### Usage
 
 ``` r
+# Load package
 library(hypeR)
 
-# Genes involed in tricarboxylic acid cycle
-symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
-             "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
-             "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+# Download msigdb genesets
+# By default this saves genesets to a temporary dir (deleted after current session)
+# The directory and msigdb version number is returned
+msigdb_info <- download_msigdb(species="Homo sapiens") 
+
+# One can also download the genesets to a specific directory for
+# later use and to ensure reproducibility
+msigdb_info <- download_msigdb(species="Homo sapiens", output_dir="path/to/dir") 
 ```
 
 #### Available Genesets
 
 ``` r
-db.info()
+db_info()
 ## |------------------------------------------------------------|
 ## | Available Gene Sets                                 v6.2.1 |
 ## |------------------------------------------------------------|
@@ -52,12 +59,19 @@ db.info()
 ## |------------------------------------------------------------|
 ```
 
+```r
+# Genes involed in tricarboxylic acid cycle
+symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+             "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+             "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+```
+
 #### Loading Genesets
 
 ``` r
-BIOCARTA <- db.get("C2.CP.BIOCARTA")
-KEGG     <- db.get("C2.CP.KEGG")
-REACTOME <- db.get("C2.CP.REACTOME")
+BIOCARTA <- db_get(msigdb_info, "C2.CP.BIOCARTA")
+KEGG     <- db_get(msigdb_info, "C2.CP.KEGG")
+REACTOME <- db_get(msigdb_info, "C2.CP.REACTOME")
 
 gsets <- c(BIOCARTA, KEGG, REACTOME)
 ```
@@ -76,7 +90,7 @@ hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
 #### Visualize Results
 
 ``` r
-hyp.plot(hyp)
+hyp_plot(hyp)
 ```
 
 <img src="figs/README-plot.png" width="672" />
@@ -84,11 +98,11 @@ hyp.plot(hyp)
 #### Interactive Table
 
 ``` r
-hyp.show(hyp)
+hyp_show(hyp)
 ```
 
 #### Save Results
 
 ``` r
-hyp.to.excel(hyp, file.path="pathways.xlsx")
+hyp_to_excel(hyp, file.path="pathways.xlsx")
 ```
