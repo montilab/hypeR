@@ -23,7 +23,7 @@ hypeR(symbols, gsets, bg = 23467, min.drawsize = 4, pval.cutoff = 1,
 \item{verbose}{Use false to suppress logs}
 }
 \value{
-A hyper dataframe
+A hyper object
 }
 \description{
 Perform hyper enrichment

@@ -12,7 +12,7 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 hyp <- hypeR(symbols, REACTOME, bg=2520, fdr=0.05)
 
 # Plotting
-p <- hyp_plot(hyp, val="fdr")
+p <- hyp_plot(hyp, val="fdr", show_plots=FALSE, return_plots=TRUE)
 
 test_that("Database retrieval is working", {
     expect_true(startsWith(names(BIOCARTA)[1], "BIOCARTA"))
