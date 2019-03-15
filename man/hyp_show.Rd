@@ -2,12 +2,12 @@
 % Please edit documentation in R/hyp_to_show.R
 \name{hyp_show}
 \alias{hyp_show}
-\title{Convert hyper dataframe to an interactive datatable}
+\title{Convert hyp object to an interactive datatable}
 \usage{
-hyp_show(df, simple = TRUE, stylish = FALSE)
+hyp_show(hyp, simple = TRUE, stylish = FALSE)
 }
 \arguments{
-\item{df}{A hyper dataframe}
+\item{hyp}{A hyp object}
 
 \item{simple}{Use true to only include essential dataframe columns}
 
@@ -17,7 +17,7 @@ hyp_show(df, simple = TRUE, stylish = FALSE)
 A datatable object
 }
 \description{
-Convert hyper dataframe to an interactive datatable
+Convert hyp object to an interactive datatable
 }
 \examples{
 # Grab a list of curated gene sets
@@ -29,7 +29,7 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+hyp <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 
 # Export
 hyp_show(hyp)

@@ -2,17 +2,17 @@
 % Please edit documentation in R/hyp_to_rmd.R
 \name{hyp_to_rmd}
 \alias{hyp_to_rmd}
-\title{Export hyper object to rmarkdown}
+\title{Export hyp object to rmarkdown}
 \usage{
-hyp_to_rmd(hyp, file.path, title = "", subtitle = "", author = "",
+hyp_to_rmd(hyp, file_path, title = "", subtitle = "", author = "",
   header = "Hyper Enrichment", show_plots = TRUE, show_tables = TRUE,
   top = 15, val = "fdr", custom_rmd_config = NULL,
   custom_pre_content = NULL, custom_post_content = NULL)
 }
 \arguments{
-\item{hyp}{A hyper object}
+\item{hyp}{A hyper object, multihyp object, or list of multihyp objects}
 
-\item{file.path}{Output file path}
+\item{file_path}{Output file path}
 
 \item{title}{Title of markdown report}
 
@@ -40,5 +40,5 @@ hyp_to_rmd(hyp, file.path, title = "", subtitle = "", author = "",
 None
 }
 \description{
-Export hyper object to rmarkdown
+Export hyp object to rmarkdown
 }

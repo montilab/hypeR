@@ -24,30 +24,31 @@ rmd_tabset <- "
 "
 
 rmd_tab <- "
-### {1} 
-```{r {1}, echo = FALSE}
-df <- hyp[['{1}']] 
-{2}
+### {2} 
+```{r {5}, echo = FALSE}
+hyp <- tabsets[['{1}']][['{2}']] 
 {3}
+{4}
 ```
 "
 
 tab_plot <- "
-df %>%
+hyp %>%
 hyp_plot(top={1}, val='{2}', show_plots=FALSE, return_plots=TRUE)
 "
 
 tab_table <- "
-df %>%
+hyp %>%
+as('data.frame') %>%
 knitr::kable(format='html') %>% 
 kable_styling() %>% 
 scroll_box(height='500px', width='900px')
 "
 
-#' Export hyper object to rmarkdown
+#' Export hyp object to rmarkdown
 #'
-#' @param hyp A hyper object
-#' @param file.path Output file path
+#' @param hyp A hyper object, multihyp object, or list of multihyp objects
+#' @param file_path Output file path
 #' @param title Title of markdown report
 #' @param subtitle Subtitle of markdown report
 #' @param author Authors of markdown report
@@ -62,9 +63,10 @@ scroll_box(height='500px', width='900px')
 #' @return None
 #'
 #' @importFrom rmarkdown render
+#' @importFrom magrittr %>%
 #' @export
 hyp_to_rmd <- function(hyp, 
-                       file.path, 
+                       file_path, 
                        title="",
                        subtitle="",
                        author="",
@@ -87,54 +89,79 @@ hyp_to_rmd <- function(hyp,
                       gsub('\\{3}', author, .)
     }
 
-    write(rmd_config, file = file.path, append = FALSE)
-    write(rmd_knitr, file = file.path, append = TRUE)
+    write(rmd_config, file = file_path, append = FALSE)
+    write(rmd_knitr, file = file_path, append = TRUE)
 
     # Content before hyper enrichment tabs
     if (!is.null(custom_pre_content)) {
-        write(custom_pre_content, file = file.path, append = TRUE)
+        write(custom_pre_content, file = file_path, append = TRUE)
     }
 
-    # Writing tabs
-    rmd_tabset <- rmd_tabset %>% 
-                  gsub('\\{1}', header, .)
+    # Iterate over the following object structure
+    #
+    # Generate a tab...
+    # for each multihyp
+    #    for each hyp
+    #
+    # Example:
+    # list(tabset1 = list(tab1 = hyp,
+    #                     tab2 = hyp),
+    #      tabset2 = list(tab1 = hyp,
+    #                     tab2 = hyp))
 
-    write(rmd_tabset, file = file.path, append = TRUE)
-
-    # Handle single dataframe hyper objects
-    if (class(hyp) == "data.frame") {
-        hyp <- list(" " = hyp)
+    # A single set of tabs
+    # ----------------------
+    if (class(hyp) == "hyp") {
+        tabsets <- list(header = list(" " = hyp))
     }
-    for (i in names(hyp)) {
+    if (class(hyp) == "multihyp") {
+        tabsets <- list(header = hyp@data)
+    }
+    if (class(hyp) == "list") {
+        tabsets <- lapply(hyp, function(x) {
+            stopifnot(class(x) == "hyp" | class(x) == "multihyp")
+            if (class(x) == "hyp") {
+                return(list(" " = x))
+            }
+            if (class(x) == "multihyp") {
+                return(x@data)
+            }
+        })
+    }
+    # ----------------------
 
-        rmd_tab_i <- rmd_tab %>%
-                     gsub("\\{1}", i, .) %>%
-                     { if (show_plots) {
-                            tab_plot <- tab_plot %>%
-                                        gsub('\\{1}', top, .) %>%
-                                        gsub('\\{2}', val, .)
+    for (tabset in names(tabsets)) {
 
-                            # Parameters passed to plotting
-                            gsub("\\{2}", 
-                                tab_plot %>%
-                                gsub('\\{1}', top, .) %>%
-                                gsub('\\{2}', val, .), 
-                                .)
-                       } else {
-                            .
-                       }
-                     } %>%
-                     { ifelse(show_tables, gsub("\\{3}", tab_table, .), .) }
+        # Tabset header and init code
+        rmd_tabset %>%
+            gsub('\\{1}', tabset, .) %>%
+            write(file = file_path, append = TRUE)
 
-        write(rmd_tab_i, file = file.path, append = TRUE)
+        # Tab content
+        tabs <- tabsets[[tabset]]
+        for (tab in names(tabs)) {
+
+            rmd_tab %>%
+                gsub("\\{1}", tabset, .) %>%
+                gsub("\\{2}", tab, .) %>%
+                gsub("\\{5}", sample(1:100000000, 1), .) %>%
+                { if (show_plots) {
+                      gsub("\\{3}", tab_plot %>%
+                                    gsub('\\{1}', top, .) %>%
+                                    gsub('\\{2}', val, .), .)
+                   } else { . }
+                } %>%
+                { ifelse(show_tables, gsub("\\{4}", tab_table, .), .) } %>%
+                write(file = file_path, append = TRUE)
+        }
     }
 
     # Content after hyper enrichment tabs
     if (!is.null(custom_post_content)) {
-        write(custom_post_content, file = file.path, append = TRUE)
+        write(custom_post_content, file = file_path, append = TRUE)
     }
 
-    rmarkdown::render(input=file.path, 
+    rmarkdown::render(input=file_path, 
                       output_format="html_document",
-                      output_file=paste(file.path, "html", sep="."))
+                      output_file=paste(file_path, "html", sep="."))
 }

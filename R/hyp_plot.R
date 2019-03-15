@@ -19,23 +19,23 @@
 
     # Subset data based on significance value
     if (val == "pval") {
-        df.1 <- df[,c(7,1,5,3)]
-        val.pretty <- "P-Value"
+        df_1 <- df[,c(7,1,5,3)]
+        val_pretty <- "P-Value"
     } else if (val == "fdr") {
-        df.1 <- df[,c(7,2,5,3)]
-        val.pretty <- "FDR"
+        df_1 <- df[,c(7,2,5,3)]
+        val_pretty <- "FDR"
     }
 
     # Calculate bar heights
-    colnames(df.1) <- c("y", "x", "x1", "x2")
-    df.2 <- df.1
-    df.2$x <- -log10(df.1$x) # Total bar height
-    df.2$x2 <- df.1$x2/df.1$x1*df.2$x # Second bar height
-    df.2$x1 <- df.2$x-df.2$x2 # First bar height
-    y <- factor(df.2$y, levels=df.2$y) # Force order of rownames
+    colnames(df_1) <- c("y", "x", "x1", "x2")
+    df_2 <- df_1
+    df_2$x <- -log10(df_1$x) # Total bar height
+    df_2$x2 <- df_1$x2/df_1$x1*df_2$x # First bar height
+    df_2$x1 <- df_2$x-df_2$x2 # Second bar height
+    y <- factor(df_2$y, levels=df_2$y) # Force order of rownames
 
-    p <- plot_ly(df.2,
-                 x = ~x1,
+    p <- plot_ly(df_2,
+                 x = ~x2,
                  y = ~y,
                  type = 'bar',
                  orientation = 'h',
@@ -45,12 +45,12 @@
                                            width = 1))) %>%
 
                  # Split bars
-                 add_trace(x = ~x2, marker = list(color = '#C4E0E5')) %>%
+                 add_trace(x = ~x1, marker = list(color = '#C4E0E5')) %>%
 
                  # Plot settings
                  layout(title = title,
                         xaxis = list(title = paste("-log<sub>10</sub>(",
-                                                   val.pretty,
+                                                   val_pretty,
                                                    ")",
                                                    sep=""),
                                      tickvals=c(-log10(0.05),
@@ -97,7 +97,7 @@
 
 #' Visualize top enriched pathways from one or more signatures
 #'
-#' @param hyp A hyper object
+#' @param hyp A hyp or multihyp object
 #' @param top Limit number of pathways shown
 #' @param val Choose significance value e.g. c("pval", "fdr")
 #' @param show_plots An option to show plots
@@ -123,21 +123,31 @@
 #' @export
 hyp_plot <- function(hyp, top=10, val=c("fdr", "pval"), show_plots=TRUE, return_plots=FALSE) {
 
+    stopifnot(class(hyp) == "hyp" | class(hyp) == "multihyp")
+
     # Default arguments
     val <- match.arg(val)
 
     # Handling of multiple signatures
-    if (class(hyp) == "list") {
-        n <- names(hyp)
+    if (class(hyp) == "multihyp") {
+        multihyp <- hyp
+        n <- names(multihyp@data)
         res <- lapply(setNames(n, n), function(title) {
-            p <- .enrichment_plot(hyp[[title]], title, top, val)
+
+            # Extract hyp dataframe
+            hyp <- multihyp@data[[title]]
+            df <- hyp@data
+
+            p <- .enrichment_plot(df, title, top, val)
             if (show_plots) {
                 show(p)
             }
             return(p)
         })
     } else  {
-        res <- .enrichment_plot(hyp, "Top Pathways", top, val)
+        # Extract hyp dataframe
+        df <- hyp@data
+        res <- .enrichment_plot(df, "Top Pathways", top, val)
         if (show_plots) {
             show(res)
         }

@@ -2,14 +2,14 @@
 % Please edit documentation in R/hyp_to_table.R
 \name{hyp_to_table}
 \alias{hyp_to_table}
-\title{Export hyper object to table}
+\title{Export hyp object to table}
 \usage{
-hyp_to_table(hyp, file.path, sep = "\\t", cols = NULL)
+hyp_to_table(hyp, file_path, sep = "\\t", cols = NULL)
 }
 \arguments{
-\item{hyp}{A hyper object}
+\item{hyp}{A hyp or multihyp object}
 
-\item{file.path}{Output file path}
+\item{file_path}{Output file path}
 
 \item{sep}{The field separator string}
 
@@ -19,7 +19,7 @@ hyp_to_table(hyp, file.path, sep = "\\t", cols = NULL)
 None
 }
 \description{
-Export hyper object to table
+Export hyp object to table
 }
 \examples{
 # Grab a list of curated gene sets
@@ -34,6 +34,6 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 
 # Export
-hyp_to_table(hyp, file.path="pathways.txt")
+hyp_to_table(hyp, file_path="pathways.txt")
 
 }

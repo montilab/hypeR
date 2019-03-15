@@ -1,6 +1,6 @@
-#' Convert hyper dataframe to an interactive datatable
+#' Convert hyp object to an interactive datatable
 #'
-#' @param df A hyper dataframe
+#' @param hyp A hyp object
 #' @param simple Use true to only include essential dataframe columns
 #' @param stylish Use true to add a bootstrap styling theme to datatable
 #' @return A datatable object
@@ -15,14 +15,20 @@
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 #'
 #' # Export
 #' hyp_show(hyp)
 #'
 #' @importFrom DT datatable
 #' @export
-hyp_show <- function(df, simple=TRUE, stylish=FALSE) {
+hyp_show <- function(hyp, simple=TRUE, stylish=FALSE) {
+
+    stopifnot(class(hyp) == "hyp")
+
+    # Extract hyp dataframe
+    df <- hyp@data
+
     if (simple) {
         cols <- c(1,2,7,8)
     } else {
@@ -32,12 +38,13 @@ hyp_show <- function(df, simple=TRUE, stylish=FALSE) {
     # Gene symbols converted to hyperlinks
     url <- "https://www.genecards.org/cgi-bin/carddisp.pl?gene="
     df$hits <- lapply(df$hits, function(x) {
-                   vapply(symbols, function(x) {
+                   symbols <- unlist(strsplit(x, ","))
+                   vapply(symbols, function(y) {
                        paste('<a href="',
                              url,
-                             x,
+                             y,
                              '">',
-                             x,
+                             y,
                              '</a>',
                              sep="")
                    }, character(1))

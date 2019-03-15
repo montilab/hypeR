@@ -1,11 +1,33 @@
+#' An S4 class to represent a hyper object.
+#'
+#' @slot data A dataframe
+setClass("hyp",
+    slots = c(data="data.frame")
+)
+setAs("hyp", "data.frame",
+    function(from)
+        from@data
+)
+
+#' An S4 class to represent multiple hyper obejcts.
+#'
+#' @slot data A list of hyper objects
+setClass("multihyp",
+    slots = c(data="list")
+)
+setAs("multihyp", "list",
+    function(from)
+        lapply(from@data, as, "data.frame")
+)
+
 #' Perform hyper enrichment
 #'
 #' @param symbols A character vector of gene symbols
 #' @param gsets A list of gene sets
 #' @param bg Size or character vector of background population genes
-#' @param min.drawsize Min number of drawn items that must be among categories items
-#' @param pval.cutoff Filter results to be less than pval cutoff
-#' @param fdr.cutoff Filter results to be less than fdr cutoff
+#' @param min_drawsize Min number of drawn items that must be among categories items
+#' @param pval_cutoff Filter results to be less than pval cutoff
+#' @param fdr_cutoff Filter results to be less than fdr cutoff
 #' @param verbose Use false to suppress logs
 #' @return A hyper object
 #'
@@ -19,20 +41,23 @@
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 #'
 #' @export
 hypeR <- function(symbols,
                   gsets,
                   bg=23467,
-                  min.drawsize=4,
-                  pval.cutoff=1,
-                  fdr.cutoff=1,
+                  min_drawsize=4,
+                  pval_cutoff=1,
+                  fdr_cutoff=1,
                   verbose=FALSE) {
 
     # Handling of multiple signatures
     if (class(symbols) == "list") {
-        hyp <- lapply(symbols, hypeR, gsets, bg, min.drawsize, pval.cutoff, fdr.cutoff, verbose)
+        lhyp <- lapply(symbols, hypeR, gsets, bg, min_drawsize, pval_cutoff, fdr_cutoff, verbose)
+ 
+        # Wrap list of hyper objects in multihyp object
+        hyp <- new("multihyp", data=lhyp)
         return(hyp)
     }
     # Handling a background population
@@ -41,11 +66,13 @@ hypeR <- function(symbols,
         bg <- length(bg)
     }
 
-    cat("Number of genes = ", length(symbols), "\n")
-    cat("Number of gene sets = ", length(gsets), "\n")
-    cat("Background population size = ", bg, "\n")
-    cat("P-Value cutoff = ", pval.cutoff, "\n")
-    cat("FDR cutoff = ", fdr.cutoff, "\n")
+    if (verbose) {
+        cat("Number of genes = ", length(symbols), "\n")
+        cat("Number of gene sets = ", length(gsets), "\n")
+        cat("Background population size = ", bg, "\n")
+        cat("P-Value cutoff = ", pval_cutoff, "\n")
+        cat("FDR cutoff = ", fdr_cutoff, "\n")
+    }
 
     df <- data.frame(matrix(ncol=8, nrow=0))
     colnames(df) <- c("pval","fdr","set.annotated","set.size","category.annotated","total.annotated","category","hits")
@@ -53,7 +80,7 @@ hypeR <- function(symbols,
     hyp <- .hyper_enrichment(drawn=symbols,
                              categories=gsets,
                              ntotal=bg,
-                             min.drawsize=min.drawsize,
+                             min.drawsize=min_drawsize,
                              mht=TRUE,
                              verbose=verbose)
 
@@ -62,8 +89,11 @@ hypeR <- function(symbols,
         df <- data.frame(hyp, stringsAsFactors=FALSE)
         df[,seq_len(6)] <- lapply(df[,seq_len(6)], as.numeric)
         df <- df[complete.cases(df),,drop=FALSE]
-        df <- df[df$pval <= pval.cutoff,,drop=FALSE]
-        df <- df[df$fdr <= fdr.cutoff,,drop=FALSE]
+        df <- df[df$pval <= pval_cutoff,,drop=FALSE]
+        df <- df[df$fdr <= fdr_cutoff,,drop=FALSE]
     }
-    return(df)
+
+    # Wrap dataframe in hyper object
+    hyp <- new("hyp", data=df)
+    return(hyp)
 }

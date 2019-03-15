@@ -1,7 +1,7 @@
-#' Export hyper object to table
+#' Export hyp object to table
 #'
-#' @param hyp A hyper object
-#' @param file.path Output file path
+#' @param hyp A hyp or multihyp object
+#' @param file_path Output file path
 #' @param sep The field separator string
 #' @param cols Dataframe columns to include
 #' @return None
@@ -19,39 +19,46 @@
 #' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
 #' # Export
-#' hyp_to_table(hyp, file.path="pathways.txt")
+#' hyp_to_table(hyp, file_path="pathways.txt")
 #'
 #' @importFrom magrittr %>% extract
 #' @export
-hyp_to_table <- function(hyp, file.path, sep="\t", cols=NULL) {
+hyp_to_table <- function(hyp, file_path, sep="\t", cols=NULL) {
 
-    # Handling of multiple signatures
-    if (class(hyp) == "list") {
+    stopifnot(class(hyp) == "hyp" | class(hyp) == "multihyp")
+
+    # A multihyp object results in multiple tables within a director named file_path
+    if (class(hyp) == "multihyp") {
+        multihyp <- hyp
 
         # Create directory if not exists
-        dir.create(file.path, showWarnings=TRUE)
+        dir.create(file_path, showWarnings=TRUE)
 
         # A new file for each dataframe
-        for (i in names(hyp)) {
-            df <- hyp[[i]]
+        for (i in names(multihyp@data)) {
+            
             fname <- i
-
             fx = "rtf"
             if (sep == "\t") {fx <- "txt"}
             if (sep ==  ",") {fx <- "csv"}
+            fp <- paste(file.path(file_path, fname), fx, sep=".")
 
-            # File path
-            fp <- paste(file.path(file.path, fname), fx, sep=".")
+            # Extract hyp object
+            hyp <- multihyp@data[[i]]
 
-            # Recursive call for each dataframe
-            hyp_to_table(df, fp, sep, cols)
+            # Recursive call for each hyp object
+            hyp_to_table(hyp, fp, sep, cols)
         }
+
+    # A hyp object results in a single table named file_path
     } else  {
+        # Extract hyp dataframe
+        df <- hyp@data
         if (is.null(cols)) {
-            cols <- seq_len(ncol(hyp))
+            cols <- seq_len(ncol(df))
         }
-        write.table(x = hyp[,cols,drop=FALSE],
-                    file = file.path,
+        write.table(x = df[,cols,drop=FALSE],
+                    file = file_path,
                     quote = FALSE,
                     sep = sep,
                     col.names = TRUE,

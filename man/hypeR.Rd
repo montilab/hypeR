@@ -4,8 +4,8 @@
 \alias{hypeR}
 \title{Perform hyper enrichment}
 \usage{
-hypeR(symbols, gsets, bg = 23467, min.drawsize = 4, pval.cutoff = 1,
-  fdr.cutoff = 1, verbose = FALSE)
+hypeR(symbols, gsets, bg = 23467, min_drawsize = 4, pval_cutoff = 1,
+  fdr_cutoff = 1, verbose = FALSE)
 }
 \arguments{
 \item{symbols}{A character vector of gene symbols}
@@ -14,11 +14,11 @@ hypeR(symbols, gsets, bg = 23467, min.drawsize = 4, pval.cutoff = 1,
 
 \item{bg}{Size or character vector of background population genes}
 
-\item{min.drawsize}{Min number of drawn items that must be among categories items}
+\item{min_drawsize}{Min number of drawn items that must be among categories items}
 
-\item{pval.cutoff}{Filter results to be less than pval cutoff}
+\item{pval_cutoff}{Filter results to be less than pval cutoff}
 
-\item{fdr.cutoff}{Filter results to be less than fdr cutoff}
+\item{fdr_cutoff}{Filter results to be less than fdr cutoff}
 
 \item{verbose}{Use false to suppress logs}
 }
@@ -38,6 +38,6 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+hyp <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 
 }

@@ -8,7 +8,7 @@ hyp_plot(hyp, top = 10, val = c("fdr", "pval"), show_plots = TRUE,
   return_plots = FALSE)
 }
 \arguments{
-\item{hyp}{A hyper object}
+\item{hyp}{A hyp or multihyp object}
 
 \item{top}{Limit number of pathways shown}
 
