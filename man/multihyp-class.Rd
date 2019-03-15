@@ -3,13 +3,13 @@
 \docType{class}
 \name{multihyp-class}
 \alias{multihyp-class}
-\title{An S4 class to represent multiple hyper obejcts.}
+\title{An S4 class to represent multiple hyp obejcts.}
 \description{
-An S4 class to represent multiple hyper obejcts.
+An S4 class to represent multiple hyp obejcts.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{A list of hyper objects}
+\item{\code{data}}{A list of hyp objects}
 }}
 

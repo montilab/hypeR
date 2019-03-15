@@ -10,7 +10,7 @@ hyp_to_rmd(hyp, file_path, title = "", subtitle = "", author = "",
   custom_pre_content = NULL, custom_post_content = NULL)
 }
 \arguments{
-\item{hyp}{A hyper object, multihyp object, or list of multihyp objects}
+\item{hyp}{A hyp object, multihyp object, or list of multihyp objects}
 
 \item{file_path}{Output file path}
 

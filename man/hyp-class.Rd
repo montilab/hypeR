@@ -3,9 +3,9 @@
 \docType{class}
 \name{hyp-class}
 \alias{hyp-class}
-\title{An S4 class to represent a hyper object.}
+\title{An S4 class to represent a hyp object.}
 \description{
-An S4 class to represent a hyper object.
+An S4 class to represent a hyp object.
 }
 \section{Slots}{
 
