@@ -47,7 +47,7 @@ scroll_box(height='500px', width='900px')
 
 #' Export hyp object to rmarkdown
 #'
-#' @param hyp A hyper object, multihyp object, or list of multihyp objects
+#' @param hyp A hyp object, multihyp object, or list of multihyp objects
 #' @param file_path Output file path
 #' @param title Title of markdown report
 #' @param subtitle Subtitle of markdown report

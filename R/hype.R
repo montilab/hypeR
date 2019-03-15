@@ -1,4 +1,4 @@
-#' An S4 class to represent a hyper object.
+#' An S4 class to represent a hyp object.
 #'
 #' @slot data A dataframe
 setClass("hyp",
@@ -9,9 +9,9 @@ setAs("hyp", "data.frame",
         from@data
 )
 
-#' An S4 class to represent multiple hyper obejcts.
+#' An S4 class to represent multiple hyp obejcts.
 #'
-#' @slot data A list of hyper objects
+#' @slot data A list of hyp objects
 setClass("multihyp",
     slots = c(data="list")
 )
@@ -29,7 +29,7 @@ setAs("multihyp", "list",
 #' @param pval_cutoff Filter results to be less than pval cutoff
 #' @param fdr_cutoff Filter results to be less than fdr cutoff
 #' @param verbose Use false to suppress logs
-#' @return A hyper object
+#' @return A hyp object
 #'
 #' @examples
 #' # Grab a list of curated gene sets
@@ -56,7 +56,7 @@ hypeR <- function(symbols,
     if (class(symbols) == "list") {
         lhyp <- lapply(symbols, hypeR, gsets, bg, min_drawsize, pval_cutoff, fdr_cutoff, verbose)
  
-        # Wrap list of hyper objects in multihyp object
+        # Wrap list of hyp objects in multihyp object
         hyp <- new("multihyp", data=lhyp)
         return(hyp)
     }
@@ -93,7 +93,7 @@ hypeR <- function(symbols,
         df <- df[df$fdr <= fdr_cutoff,,drop=FALSE]
     }
 
-    # Wrap dataframe in hyper object
+    # Wrap dataframe in hyp object
     hyp <- new("hyp", data=df)
     return(hyp)
 }
