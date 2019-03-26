@@ -1,3 +1,19 @@
+#' Format a string using placeholders
+#'
+#' @param string A an unformatted string with placeholders (e.g. "Format with {1} and {2}")
+#' @param ... Variables to format placeholders with
+#' @return A formatted string
+#'
+format_str <- function(string, ...) {
+    args <- list(...)
+    for (i in 1:length(args)) {
+        pattern <- paste("\\{", i, "}", sep="")
+        replacement <- args[[i]]
+        string <- gsub(pattern, replacement, string)
+    }
+    return(string)
+}
+
 rmd_config <- "---
 title: '{1}'
 subtitle: '{2}'
@@ -25,11 +41,11 @@ rmd_tabset <- "
 "
 
 rmd_tab <- "
-### {2} 
-```{r {5}, echo = FALSE}
-hyp <- tabsets[['{1}']][['{2}']] 
-{3}
+### {1} 
+```{r {2}, echo = FALSE}
+hyp <- tabsets[['{3}']][['{1}']] 
 {4}
+{5}
 ```
 "
 
@@ -85,10 +101,7 @@ hyp_to_rmd <- function(hyp,
     if (!is.null(custom_rmd_config)) {
         rmd_config <- custom_rmd_config
     } else {
-        rmd_config <- rmd_config %>%
-                      gsub('\\{1}', title, .) %>%
-                      gsub('\\{2}', subtitle, .) %>%
-                      gsub('\\{3}', author, .)
+        rmd_config <- format_str(rmd_config, title, subtitle, author)
     }
 
     write(rmd_config, file = file_path, append = FALSE)
@@ -136,24 +149,19 @@ hyp_to_rmd <- function(hyp,
 
         # Tabset header and init code
         rmd_tabset %>%
-            gsub('\\{1}', tabset, .) %>%
+            format_str(tabset) %>%
             write(file = file_path, append = TRUE)
 
         # Tab content
         tabs <- tabsets[[tabset]]
         for (tab in names(tabs)) {
 
+            tab_id <- sample(1:100000000, 1)
+            plot_area <- ifelse(show_plots, format_str(tab_plot, top, val), "")
+            table_area <- ifelse(show_tables, tab_table, "")
+
             rmd_tab %>%
-                gsub("\\{1}", tabset, .) %>%
-                gsub("\\{2}", tab, .) %>%
-                gsub("\\{5}", sample(1:100000000, 1), .) %>%
-                { if (show_plots) {
-                      gsub("\\{3}", tab_plot %>%
-                                    gsub('\\{1}', top, .) %>%
-                                    gsub('\\{2}', val, .), .)
-                   } else { . }
-                } %>%
-                { ifelse(show_tables, gsub("\\{4}", tab_table, .), .) } %>%
+                format_str(tab, tab_id, tabset, plot_area, table_area) %>%
                 write(file = file_path, append = TRUE)
         }
     }
