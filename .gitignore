@@ -1,6 +1,6 @@
 # Devolpment scripts
 dev/
-README.Rmd
+workflow/
 
 # Larger Datasets
 inst/extdata/C1.v6.2.1.rds

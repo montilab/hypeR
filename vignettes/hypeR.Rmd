@@ -55,7 +55,7 @@ library(hypeR)
 Download all available MSigDB genesets to be available for hypeR::db_get().
 ```{r}
 
-msigdb_info <- hypeR::download_msigdb(species="Homo sapiens") 
+msigdb_path <- hypeR::msigdb_download(species="Homo sapiens") 
 
 ```
 
@@ -74,7 +74,7 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 All genesets can be downloaded with the function hypeR::download_msigdb().
 ```{r}
 
-db_info()
+msigdb_info()
 
 ```
 
@@ -82,9 +82,9 @@ db_info()
 Use hypeR::db_get() to retrieve a downloaded geneset. In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a list of character vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
 ```{r}
 
-BIOCARTA <- db_get(msigdb_info, "C2.CP.BIOCARTA")
-KEGG     <- db_get(msigdb_info, "C2.CP.KEGG")
-REACTOME <- db_get(msigdb_info, "C2.CP.REACTOME")
+BIOCARTA <- msigdb_get(msigdb_path, "C2.CP.BIOCARTA")
+KEGG     <- msigdb_get(msigdb_path, "C2.CP.KEGG")
+REACTOME <- msigdb_get(msigdb_path, "C2.CP.REACTOME")
 
 gsets <- c(BIOCARTA, KEGG, REACTOME)
 

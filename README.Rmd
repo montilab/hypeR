@@ -1,0 +1,192 @@
+---
+title: "hypeR"
+output: rmarkdown::github_document
+---
+Geneset enrichment analysis based on hyper-geometric test
+
+[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master) [![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r echo=FALSE, message=FALSE}
+knitr::opts_chunk$set(message=FALSE)
+devtools::load_all(".")
+```
+
+1. [Installation](#installation)
+2. [Downloading Genesets](#downloading-genesets)
+    i. [Using msigdb](#using-msigdb)
+    ii. [Using hyperdb](#using-hyperdb)
+3. [hypeR Enrichment](#hyper-enrichment)
+    i. [Single Signature](#single-signature)
+        a. [Plot results](#plot-results)
+        b. [Enrichment map](#enrichment-map)
+        c. [Show data](#show-data)
+    ii. [Multiple Signatures](#multiple-signatures)   
+        a. [Export to excel](#export-to-excel)
+        b. [Export to table](#export-to-table)
+    iii. [Multiple Experiments](#multiple-experiments)   
+        a. [Markdown report](#markdown-report)
+
+## Installation
+While hypeR is currently a [Bioconductor package](https://www.bioconductor.org/packages/devel/bioc//html/hypeR.html), please use the dev branch to take advantage of the most updated features, until the next stable Bioconductor release.
+```{r eval=FALSE}
+library(devtools)
+
+devtools::install_github("montilab/hypeR", ref="dev")
+```
+
+```{r eval=FALSE}
+library(hypeR)
+```
+
+## Downloading Genesets
+### Using msigdb
+For most user purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. Therefore, we have added convenient functions for retrieving msigdb data compatible with hypeR.
+
+#### Available msigdb genesets
+```{r}
+hypeR::msigdb_info()
+```
+
+#### Downloading and loading msigdb genesets
+Use hypeR::msigdb_get() to retrieve a downloaded geneset. In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of character vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
+```{r}
+msigdb_path <- hypeR::msigdb_download(species="Homo sapiens")
+
+BIOCARTA <- msigdb_get(msigdb_path, "C2.CP.BIOCARTA")
+KEGG     <- msigdb_get(msigdb_path, "C2.CP.KEGG")
+REACTOME <- msigdb_get(msigdb_path, "C2.CP.REACTOME")
+
+gsets <- c(BIOCARTA, KEGG, REACTOME)
+```
+
+```{r}
+# Geneset labels
+names(gsets)[1:5]
+
+# Gene symbols
+gsets$BIOCARTA_41BB_PATHWAY[1:5]
+```
+
+### Using hyperdb
+As mentioned previously, one can use custom genesets with hypeR. If msigdb genesets are not sufficient, we have also provided another set of functions for downloading and loading other open source genesets. This is facilitated by interfacing with the publicly available [libraries](https://amp.pharm.mssm.edu/Enrichr/#stats) hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/).
+
+#### Available genesets
+```{r eval=FALSE}
+hypeR::hyperdb_info()
+```
+
+
+#### Downloading and loading hyperdb genesets
+```{r eval=FALSE}
+gsets <- hypeR::hyperdb_get("Cancer_Cell_Line_Encyclopedia")
+```
+
+### hypeR enrichment
+#### Single signature
+Often we are just interested in a single signature. Here we define our signature or genes of interest as a portion of the Wnt signaling pathway (to ensure we get some significant results). In this case, hypeR will return a *hyp object*. This object contains relevant information to the enrichment results and is recognized by downstream visualization and analysis tools.
+
+```{r}
+signature <- gsets$KEGG_WNT_SIGNALING_PATHWAY[1:50]
+
+hyp <- hypeR::hypeR(signature, gsets, bg=2520)
+```
+
+```{r}
+# A hyp object
+class(hyp)
+
+# Convert to a dataframe
+hyp.df <- as(hyp, "data.frame")
+hyp.df[1:5,1:2]
+```
+
+#### Plot results
+```{r eval=FALSE}
+hypeR::hyp_plot(hyp)
+```
+
+<img src="figs/fig_001.png" width="672"/>
+
+#### Enrichment map
+```{r eval=FALSE}
+hypeR::hyp_emap(hyp, gsets)
+```
+
+<img src="figs/fig_002.png" width="672"/>
+
+#### Show data
+```{r eval=FALSE}
+hypeR::hyp_show(hyp)
+```
+
+<img src="figs/fig_003.png" width="672"/>
+
+#### Multiple signatures
+Other times we are looking at multiple signatures that may have been defined in a single experiment. In this case, we can feed hypeR a named list of signatures and a *multihyp object* will be returned. This object is essentially just multiple *hyp objects*. However it is recognized and handled differently by downstream visualization and analysis tools.
+
+```{r}
+set.seed(1)
+experiment <- list("YAP-KO Signature"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                   "YAP-KO Up-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                   "YAP-KO Down-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10))
+
+multihyp <- hypeR(experiment, gsets, bg=2520)
+```
+
+#### Plot results
+When plotting a multihyp object, each signatures is plotted and returned separately.
+```{r}
+hypeR::hyp_plot(multihyp)
+```
+
+#### Export to excel
+When saving a multihyp object to excel, each signature is exported to its own tab.
+```{r, eval=FALSE}
+hypeR::hyp_to_excel(multihyp, file.path="hyper.xls")
+```
+
+#### Export to table
+When saving a multihyp object to a table, each signature is exported as its own table in a single directory.
+```{r, eval=FALSE}
+hypeR::hyp_to_table(multihyp, file.path="hyper.txt")
+```
+
+#### Multiple experiments
+Sometimes, we are generating enrichment reports for mutliple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with our collaborators.
+```{r}
+set.seed(1)
+experiment.1 <- list("YAP-KO Signature"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                     "YAP-KO Up-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                     "YAP-KO Down-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10))
+set.seed(2)
+experiment.2 <- list("LATS-KO Signature"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                     "LATS-KO Up-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                     "LATS-KO Down-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10))
+set.seed(3)
+experiment.3 <- list("TEAD-KO Signature"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                     "TEAD-KO Up-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10),
+                     "TEAD-KO Down-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10))
+
+experiments <- list("YAP-KO Experiment"=experiment.1,
+                    "LATS-KO Experiment"=experiment.2,
+                    "TEAD-KO Experiment"=experiment.3)
+
+lmultihyp <- lapply(experiments, function(x) hypeR(x, gsets, bg=2520))
+```
+
+#### Markdown report
+```{r eval=FALSE}
+hypeR::hyp_to_rmd(lmultihyp,
+                  file_path="hyper-enrichment.rmd",
+                  title="Hyper Enrichment (hypeR)",
+                  subtitle="YAP, LATS, and TEAD Knockout Experiments",
+                  author="Anthony Federico, Stefano Monti",
+                  show_plots=T,
+                  show_tables=T,
+                  top=10,
+                  val="fdr")
+```
+
+<img src="figs/fig_004.png" width="672"/>

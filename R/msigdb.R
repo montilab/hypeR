@@ -10,10 +10,10 @@
 #' @importFrom msigdbr msigdbr
 #'
 #' @examples
-#' HALLMARK <- download_gsets("Homo sapiens", "H", "")
+#' HALLMARK <- msigdb_helper("Homo sapiens", "H", "")
 #'
 #' @export
-download_gsets <- function(species="Homo sapiens", category, subcategory) {
+msigdb_helper <- function(species="Homo sapiens", category, subcategory) {
 
     # Download genesets
     mdf <- msigdbr(species, category, subcategory) %>%
@@ -34,14 +34,14 @@ download_gsets <- function(species="Homo sapiens", category, subcategory) {
 #' @return A list containing the output directory and version number of gene sets
 #'
 #' @examples
-#' msigdb_info <- download_msigdb()
+#' msigdb_path <- msigdb_download()
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select arrange
 #' @importFrom msigdbr msigdbr
 #'
 #' @export
-download_msigdb <- function(species="Homo sapiens", output_dir=NULL) {
+msigdb_download <- function(species="Homo sapiens", output_dir=NULL) {
 
     if (is.null(output_dir)) {
         output_dir <- tempdir()
@@ -70,7 +70,7 @@ download_msigdb <- function(species="Homo sapiens", output_dir=NULL) {
         subcategory <- as.character(res[i,2])
 
         # Download gsets
-        gsets <- download_gsets(species, category, subcategory)
+        gsets <- msigdb_helper(species, category, subcategory)
 
         # Filename formatting
         nm <- ifelse(subcategory == "", category, paste(category, subcategory, sep="."))
@@ -93,10 +93,10 @@ download_msigdb <- function(species="Homo sapiens", output_dir=NULL) {
 #' @return A table of values
 #'
 #' @examples
-#' db_info()
+#' msigdb_info()
 #'
 #' @export
-db_info <- function() {
+msigdb_info <- function() {
     cat("|------------------------------------------------------------|\n")
     cat("| Available Gene Sets                                 v6.2.1 |\n")
     cat("|------------------------------------------------------------|\n")
@@ -124,15 +124,15 @@ db_info <- function() {
 #' Fetch downloaded gene sets from msigdb
 #'
 #' @param symbol A symbol corresponding to a msigdb gene set
-#' @param msigdb_info A list containing the gene set directory and version number of gene sets
+#' @param msigdb_path A list containing the gene set directory and version number of gene sets
 #' @return A list of gene sets
 #'
 #' @examples
-#' msigdb_info <- download_msigdb()
-#' REACTOME <- db_get(msigdb_info, "C2.CP.REACTOME")
+#' msigdb_path <- msigdb_download()
+#' REACTOME <- msigdb_get(msigdb_path, "C2.CP.REACTOME")
 #'
 #' @export
-db_get <- function(msigdb_info,
+msigdb_get <- function(msigdb_path,
                    symbol=c("C1",
                             "C2.CGP",
                             "C2.CP",
@@ -151,7 +151,7 @@ db_get <- function(msigdb_info,
                             "H")) {
 
     symbol <- match.arg(symbol)
-    path <- file.path(msigdb_info$output_dir, paste(symbol, msigdb_info$vs, "rds", sep="."))
+    path <- file.path(msigdb_path$output_dir, paste(symbol, msigdb_path$vs, "rds", sep="."))
     gs <- readRDS(path)
     return(gs)
 }

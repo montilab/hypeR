@@ -1,6 +1,6 @@
 Package: hypeR
 Title: Hyper Enrichment
-Version: 1.00.2
+Version: 1.00.3
 Author:
     Anthony Federico <anfed@bu.edu>,
     Stefano Monti <smonti@bu.edu>
@@ -18,7 +18,10 @@ Imports:
     dplyr,
     openxlsx,
     msigdbr,
-    rmarkdown
+    rmarkdown,
+    gh,
+    igraph,
+    visNetwork
 Suggests: 
     devtools,
     testthat,
