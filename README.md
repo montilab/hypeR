@@ -6,6 +6,8 @@ Geneset enrichment analysis based on hyper-geometric test
 
 [![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master) [![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
+*For latest version, please refer to the [dev branch](https://github.com/montilab/hypeR/tree/dev)*
+
 ### Installation
 
 ``` r
