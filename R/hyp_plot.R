@@ -3,7 +3,7 @@
 #' @param df A dataframe
 #' @param title Plot title
 #' @param top Limit number of pathways shown
-#' @param val Choose significance value e.g. c("pval", "fdr")
+#' @param val Choose significance value e.g. c("fdr", "pval")
 #' @return A plotly object
 #'
 #' @importFrom plotly plot_ly plotly_empty add_trace add_annotations layout %>%
@@ -99,7 +99,7 @@
 #'
 #' @param hyp A hyp or multihyp object
 #' @param top Limit number of pathways shown
-#' @param val Choose significance value e.g. c("pval", "fdr")
+#' @param val Choose significance value e.g. c("fdr", "pval")
 #' @param show_plots An option to show plots
 #' @param return_plots An option to return plots
 #' @return A plotly object

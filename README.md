@@ -94,7 +94,7 @@ msigdb_path <- hypeR::msigdb_download(species="Homo sapiens")
 
     ## v6.2.1
     ## Downloading Gene Sets to...
-    ## /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//RtmpKhKLrk
+    ## /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//Rtmpmk1Vgr
     ## - C1 -> 326 Gene Sets 
     ## - C2.CGP -> 3433 Gene Sets 
     ## - C2.CP -> 252 Gene Sets 
@@ -207,7 +207,7 @@ hypeR::hyp_plot(hyp)
 #### Enrichment map
 
 ``` r
-hypeR::hyp_emap(hyp, gsets)
+hypeR::hyp_emap(hyp)
 ```
 
 <img src="figs/fig_002.png" width="672"/>
@@ -301,9 +301,8 @@ hypeR::hyp_to_rmd(lmultihyp,
                   subtitle="YAP, LATS, and TEAD Knockout Experiments",
                   author="Anthony Federico, Stefano Monti",
                   show_plots=T,
-                  show_tables=T,
-                  top=10,
-                  val="fdr")
+                  show_emaps=F,
+                  show_tables=T)
 ```
 
 <img src="figs/fig_004.png" width="672"/>

@@ -5,8 +5,11 @@
 \title{Export hyp object to rmarkdown}
 \usage{
 hyp_to_rmd(hyp, file_path, title = "", subtitle = "", author = "",
-  header = "Hyper Enrichment", show_plots = TRUE, show_tables = TRUE,
-  top = 15, val = "fdr", custom_rmd_config = NULL,
+  header = "Hyper Enrichment", show_plots = TRUE, show_emaps = TRUE,
+  show_tables = TRUE, top_plot = 15, top_emap = 15,
+  val_plot = c("fdr", "pval"), val_emap = c("fdr", "pval"),
+  similarity_metric = c("jaccard_similarity", "overlap_similarity"),
+  similarity_cutoff = 0.2, custom_rmd_config = NULL,
   custom_pre_content = NULL, custom_post_content = NULL)
 }
 \arguments{
@@ -24,11 +27,21 @@ hyp_to_rmd(hyp, file_path, title = "", subtitle = "", author = "",
 
 \item{show_plots}{Option to show plots in tabs}
 
+\item{show_emaps}{Option to show emaps in tabs}
+
 \item{show_tables}{Option to show table in tabs}
 
-\item{top}{Limit number of pathways shown in plots}
+\item{top_plot}{Limit number of pathways shown in plots}
 
-\item{val}{Choose significance value in plots e.g. c("pval", "fdr")}
+\item{top_emap}{Limit number of pathways shown in emaps}
+
+\item{val_plot}{Choose significance value in plots e.g. c("fdr", "pval")}
+
+\item{val_emap}{Choose significance value in emaps e.g. c("fdr", "pval")}
+
+\item{similarity_metric}{Similarity matric used in emaps}
+
+\item{similarity_cutoff}{Similarity cutoff used in emaps}
 
 \item{custom_rmd_config}{Replace configuration section of markdown report}
 

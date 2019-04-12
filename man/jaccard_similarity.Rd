@@ -9,3 +9,4 @@ jaccard_similarity(a, b)
 \description{
 Calculate jaccard similarity of two sets
 }
+\keyword{internal}

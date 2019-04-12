@@ -12,7 +12,7 @@ hyp_plot(hyp, top = 10, val = c("fdr", "pval"), show_plots = TRUE,
 
 \item{top}{Limit number of pathways shown}
 
-\item{val}{Choose significance value e.g. c("pval", "fdr")}
+\item{val}{Choose significance value e.g. c("fdr", "pval")}
 
 \item{show_plots}{An option to show plots}
 

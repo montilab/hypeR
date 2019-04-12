@@ -13,7 +13,7 @@
 
 \item{top}{Limit number of pathways shown}
 
-\item{val}{Choose significance value e.g. c("pval", "fdr")}
+\item{val}{Choose significance value e.g. c("fdr", "pval")}
 }
 \value{
 A plotly object

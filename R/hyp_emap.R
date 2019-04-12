@@ -1,15 +1,28 @@
 #' Calculate jaccard similarity of two sets
 #'
+#' @keywords internal
 jaccard_similarity <- function(a, b) {
     length( intersect(a, b) ) / length( union(a, b) )
 }
 #' Calculate overlap similarity of two sets
 #'
+#' @keywords internal
 overlap_similarity <- function(a, b) {
     length( intersect(a, b) ) / min( length(a), length(b) )
 }
 
 #' Plot enrichment map
+#'
+#' @param df A dataframe
+#' @param gsets A list of genesets
+#' @param title Plot title
+#' @param similarity_metric Metric to calculate geneset similarity
+#' @param similarity_cutoff Geneset similarity cutoff
+#' @param pval_cutoff Filter results to be less than pval cutoff
+#' @param fdr_cutoff Filter results to be less than fdr cutoff
+#' @param val Choose significance value shown above nodes e.g. c("fdr", "pval")
+#' @param top Limit number of pathways shown
+#' @return A plotly object
 #'
 #' @import igraph
 #' @import visNetwork
@@ -36,11 +49,11 @@ overlap_similarity <- function(a, b) {
     }
 
     # Significance cutoff
-    df <- df[df$pval <= pval_cutoff,,drop=FALSE]
-    df <- df[df$fdr <= fdr_cutoff,,drop=FALSE]
+    hyp.df <- df[df$pval <= pval_cutoff,,drop=FALSE]
+    hyp.df <- df[df$fdr <= fdr_cutoff,,drop=FALSE]
     
     # Geneset similarity matrix
-    hyp.gsets <- gsets[df$category]
+    hyp.gsets <- gsets[hyp.df$category]
     hyp.gsets.mat <- sapply(hyp.gsets, function(x) {
         sapply(hyp.gsets, function(y,x) {
             if (similarity_metric == "jaccard_similarity") jaccard_similarity(x, y)
@@ -88,18 +101,29 @@ overlap_similarity <- function(a, b) {
                                    })
     
     output <- visNetwork(vnet$nodes, vnet$edges, main=list(text=title, style="font-family:Helvetica")) %>%
-                  visNodes(shadow=TRUE) %>%
-                  visEdges(color="red", hidden=FALSE, shadow=TRUE) %>%
-                  visOptions(highlightNearest=TRUE) %>%
-                  visInteraction(multiselect=TRUE, tooltipDelay=300) %>%
-                  visIgraphLayout(layout = "layout_nicely")
+                         visNodes(shadow=TRUE) %>%
+                         visEdges(color="red", hidden=FALSE, shadow=TRUE) %>%
+                         visOptions(highlightNearest=TRUE) %>%
+                         visInteraction(multiselect=TRUE, tooltipDelay=300) %>%
+                         visIgraphLayout(layout = "layout_nicely")
 }
 
 #' Visualize enrichment map from one or more signatures
 #'
+#' @param df A dataframe
+#' @param hyp A hyp or multihyp object
+#' @param similarity_metric Metric to calculate geneset similarity
+#' @param similarity_cutoff Geneset similarity cutoff
+#' @param pval_cutoff Filter results to be less than pval cutoff
+#' @param fdr_cutoff Filter results to be less than fdr cutoff
+#' @param val Choose significance value shown above nodes e.g. c("fdr", "pval")
+#' @param top Limit number of pathways shown
+#' @param show_plots An option to show plots
+#' @param return_plots An option to return plots
+#' @return A plotly object
+#'
 #' @export
 hyp_emap <- function(hyp, 
-                     gsets,
                      similarity_metric=c("jaccard_similarity", "overlap_similarity"),
                      similarity_cutoff=0.2,
                      pval_cutoff=1, 
@@ -124,6 +148,7 @@ hyp_emap <- function(hyp,
             # Extract hyp dataframe
             hyp <- multihyp@data[[title]]
             df <- hyp@data
+            gsets <- hyp@args$gsets
 
             p <- .enrichment_map(df, 
                                  gsets, 
@@ -142,6 +167,7 @@ hyp_emap <- function(hyp,
     } else  {
         # Extract hyp dataframe
         df <- hyp@data
+        gsets <- hyp@args$gsets
         res <- .enrichment_map(df,
                                gsets, 
                                "Enrichment Map",

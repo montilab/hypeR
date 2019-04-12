@@ -4,10 +4,34 @@
 \alias{hyp_emap}
 \title{Visualize enrichment map from one or more signatures}
 \usage{
-hyp_emap(hyp, gsets, similarity_metric = c("jaccard_similarity",
+hyp_emap(hyp, similarity_metric = c("jaccard_similarity",
   "overlap_similarity"), similarity_cutoff = 0.2, pval_cutoff = 1,
   fdr_cutoff = 1, val = c("fdr", "pval"), top = NULL,
   show_plots = TRUE, return_plots = FALSE)
+}
+\arguments{
+\item{hyp}{A hyp or multihyp object}
+
+\item{similarity_metric}{Metric to calculate geneset similarity}
+
+\item{similarity_cutoff}{Geneset similarity cutoff}
+
+\item{pval_cutoff}{Filter results to be less than pval cutoff}
+
+\item{fdr_cutoff}{Filter results to be less than fdr cutoff}
+
+\item{val}{Choose significance value shown above nodes e.g. c("fdr", "pval")}
+
+\item{top}{Limit number of pathways shown}
+
+\item{show_plots}{An option to show plots}
+
+\item{return_plots}{An option to return plots}
+
+\item{df}{A dataframe}
+}
+\value{
+A plotly object
 }
 \description{
 Visualize enrichment map from one or more signatures

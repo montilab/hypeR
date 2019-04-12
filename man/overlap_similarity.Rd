@@ -9,3 +9,4 @@ overlap_similarity(a, b)
 \description{
 Calculate overlap similarity of two sets
 }
+\keyword{internal}
