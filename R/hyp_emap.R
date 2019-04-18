@@ -110,7 +110,6 @@ overlap_similarity <- function(a, b) {
 
 #' Visualize enrichment map from one or more signatures
 #'
-#' @param df A dataframe
 #' @param hyp A hyp or multihyp object
 #' @param similarity_metric Metric to calculate geneset similarity
 #' @param similarity_cutoff Geneset similarity cutoff

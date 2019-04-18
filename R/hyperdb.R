@@ -1,5 +1,8 @@
 #' Print available gene sets
 #'
+#' @param quiet Use true to suppress printing of available genesets
+#' @return A character vector of available genesets
+#'
 #' @importFrom gh gh
 #' @export
 hyperdb_info <- function(quiet=FALSE) {
@@ -11,6 +14,9 @@ hyperdb_info <- function(quiet=FALSE) {
 }
 
 #' Fetch a gene sets from hyperdb
+#'
+#' @param gset A name corresponding to an available gene set
+#' @return A list of gene sets
 #'
 #' @export
 hyperdb_get <- function(gset) {

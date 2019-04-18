@@ -6,6 +6,12 @@
 \usage{
 hyperdb_info(quiet = FALSE)
 }
+\arguments{
+\item{quiet}{Use true to suppress printing of available genesets}
+}
+\value{
+A character vector of available genesets
+}
 \description{
 Print available gene sets
 }

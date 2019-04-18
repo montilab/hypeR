@@ -6,6 +6,12 @@
 \usage{
 hyperdb_get(gset)
 }
+\arguments{
+\item{gset}{A name corresponding to an available gene set}
+}
+\value{
+A list of gene sets
+}
 \description{
 Fetch a gene sets from hyperdb
 }

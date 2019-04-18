@@ -7,6 +7,5 @@
 #'   \item{signature}{A charcter vector of gene symbols}
 #'   \item{experiment}{A list of signatures}
 #'   \item{project}{A list of experiments}
-#'
 #' }
 "signatures"

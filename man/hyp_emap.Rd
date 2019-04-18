@@ -27,8 +27,6 @@ hyp_emap(hyp, similarity_metric = c("jaccard_similarity",
 \item{show_plots}{An option to show plots}
 
 \item{return_plots}{An option to return plots}
-
-\item{df}{A dataframe}
 }
 \value{
 A plotly object
