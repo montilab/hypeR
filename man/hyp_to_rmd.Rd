@@ -4,16 +4,17 @@
 \alias{hyp_to_rmd}
 \title{Export hyp object to rmarkdown}
 \usage{
-hyp_to_rmd(hyp, file_path, title = "", subtitle = "", author = "",
-  header = "Hyper Enrichment", show_plots = TRUE, show_emaps = TRUE,
-  show_tables = TRUE, top_plot = 15, top_emap = 15,
-  val_plot = c("fdr", "pval"), val_emap = c("fdr", "pval"),
+hyp_to_rmd(hyp.obj, file_path, title = "hypeR Enrichment Report",
+  subtitle = "", author = "", header = "Enrichment",
+  show_plots = TRUE, show_emaps = TRUE, show_tables = TRUE,
+  top_plot = 15, top_emap = 15, val_plot = c("fdr", "pval"),
+  val_emap = c("fdr", "pval"),
   similarity_metric = c("jaccard_similarity", "overlap_similarity"),
   similarity_cutoff = 0.2, custom_rmd_config = NULL,
   custom_pre_content = NULL, custom_post_content = NULL)
 }
 \arguments{
-\item{hyp}{A hyp object, multihyp object, or list of multihyp objects}
+\item{hyp.obj}{A hyp object, multihyp object, or list of multihyp objects}
 
 \item{file_path}{Output file path}
 

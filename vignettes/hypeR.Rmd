@@ -3,10 +3,12 @@ title: "hypeR"
 author:
 - name: Anthony Federico
   affiliation:
-  - &1 Section of Computational Biomedicine, Boston University, Boston, MA
+  - &1 Bioinformatics Department, Boston University, Boston, MA
+  - &2 Section of Computational Biomedicine, Boston University, Boston, MA
 - name: Stefano Monti
   affiliation:
   - *1
+  - *2
 date: '`r format(Sys.Date(), "%B %e, %Y")`'
 package: hypeR
 output:
@@ -93,35 +95,35 @@ gsets <- c(BIOCARTA, KEGG, REACTOME)
 ## Hyper Enrichment
 ```{r}
 
-hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
+hyp.obj <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
 
 ```
 
 ## Visualize Results
 ```{r}
 
-hyp_plot(hyp)
+hyp_plot(hyp.obj)
 
 ```
 
 ## Interactive Table
 ```{r}
 
-hyp_show(hyp)
+hyp_show(hyp.obj)
 
 ```
 
 ## Save Results to Excel
 ```{r, eval=FALSE}
 
-hyp_to_excel(hyp, file.path="pathways.xlsx")
+hyp_to_excel(hyp.obj, file.path="pathways.xlsx")
 
 ```
 
 ## Save Results to Table
 ```{r, eval=FALSE}
 
-hyp_to_table(hyp, file.path="pathways.txt")
+hyp_to_table(hyp.obj, file.path="pathways.txt")
 
 ```
 
@@ -141,7 +143,7 @@ gsets <- sapply(text.split, function(x) {
 })
 names(gsets) <- unlist(lapply(text.split, function(x) strsplit(x, "\t")[[1]][1]))
 
-hyp <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
+hyp.obj <- hypeR(symbols, gsets, bg=7842, fdr=0.05)
 
 ```
 
@@ -157,7 +159,7 @@ text.split <- strsplit(text, "\n")[[1]]
 bg <- text.split[2:length(text.split)]
 head(bg)
 
-hyp <- hypeR(symbols, gsets, bg=bg)
+hyp.obj <- hypeR(symbols, gsets, bg=bg)
 
 ```
 

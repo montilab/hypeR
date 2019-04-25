@@ -94,7 +94,7 @@ msigdb_path <- hypeR::msigdb_download(species="Homo sapiens")
 
     ## v6.2.1
     ## Downloading Gene Sets to...
-    ## /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//Rtmpmk1Vgr
+    ## /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//RtmpzYf8cm
     ## - C1 -> 326 Gene Sets 
     ## - C2.CGP -> 3433 Gene Sets 
     ## - C2.CP -> 252 Gene Sets 
@@ -171,21 +171,19 @@ analysis tools.
 ``` r
 signature <- gsets$KEGG_WNT_SIGNALING_PATHWAY[1:50]
 
-hyp <- hypeR::hypeR(signature, gsets, bg=2520)
+hyp.obj <- hypeR::hypeR(signature, gsets, bg=2520)
 ```
 
 ``` r
 # A hyp object
-class(hyp)
+class(hyp.obj)
 ```
 
-    ## [1] "hyp"
-    ## attr(,"package")
-    ## [1] "hypeR"
+    ## [1] "hyp" "R6"
 
 ``` r
 # Convert to a dataframe
-hyp.df <- as(hyp, "data.frame")
+hyp.df <- hyp.obj$as.data.frame()
 hyp.df[1:5,1:2]
 ```
 
@@ -199,7 +197,7 @@ hyp.df[1:5,1:2]
 #### Plot results
 
 ``` r
-hypeR::hyp_plot(hyp)
+hypeR::hyp_plot(hyp.obj)
 ```
 
 <img src="figs/fig_001.png" width="672"/>
@@ -207,7 +205,7 @@ hypeR::hyp_plot(hyp)
 #### Enrichment map
 
 ``` r
-hypeR::hyp_emap(hyp)
+hypeR::hyp_emap(hyp.obj)
 ```
 
 <img src="figs/fig_002.png" width="672"/>
@@ -215,7 +213,7 @@ hypeR::hyp_emap(hyp)
 #### Show data
 
 ``` r
-hypeR::hyp_show(hyp)
+hypeR::hyp_show(hyp.obj)
 ```
 
 <img src="figs/fig_003.png" width="672"/>
@@ -234,7 +232,7 @@ experiment <- list("YAP-KO Signature"=sample(gsets[[sample(names(gsets), 1)]], 1
                    "YAP-KO Up-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10),
                    "YAP-KO Down-regulated"=sample(gsets[[sample(names(gsets), 1)]], 10))
 
-multihyp <- hypeR(experiment, gsets, bg=2520)
+multihyp.obj <- hypeR(experiment, gsets, bg=2520)
 ```
 
 #### Plot results
@@ -243,7 +241,7 @@ When plotting a multihyp object, each signatures is plotted and returned
 separately.
 
 ``` r
-hypeR::hyp_plot(multihyp)
+hypeR::hyp_plot(multihyp.obj)
 ```
 
 #### Export to excel
@@ -252,7 +250,7 @@ When saving a multihyp object to excel, each signature is exported to
 its own tab.
 
 ``` r
-hypeR::hyp_to_excel(multihyp, file.path="hyper.xls")
+hypeR::hyp_to_excel(multihyp.obj, file.path="hyper.xls")
 ```
 
 #### Export to table
@@ -261,7 +259,7 @@ When saving a multihyp object to a table, each signature is exported as
 its own table in a single directory.
 
 ``` r
-hypeR::hyp_to_table(multihyp, file.path="hyper.txt")
+hypeR::hyp_to_table(multihyp.obj, file.path="hyper.txt")
 ```
 
 #### Multiple experiments
@@ -289,13 +287,13 @@ experiments <- list("YAP-KO Experiment"=experiment.1,
                     "LATS-KO Experiment"=experiment.2,
                     "TEAD-KO Experiment"=experiment.3)
 
-lmultihyp <- lapply(experiments, function(x) hypeR(x, gsets, bg=2520))
+lmultihyp.obj <- lapply(experiments, function(x) hypeR(x, gsets, bg=2520))
 ```
 
 #### Markdown report
 
 ``` r
-hypeR::hyp_to_rmd(lmultihyp,
+hypeR::hyp_to_rmd(lmultihyp.obj,
                   file_path="hyper-enrichment.rmd",
                   title="Hyper Enrichment (hypeR)",
                   subtitle="YAP, LATS, and TEAD Knockout Experiments",

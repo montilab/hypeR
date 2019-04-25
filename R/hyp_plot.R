@@ -97,7 +97,7 @@
 
 #' Visualize top enriched pathways from one or more signatures
 #'
-#' @param hyp A hyp or multihyp object
+#' @param hyp_obj A hyp or multihyp object
 #' @param top Limit number of pathways shown
 #' @param val Choose significance value e.g. c("fdr", "pval")
 #' @param show_plots An option to show plots
@@ -114,29 +114,29 @@
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
 #' # Visualize
-#' hyp_plot(hyp, top=3, val="fdr")
+#' hyp_plot(hyp_obj, top=3, val="fdr")
 #'
 #' @importFrom plotly plot_ly add_trace add_annotations layout %>%
 #' @export
-hyp_plot <- function(hyp, top=10, val=c("fdr", "pval"), show_plots=TRUE, return_plots=FALSE) {
+hyp_plot <- function(hyp_obj, top=10, val=c("fdr", "pval"), show_plots=TRUE, return_plots=FALSE) {
 
-    stopifnot(class(hyp) == "hyp" | class(hyp) == "multihyp")
+    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
 
     # Default arguments
     val <- match.arg(val)
 
     # Handling of multiple signatures
-    if (class(hyp) == "multihyp") {
-        multihyp <- hyp
-        n <- names(multihyp@data)
+    if ("multihyp" %in% class(hyp_obj)) {
+        multihyp_obj <- hyp_obj
+        n <- names(multihyp_obj$data)
         res <- lapply(setNames(n, n), function(title) {
 
             # Extract hyp dataframe
-            hyp <- multihyp@data[[title]]
-            df <- hyp@data
+            hyp_obj <- multihyp_obj$data[[title]]
+            df <- hyp_obj$data
 
             p <- .enrichment_plot(df, title, top, val)
             if (show_plots) {
@@ -146,7 +146,7 @@ hyp_plot <- function(hyp, top=10, val=c("fdr", "pval"), show_plots=TRUE, return_
         })
     } else  {
         # Extract hyp dataframe
-        df <- hyp@data
+        df <- hyp_obj$data
         res <- .enrichment_plot(df, "Top Pathways", top, val)
         if (show_plots) {
             show(res)

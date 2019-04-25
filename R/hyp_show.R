@@ -1,6 +1,6 @@
 #' Convert hyp object to an interactive datatable
 #'
-#' @param hyp A hyp object
+#' @param hyp_obj A hyp object
 #' @param simple Use true to only include essential dataframe columns
 #' @param stylish Use true to add a bootstrap styling theme to datatable
 #' @return A datatable object
@@ -15,19 +15,19 @@
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
+#' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 #'
 #' # Export
-#' hyp_show(hyp)
+#' hyp_show(hyp_obj)
 #'
 #' @importFrom DT datatable
 #' @export
-hyp_show <- function(hyp, simple=TRUE, stylish=FALSE) {
+hyp_show <- function(hyp_obj, simple=TRUE, stylish=FALSE) {
 
-    stopifnot(class(hyp) == "hyp")
+    stopifnot("hyp" %in% class(hyp_obj))
 
     # Extract hyp dataframe
-    df <- hyp@data
+    df <- hyp_obj$data
 
     if (simple) {
         cols <- c(1,2,7,8)

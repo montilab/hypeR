@@ -2,12 +2,12 @@
 % Please edit documentation in R/hyp_to_table.R
 \name{hyp_to_table}
 \alias{hyp_to_table}
-\title{Export hyp object to table}
+\title{Export hyp or multihyp object to table}
 \usage{
-hyp_to_table(hyp, file_path, sep = "\\t", cols = NULL)
+hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL)
 }
 \arguments{
-\item{hyp}{A hyp or multihyp object}
+\item{hyp_obj}{A hyp or multihyp object}
 
 \item{file_path}{Output file path}
 
@@ -19,7 +19,7 @@ hyp_to_table(hyp, file_path, sep = "\\t", cols = NULL)
 None
 }
 \description{
-Export hyp object to table
+Export hyp or multihyp object to table
 }
 \examples{
 # Grab a list of curated gene sets
@@ -31,9 +31,9 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 
 # Export
-hyp_to_table(hyp, file_path="pathways.txt")
+hyp_to_table(hyp_obj, file_path="pathways.txt")
 
 }

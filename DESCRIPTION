@@ -15,6 +15,7 @@ LazyData: true
 Imports:
     plotly,
     DT,
+    R6,
     magrittr,
     dplyr,
     openxlsx,

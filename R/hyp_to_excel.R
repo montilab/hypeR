@@ -1,6 +1,6 @@
-#' Export hyp object to excel
+#' Export hyp or multihyp object to excel
 #'
-#' @param hyp A hyp or multihyp object
+#' @param hyp_obj A hyp or multihyp object
 #' @param file_path Output file path
 #' @param cols Dataframe columns to include
 #' @return None
@@ -15,34 +15,34 @@
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 #'
 #' # Export
-#' hyp_to_excel(hyp, file_path="pathways.xlsx")
+#' hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
 #'
 #' @importFrom openxlsx createWorkbook addWorksheet writeData saveWorkbook
 #' @export
-hyp_to_excel <- function(hyp, file_path, cols=NULL) {
+hyp_to_excel <- function(hyp_obj, file_path, cols=NULL) {
     
-    stopifnot(class(hyp) == "hyp" | class(hyp) == "multihyp")
+    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
 
     # Handle hyp objects
-    if (class(hyp) == "hyp") {
-        multihyp <- new("multihyp", data=list(" " = hyp))
+    if ("hyp" %in% class(hyp_obj)) {
+        multihyp_obj <- multihyp$new(data=list(" "=hyp_obj))
     } else {
-        multihyp <- hyp
+        multihyp_obj <- hyp_obj
     }
     
     # Generate excel file
     wb <- openxlsx::createWorkbook()
 
     # A new sheet for each dataframe
-    for (i in names(multihyp@data)) {
+    for (i in names(multihyp_obj$data)) {
         sheet <- openxlsx::addWorksheet(wb, sheetName=i)
 
         # Extract hyp dataframe
-        hyp <- multihyp@data[[i]]
-        df <- hyp@data
+        hyp_obj <- multihyp_obj$data[[i]]
+        df <- hyp_obj$data
 
         if (is.null(cols)) {
             cols <- seq_len(ncol(df))

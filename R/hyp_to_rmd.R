@@ -43,7 +43,7 @@ rmd_tabset <- "
 rmd_tab <- "
 ### {1} 
 ```{r {2}, echo = FALSE}
-hyp <- tabsets[['{3}']][['{1}']] 
+hyp.obj <- tabsets[['{3}']][['{1}']] 
 {4}
 {5}
 {6}
@@ -51,17 +51,17 @@ hyp <- tabsets[['{3}']][['{1}']]
 "
 
 tab_plot <- "
-hyp %>%
+hyp.obj %>%
 hyp_plot(top={1}, val='{2}', show_plots=FALSE, return_plots=TRUE)
 "
 
 tab_emap <- "
-hyp %>%
+hyp.obj %>%
 hyp_emap(top={1}, val='{2}', similarity_metric='{3}', similarity_cutoff={4}, show_plots=FALSE, return_plots=TRUE)
 "
 
 tab_table <- "
-df <- as(hyp, 'data.frame') 
+df <- hyp.obj$as.data.frame()
 df$abrv.name <- substr(rownames(df), 1, 30) 
 col_ix <- match(c('pval', 'fdr', 'abrv.name'), colnames(df))
 df <- df[, c(col_ix, (1:ncol(df))[-col_ix])]
@@ -71,7 +71,7 @@ df
 
 #' Export hyp object to rmarkdown
 #'
-#' @param hyp A hyp object, multihyp object, or list of multihyp objects
+#' @param hyp.obj A hyp object, multihyp object, or list of multihyp objects
 #' @param file_path Output file path
 #' @param title Title of markdown report
 #' @param subtitle Subtitle of markdown report
@@ -94,12 +94,12 @@ df
 #' @importFrom rmarkdown render
 #' @importFrom magrittr %>%
 #' @export
-hyp_to_rmd <- function(hyp,
-                       file_path, 
-                       title="",
+hyp_to_rmd <- function(hyp.obj,
+                       file_path,
+                       title="hypeR Enrichment Report",
                        subtitle="",
                        author="",
-                       header="Hyper Enrichment",
+                       header="Enrichment",
                        show_plots=TRUE,
                        show_emaps=TRUE,
                        show_tables=TRUE,
@@ -147,20 +147,22 @@ hyp_to_rmd <- function(hyp,
 
     # A single set of tabs
     # ----------------------
-    if (class(hyp) == "hyp") {
-        tabsets <- list(header = list(" " = hyp))
+    if ("hyp" %in% class(hyp.obj)) {
+        tabsets <- list(x = list(" " = hyp.obj))
+        names(tabsets) <- c(header)
     }
-    if (class(hyp) == "multihyp") {
-        tabsets <- list(header = hyp@data)
+    if ("multihyp" %in% class(hyp.obj)) {
+        tabsets <- list(x = hyp.obj$data)
+        names(tabsets) <- c(header)
     }
-    if (class(hyp) == "list") {
-        tabsets <- lapply(hyp, function(x) {
-            stopifnot(class(x) == "hyp" | class(x) == "multihyp")
-            if (class(x) == "hyp") {
+    if (class(hyp.obj) == "list") {
+        tabsets <- lapply(hyp.obj, function(x) {
+            stopifnot("hyp" %in% class(x) | "multihyp" %in% class(x))
+            if ("hyp" %in% class(x)) {
                 return(list(" " = x))
             }
-            if (class(x) == "multihyp") {
-                return(x@data)
+            if ("multihyp" %in% class(x)) {
+                return(x$data)
             }
         })
     }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/hyp_to_excel.R
 \name{hyp_to_excel}
 \alias{hyp_to_excel}
-\title{Export hyp object to excel}
+\title{Export hyp or multihyp object to excel}
 \usage{
-hyp_to_excel(hyp, file_path, cols = NULL)
+hyp_to_excel(hyp_obj, file_path, cols = NULL)
 }
 \arguments{
-\item{hyp}{A hyp or multihyp object}
+\item{hyp_obj}{A hyp or multihyp object}
 
 \item{file_path}{Output file path}
 
@@ -17,7 +17,7 @@ hyp_to_excel(hyp, file_path, cols = NULL)
 None
 }
 \description{
-Export hyp object to excel
+Export hyp or multihyp object to excel
 }
 \examples{
 # Grab a list of curated gene sets
@@ -29,9 +29,9 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 
 # Export
-hyp_to_excel(hyp, file_path="pathways.xlsx")
+hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
 
 }

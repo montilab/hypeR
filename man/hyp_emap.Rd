@@ -4,13 +4,13 @@
 \alias{hyp_emap}
 \title{Visualize enrichment map from one or more signatures}
 \usage{
-hyp_emap(hyp, similarity_metric = c("jaccard_similarity",
+hyp_emap(hyp_obj, similarity_metric = c("jaccard_similarity",
   "overlap_similarity"), similarity_cutoff = 0.2, pval_cutoff = 1,
   fdr_cutoff = 1, val = c("fdr", "pval"), top = NULL,
   show_plots = TRUE, return_plots = FALSE)
 }
 \arguments{
-\item{hyp}{A hyp or multihyp object}
+\item{hyp_obj}{A hyp or multihyp object}
 
 \item{similarity_metric}{Metric to calculate geneset similarity}
 

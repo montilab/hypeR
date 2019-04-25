@@ -110,7 +110,7 @@ overlap_similarity <- function(a, b) {
 
 #' Visualize enrichment map from one or more signatures
 #'
-#' @param hyp A hyp or multihyp object
+#' @param hyp_obj A hyp or multihyp object
 #' @param similarity_metric Metric to calculate geneset similarity
 #' @param similarity_cutoff Geneset similarity cutoff
 #' @param pval_cutoff Filter results to be less than pval cutoff
@@ -122,7 +122,7 @@ overlap_similarity <- function(a, b) {
 #' @return A plotly object
 #'
 #' @export
-hyp_emap <- function(hyp, 
+hyp_emap <- function(hyp_obj, 
                      similarity_metric=c("jaccard_similarity", "overlap_similarity"),
                      similarity_cutoff=0.2,
                      pval_cutoff=1, 
@@ -132,22 +132,22 @@ hyp_emap <- function(hyp,
                      show_plots=TRUE, 
                      return_plots=FALSE) {
 
-    stopifnot(class(hyp) == "hyp" | class(hyp) == "multihyp")
+    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
 
     # Default arguments
     similarity_metric <- match.arg(similarity_metric)
     val <- match.arg(val)
 
     # Handling of multiple signatures
-    if (class(hyp) == "multihyp") {
-        multihyp <- hyp
-        n <- names(multihyp@data)
+    if ("multihyp" %in% class(hyp_obj)) {
+        multihyp_obj <- hyp_obj
+        n <- names(multihyp_obj$data)
         res <- lapply(setNames(n, n), function(title) {
 
             # Extract hyp dataframe
-            hyp <- multihyp@data[[title]]
-            df <- hyp@data
-            gsets <- hyp@args$gsets
+            hyp_obj <- multihyp_obj$data[[title]]
+            df <- hyp_obj$data
+            gsets <- hyp_obj$args$gsets
 
             p <- .enrichment_map(df, 
                                  gsets, 
@@ -165,8 +165,8 @@ hyp_emap <- function(hyp,
         })
     } else  {
         # Extract hyp dataframe
-        df <- hyp@data
-        gsets <- hyp@args$gsets
+        df <- hyp_obj$data
+        gsets <- hyp_obj$args$gsets
         res <- .enrichment_map(df,
                                gsets, 
                                "Enrichment Map",

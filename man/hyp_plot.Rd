@@ -4,11 +4,11 @@
 \alias{hyp_plot}
 \title{Visualize top enriched pathways from one or more signatures}
 \usage{
-hyp_plot(hyp, top = 10, val = c("fdr", "pval"), show_plots = TRUE,
-  return_plots = FALSE)
+hyp_plot(hyp_obj, top = 10, val = c("fdr", "pval"),
+  show_plots = TRUE, return_plots = FALSE)
 }
 \arguments{
-\item{hyp}{A hyp or multihyp object}
+\item{hyp_obj}{A hyp or multihyp object}
 
 \item{top}{Limit number of pathways shown}
 
@@ -34,9 +34,9 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
 
 # Visualize
-hyp_plot(hyp, top=3, val="fdr")
+hyp_plot(hyp_obj, top=3, val="fdr")
 
 }

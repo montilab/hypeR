@@ -38,6 +38,6 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
+hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 
 }
