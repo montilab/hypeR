@@ -10,6 +10,10 @@
 #' @section Methods:
 #
 #' \code{multihyp$as.list()} returns a list of \code{hyp} objects as dataframes.
+#' 
+#' @section See Also:
+#' 
+#' \code{hyp}
 #'
 #' @importFrom R6 R6Class
 #'

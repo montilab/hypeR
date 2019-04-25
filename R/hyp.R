@@ -14,6 +14,10 @@
 #' well as the arguments used in creating it.
 #'
 #' \code{hyp$as.data.frame()} returns the dataframe slot.
+#' 
+#' @section See Also:
+#' 
+#' \code{multihyp}
 #'
 #' @importFrom R6 R6Class
 #'

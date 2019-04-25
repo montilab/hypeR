@@ -23,4 +23,10 @@ A multihyp object
 \code{multihyp$as.list()} returns a list of \code{hyp} objects as dataframes.
 }
 
+\section{See Also}{
+
+
+\code{hyp}
+}
+
 \keyword{datasets}

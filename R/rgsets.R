@@ -10,6 +10,10 @@
 #' }
 #'
 #' @section Methods:
+#' 
+#' @section See Also:
+#' 
+#' \code{pvector}
 #'
 #' @importFrom R6 R6Class
 #'
