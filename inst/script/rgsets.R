@@ -45,5 +45,6 @@ gsets <- nodes %>%
 # -- 
 
 rgsets.obj <- hypeR::rgsets$new(gsets, nodes, edges)
-
+rgsets.lst <- list("REACTOME"=rgsets.obj)
+    
 saveRDS(rgsets.obj, file.path(system.file("extdata", package="hypeR"), "rgsets.rds"))

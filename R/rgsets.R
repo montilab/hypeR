@@ -25,7 +25,7 @@ rgsets <- R6Class("rgsets", list(
     },
     print = function(...) {
         cat("gsets\n\n")
-        base::print(head(names(gsets)))
+        base::print(head(names(self$gsets)))
         cat("\nnodes\n")
         base::print(head(self$nodes))
         cat("\nedges\n")
