@@ -117,21 +117,21 @@ hyp.df[1:5,1:2]
 hypeR::hyp_plot(hyp.obj)
 ```
 
-<img src="media/figs/fig_001.png" width="800"/>
+<img src="media/figs/fig_001.png" width="900"/>
 
 #### Enrichment map
 ```{r eval=FALSE}
 hypeR::hyp_emap(hyp.obj)
 ```
 
-<img src="media/figs/fig_002.png" width="800"/>
+<img src="media/figs/fig_002.png" width="900"/>
 
 #### Show data
 ```{r eval=FALSE}
 hypeR::hyp_show(hyp.obj)
 ```
 
-<img src="media/figs/fig_003.png" width="800"/>
+<img src="media/figs/fig_003.png" width="900"/>
 
 #### Multiple signatures
 Other times we are looking at multiple signatures that may have been defined in a single experiment. In this case, we can feed hypeR a named list of signatures and a *multihyp object* will be returned. This object is essentially just multiple *hyp objects*. However it is recognized and handled differently by downstream visualization and analysis tools.
@@ -198,4 +198,4 @@ hypeR::hyp_to_rmd(lmultihyp.obj,
                   show_tables=T)
 ```
 
-<img src="media/figs/fig_004.png" width="800"/>
+<img src="media/figs/fig_004.png" width="900"/>
