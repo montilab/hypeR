@@ -25,11 +25,10 @@ test_that("multihyp object is working", {
 })
 
 # Example genesets
-BIOCARTA <- ex_get("C2.CP.BIOCARTA")
-KEGG <- ex_get("C2.CP.KEGG")
-REACTOME <- ex_get("C2.CP.REACTOME")
-
-gsets <- c(BIOCARTA, KEGG, REACTOME)
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+BIOCARTA <- gsets$BIOCARTA
+KEGG <- gsets$KEGG
+REACTOME <- gsets$REACTOME
 
 # Example signatures
 signature <- hypeR::signatures$signature

@@ -2,21 +2,6 @@
 dev/
 workflow/
 
-# Larger Datasets
-inst/extdata/C1.v6.2.1.rds
-inst/extdata/C2.CGP.v6.2.1.rds
-inst/extdata/C2.CP.v6.2.1.rds
-inst/extdata/C3.MIR.v6.2.1.rds
-inst/extdata/C3.TFT.v6.2.1.rds
-inst/extdata/C4.CGN.v6.2.1.rds
-inst/extdata/C4.CM.v6.2.1.rds
-inst/extdata/C5.BP.v6.2.1.rds
-inst/extdata/C5.CC.v6.2.1.rds
-inst/extdata/C5.MF.v6.2.1.rds
-inst/extdata/C6.v6.2.1.rds
-inst/extdata/C7.v6.2.1.rds
-inst/extdata/H.v6.2.1.rds
-
 # General
 .DS_Store
 .AppleDouble

@@ -21,7 +21,8 @@ Convert hyp object to an interactive datatable
 }
 \examples{
 # Grab a list of curated gene sets
-REACTOME <- ex_get("C2.CP.REACTOME")
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+REACTOME <- gsets$REACTOME
 
 # Genes involed in tricarboxylic acid cycle
 symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",

@@ -155,23 +155,3 @@ msigdb_get <- function(msigdb_path,
     gs <- readRDS(path)
     return(gs)
 }
-
-#' Fetch example gene sets
-#'
-#' @param symbol A symbol corresponding to an example gene set
-#' @return A list of gene sets
-#'
-#' @examples
-#' REACTOME <- ex_get("C2.CP.REACTOME")
-#'
-#' @export
-ex_get <- function(symbol=c("C2.CP.REACTOME", 
-                            "C2.CP.BIOCARTA", 
-                            "C2.CP.KEGG")) {
-
-    symbol <- match.arg(symbol)
-    path <- paste(symbol, "v6.2.1.rds", sep=".")
-    db <- system.file("extdata", path, package="hypeR")
-    gs <- readRDS(db)
-    return(gs)
-}
