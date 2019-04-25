@@ -1,13 +1,16 @@
-hypeR
-================
-
-Geneset enrichment analysis based on hyper-geometric
-test
-
-[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master)
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# hypeR <img src="media/logo.png" align="right" width="120"/>
+
+[![](https://img.shields.io/badge/bioconductor-3.9-3a6378.svg)](https://doi.org/doi:10.18129/B9.bioc.hypeR)
+[![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
+[![](https://img.shields.io/badge/lifecycle-maturing-4ba598.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master)
+
+## Overview
+
+Geneset enrichment analysis based on hyper-geometric test
 
 1.  [Installation](#installation)
 2.  [Downloading Genesets](#downloading-genesets)
@@ -57,28 +60,28 @@ compatible with hypeR.
 hypeR::msigdb_info()
 ```
 
-    ## |------------------------------------------------------------|
-    ## | Available Gene Sets                                 v6.2.1 |
-    ## |------------------------------------------------------------|
-    ## | C1             | Positional (326)                          |
-    ## | C2.CGP         | Chemical and Genetic Perturbations (3433) |
-    ## | C2.CP          | Canonical Pathways (252)                  |
-    ## | C2.CP.BIOCARTA | Canonical BIOCARTA (217)                  |
-    ## | C2.CP.KEGG     | Canonical KEGG (186)                      |
-    ## | C2.CP.REACTOME | Canonical REACTOME (674)                  |
-    ## | C3.MIR         | Motif miRNA Targets (221)                 |
-    ## | C3.TFT         | Motif Transcription Factor Targets (615)  |
-    ## | C4.CGN         | Cancer Gene Neighborhoods (427)           |
-    ## | C4.CM          | Cancer Modules (431)                      |
-    ## | C5.BP          | GO Biological Process (4436)              |
-    ## | C5.CC          | GO Cellular Component (580)               |
-    ## | C5.MF          | GO Molecular Function (901)               |
-    ## | C6             | Oncogenic Signatures (189)                |
-    ## | C7             | Immunologic Signatures (4872)             |
-    ## | H              | Hallmark (50)                             |
-    ## |------------------------------------------------------------|
-    ## | Source: http://software.broadinstitute.org/gsea/msigdb     |
-    ## |------------------------------------------------------------|
+    #> |------------------------------------------------------------|
+    #> | Available Gene Sets                                 v6.2.1 |
+    #> |------------------------------------------------------------|
+    #> | C1             | Positional (326)                          |
+    #> | C2.CGP         | Chemical and Genetic Perturbations (3433) |
+    #> | C2.CP          | Canonical Pathways (252)                  |
+    #> | C2.CP.BIOCARTA | Canonical BIOCARTA (217)                  |
+    #> | C2.CP.KEGG     | Canonical KEGG (186)                      |
+    #> | C2.CP.REACTOME | Canonical REACTOME (674)                  |
+    #> | C3.MIR         | Motif miRNA Targets (221)                 |
+    #> | C3.TFT         | Motif Transcription Factor Targets (615)  |
+    #> | C4.CGN         | Cancer Gene Neighborhoods (427)           |
+    #> | C4.CM          | Cancer Modules (431)                      |
+    #> | C5.BP          | GO Biological Process (4436)              |
+    #> | C5.CC          | GO Cellular Component (580)               |
+    #> | C5.MF          | GO Molecular Function (901)               |
+    #> | C6             | Oncogenic Signatures (189)                |
+    #> | C7             | Immunologic Signatures (4872)             |
+    #> | H              | Hallmark (50)                             |
+    #> |------------------------------------------------------------|
+    #> | Source: http://software.broadinstitute.org/gsea/msigdb     |
+    #> |------------------------------------------------------------|
 
 #### Downloading and loading msigdb genesets
 
@@ -92,25 +95,25 @@ analysis, as long as it is appropriately defined.
 msigdb_path <- hypeR::msigdb_download(species="Homo sapiens")
 ```
 
-    ## v6.2.1
-    ## Downloading Gene Sets to...
-    ## /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//RtmpzYf8cm
-    ## - C1 -> 326 Gene Sets 
-    ## - C2.CGP -> 3433 Gene Sets 
-    ## - C2.CP -> 252 Gene Sets 
-    ## - C2.CP.BIOCARTA -> 217 Gene Sets 
-    ## - C2.CP.KEGG -> 186 Gene Sets 
-    ## - C2.CP.REACTOME -> 674 Gene Sets 
-    ## - C3.MIR -> 221 Gene Sets 
-    ## - C3.TFT -> 615 Gene Sets 
-    ## - C4.CGN -> 427 Gene Sets 
-    ## - C4.CM -> 431 Gene Sets 
-    ## - C5.BP -> 4436 Gene Sets 
-    ## - C5.CC -> 580 Gene Sets 
-    ## - C5.MF -> 901 Gene Sets 
-    ## - C6 -> 189 Gene Sets 
-    ## - C7 -> 4872 Gene Sets 
-    ## - H -> 50 Gene Sets
+    #> v6.2.1
+    #> Downloading Gene Sets to...
+    #> /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//RtmpJycQwh
+    #> - C1 -> 326 Gene Sets 
+    #> - C2.CGP -> 3433 Gene Sets 
+    #> - C2.CP -> 252 Gene Sets 
+    #> - C2.CP.BIOCARTA -> 217 Gene Sets 
+    #> - C2.CP.KEGG -> 186 Gene Sets 
+    #> - C2.CP.REACTOME -> 674 Gene Sets 
+    #> - C3.MIR -> 221 Gene Sets 
+    #> - C3.TFT -> 615 Gene Sets 
+    #> - C4.CGN -> 427 Gene Sets 
+    #> - C4.CM -> 431 Gene Sets 
+    #> - C5.BP -> 4436 Gene Sets 
+    #> - C5.CC -> 580 Gene Sets 
+    #> - C5.MF -> 901 Gene Sets 
+    #> - C6 -> 189 Gene Sets 
+    #> - C7 -> 4872 Gene Sets 
+    #> - H -> 50 Gene Sets
 
 ``` r
 BIOCARTA <- msigdb_get(msigdb_path, "C2.CP.BIOCARTA")
@@ -125,16 +128,16 @@ gsets <- c(BIOCARTA, KEGG, REACTOME)
 names(gsets)[1:5]
 ```
 
-    ## [1] "BIOCARTA_41BB_PATHWAY"   "BIOCARTA_ACE2_PATHWAY"  
-    ## [3] "BIOCARTA_ACH_PATHWAY"    "BIOCARTA_ACTINY_PATHWAY"
-    ## [5] "BIOCARTA_AGPCR_PATHWAY"
+    #> [1] "BIOCARTA_41BB_PATHWAY"   "BIOCARTA_ACE2_PATHWAY"  
+    #> [3] "BIOCARTA_ACH_PATHWAY"    "BIOCARTA_ACTINY_PATHWAY"
+    #> [5] "BIOCARTA_AGPCR_PATHWAY"
 
 ``` r
 # Gene symbols
 gsets$BIOCARTA_41BB_PATHWAY[1:5]
 ```
 
-    ## [1] "ATF2"  "CHUK"  "IFNG"  "IKBKB" "IL2"
+    #> [1] "ATF2"  "CHUK"  "IFNG"  "IKBKB" "IL2"
 
 ### Using hyperdb
 
@@ -179,7 +182,7 @@ hyp.obj <- hypeR::hypeR(signature, gsets, bg=2520)
 class(hyp.obj)
 ```
 
-    ## [1] "hyp" "R6"
+    #> [1] "hyp" "R6"
 
 ``` r
 # Convert to a dataframe
@@ -187,12 +190,12 @@ hyp.df <- hyp.obj$as.data.frame()
 hyp.df[1:5,1:2]
 ```
 
-    ##                               pval     fdr
-    ## KEGG_WNT_SIGNALING_PATHWAY 1.3e-65 1.4e-62
-    ## BIOCARTA_WNT_PATHWAY       7.2e-15 3.9e-12
-    ## KEGG_BASAL_CELL_CARCINOMA  2.0e-14 7.3e-12
-    ## KEGG_MELANOGENESIS         1.8e-12 4.9e-10
-    ## BIOCARTA_PITX2_PATHWAY     4.5e-09 9.7e-07
+    #>                               pval     fdr
+    #> KEGG_WNT_SIGNALING_PATHWAY 1.3e-65 1.4e-62
+    #> BIOCARTA_WNT_PATHWAY       7.2e-15 3.9e-12
+    #> KEGG_BASAL_CELL_CARCINOMA  2.0e-14 7.3e-12
+    #> KEGG_MELANOGENESIS         1.8e-12 4.9e-10
+    #> BIOCARTA_PITX2_PATHWAY     4.5e-09 9.7e-07
 
 #### Plot results
 
@@ -200,7 +203,7 @@ hyp.df[1:5,1:2]
 hypeR::hyp_plot(hyp.obj)
 ```
 
-<img src="figs/fig_001.png" width="672"/>
+<img src="media/figs/fig_001.png" width="672"/>
 
 #### Enrichment map
 
@@ -208,7 +211,7 @@ hypeR::hyp_plot(hyp.obj)
 hypeR::hyp_emap(hyp.obj)
 ```
 
-<img src="figs/fig_002.png" width="672"/>
+<img src="media/figs/fig_002.png" width="672"/>
 
 #### Show data
 
@@ -216,7 +219,7 @@ hypeR::hyp_emap(hyp.obj)
 hypeR::hyp_show(hyp.obj)
 ```
 
-<img src="figs/fig_003.png" width="672"/>
+<img src="media/figs/fig_003.png" width="672"/>
 
 #### Multiple signatures
 
@@ -303,4 +306,4 @@ hypeR::hyp_to_rmd(lmultihyp.obj,
                   show_tables=T)
 ```
 
-<img src="figs/fig_004.png" width="672"/>
+<img src="media/figs/fig_004.png" width="672"/>

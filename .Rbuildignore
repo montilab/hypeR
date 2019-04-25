@@ -1,6 +1,7 @@
 ^data-raw$
 ^dev$
-^figs$
+^art$
+^media$
 ^workflow$
 ^\.git$
 ^.*\.Rproj$
