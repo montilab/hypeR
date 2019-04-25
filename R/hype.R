@@ -2,6 +2,7 @@
 #'
 #' @param symbols A character vector of gene symbols
 #' @param gsets A list of gene sets
+#' @param gsets_relational Use true to inform gsets is relational
 #' @param bg Size or character vector of background population genes
 #' @param min_drawsize Min number of drawn items that must be among categories items
 #' @param pval_cutoff Filter results to be less than pval cutoff
@@ -25,19 +26,32 @@
 #' @export
 hypeR <- function(symbols,
                   gsets,
+                  gsets_relational=FALSE,
                   bg=23467,
                   min_drawsize=4,
                   pval_cutoff=1,
                   fdr_cutoff=1,
                   verbose=FALSE) {
 
-    # Save arguments
+    # Save original arguments
     args <- as.list(environment())
-
+    
+    # Check if gsets are relational
+    if (gsets_relational) {
+        stopifnot("rgsets" %in% class(gsets))
+        gsets <- gsets$gsets
+    }
+    
     # Handling of multiple signatures
     if (class(symbols) == "list") {
-        lhyp <- lapply(symbols, hypeR, gsets, bg, min_drawsize, pval_cutoff, fdr_cutoff, verbose)
- 
+        lhyp <- lapply(symbols, hypeR, args$gsets, 
+                                       args$gsets_relational, 
+                                       args$bg, 
+                                       args$min_drawsize, 
+                                       args$pval_cutoff,
+                                       args$fdr_cutoff, 
+                                       args$verbose
+                )
         # Wrap list of hyp objects in multihyp object
         multihyp.obj <- multihyp$new(data=lhyp)
         return(multihyp.obj)

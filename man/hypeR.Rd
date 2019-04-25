@@ -4,13 +4,16 @@
 \alias{hypeR}
 \title{Perform hyper enrichment}
 \usage{
-hypeR(symbols, gsets, bg = 23467, min_drawsize = 4, pval_cutoff = 1,
-  fdr_cutoff = 1, verbose = FALSE)
+hypeR(symbols, gsets, gsets_relational = FALSE, bg = 23467,
+  min_drawsize = 4, pval_cutoff = 1, fdr_cutoff = 1,
+  verbose = FALSE)
 }
 \arguments{
 \item{symbols}{A character vector of gene symbols}
 
 \item{gsets}{A list of gene sets}
+
+\item{gsets_relational}{Use true to inform gsets is relational}
 
 \item{bg}{Size or character vector of background population genes}
 

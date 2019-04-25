@@ -147,7 +147,13 @@ hyp_emap <- function(hyp_obj,
             # Extract hyp dataframe
             hyp_obj <- multihyp_obj$data[[title]]
             df <- hyp_obj$data
-            gsets <- hyp_obj$args$gsets
+            # Check if gsets are relational
+            if (hyp_obj$args$gsets_relational) {
+                stopifnot("rgsets" %in% class(hyp_obj$args$gsets))
+                gsets <- hyp_obj$args$gsets$gsets
+            } else {
+                gsets <- hyp_obj$args$gsets
+            }
 
             p <- .enrichment_map(df, 
                                  gsets, 
@@ -163,10 +169,16 @@ hyp_emap <- function(hyp_obj,
             }
             return(p)
         })
-    } else  {
+    } else {
         # Extract hyp dataframe
         df <- hyp_obj$data
-        gsets <- hyp_obj$args$gsets
+        # Check if gsets are relational
+        if (hyp_obj$args$gsets_relational) {
+            stopifnot("rgsets" %in% class(hyp_obj$args$gsets))
+            gsets <- hyp_obj$args$gsets$gsets
+        } else {
+            gsets <- hyp_obj$args$gsets
+        }
         res <- .enrichment_map(df,
                                gsets, 
                                "Enrichment Map",

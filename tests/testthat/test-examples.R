@@ -26,6 +26,8 @@ test_that("multihyp object is working", {
 
 test_that("pvector object is working", {
     pv <- pvector$new(c(1,2,3,4,5))
+    expect_is(pv, "pvector")
+    expect_is(pv, "R6")
     popped <- pv$pop()
     expect_equal(popped, 1)
     expect_output(print(pv))
@@ -50,6 +52,9 @@ BIOCARTA <- gsets$BIOCARTA
 KEGG <- gsets$KEGG
 REACTOME <- gsets$REACTOME
 
+rgsets.lst <- readRDS(system.file("extdata/rgsets.rds", package="hypeR"))
+rgsets.obj <- rgsets.lst$REACTOME
+    
 # Example signatures
 signature <- hypeR::signatures$signature
 experiment <- hypeR::signatures$experiment
@@ -77,6 +82,15 @@ test_that("hypeR() is working with single signatures", {
     expect_equal(hyp_obj$args$gsets, REACTOME)
     expect_equal(hyp_obj$args$pval_cutoff, 1)
     expect_equal(hyp_obj$args$fdr_cutoff, 0.05)
+    
+    # Test relational gsets
+    expect_error(hypeR(signature, rgsets.obj, bg=2520, fdr_cutoff=0.05))
+    hyp_obj <- hypeR(signature, rgsets.obj, gsets_relational=TRUE, bg=2520, pval_cutoff=0.05)
+    expect_true(hyp_obj$args$gsets_relational)
+    expect_is(hyp_obj$args$gsets, "rgsets")
+    expect_is(hyp_obj$args$gsets, "R6")
+    expect_equal(hyp_obj$data$pval, c(4.2e-10, 1.1e-04))
+    expect_equal(hyp_obj$data$fdr, c(6.6e-07, 8.7e-02))
 })
 
 test_that("hypeR() is working with multiple signatures", {
@@ -92,6 +106,14 @@ test_that("hypeR() is working with multiple signatures", {
     expect_equal(hyp_obj$args$gsets, REACTOME)
     expect_equal(hyp_obj$args$pval_cutoff, 1)
     expect_equal(hyp_obj$args$fdr_cutoff, 1)
+    
+    # Test relational gsets
+    expect_error(hypeR(experiment, rgsets.obj, bg=2520, fdr_cutoff=0.05))
+    multihyp_obj <- hypeR(experiment, rgsets.obj, gsets_relational=TRUE, bg=2520, pval_cutoff=0.05)
+    hyp_obj <- multihyp_obj$data[["YAP-KO Signature"]]
+    expect_equal(dim(hyp_obj$data), c(37, 8))
+    expect_is(hyp_obj$args$gsets, "rgsets")
+    expect_is(hyp_obj$args$gsets, "R6")
 })
 
 test_that("hyp_show() is working", {
@@ -156,9 +178,36 @@ test_that("hyp_plot() is working", {
     expect_s3_class(p[["YAP-KO Signature"]], "htmlwidget")
 })
 
-test_that("hyp_emap() is working", {
+test_that("hyp_emap() is working with gsets", {
     hyp_obj <- hypeR(signature, REACTOME, bg=2520)
     multihyp_obj <- hypeR(experiment, REACTOME, bg=2520)
+    
+    # Handle a hyp object
+    expect_silent(hyp_emap(hyp_obj, top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(hyp_obj, val="pval", top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(hyp_obj, val="fdr", top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(hyp_obj, similarity_metric="jaccard_similarity", top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(hyp_obj, similarity_metric="overlap_similarity",  top=30, show_plots=T, return_plots=F))
+    p <- hyp_plot(hyp_obj,  top=30, show_plots=F, return_plots=T)
+    expect_s3_class(p, "plotly")
+    expect_s3_class(p, "htmlwidget")
+    
+    # Handle a multihyp object
+    expect_silent(hyp_emap(multihyp_obj, top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(multihyp_obj, val="pval", top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(multihyp_obj, val="fdr",  top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(multihyp_obj, similarity_metric="jaccard_similarity", top=30, show_plots=T, return_plots=F))
+    expect_silent(hyp_emap(multihyp_obj, similarity_metric="overlap_similarity",  top=30, show_plots=T, return_plots=F))
+    p <- hyp_plot(multihyp_obj, top=30, show_plots=F, return_plots=T)
+    expect_equal(length(p), 3)
+    expect_equal(names(p), c("YAP-KO Signature", "YAP-KO Up-regulated", "YAP-KO Down-regulated"))
+    expect_s3_class(p[["YAP-KO Signature"]], "plotly")
+    expect_s3_class(p[["YAP-KO Signature"]], "htmlwidget")
+})
+
+test_that("hyp_emap() is working with relational gsets", {
+    hyp_obj <- hypeR(signature, rgsets.obj, gsets_relational=TRUE, bg=2520)
+    multihyp_obj <- hypeR(experiment, rgsets.obj, gsets_relational=TRUE, bg=2520)
     
     # Handle a hyp object
     expect_silent(hyp_emap(hyp_obj, top=30, show_plots=T, return_plots=F))
