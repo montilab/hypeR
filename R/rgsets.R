@@ -1,4 +1,4 @@
-#' Relational genes ets
+#' Relational genesets
 #'
 #' @name rgsets
 #'
@@ -42,7 +42,6 @@ rgsets <- R6Class("rgsets", list(
                     subset(label %in% labels) %>%
                     rownames()
 
-        # Find all parent ids of children ids
         ids.subset <- pvector$new()
         for (id.x in children) {
             
@@ -54,7 +53,7 @@ rgsets <- R6Class("rgsets", list(
                            pull(from)   
                        )
             
-            while (length(parents$values) > 0) {
+            while (parents$length() > 0) {
                 id.y <- parents$pop()
                 id.z <- self$edges %>%
                         filter(to == id.y) %>%

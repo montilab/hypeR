@@ -24,6 +24,26 @@ test_that("multihyp object is working", {
     expect_equal(dim(multihyp_obj$as.list()[[1]]), c(10, 5))
 })
 
+test_that("pvector object is working", {
+    pv <- pvector$new(c(1,2,3,4,5))
+    popped <- pv$pop()
+    expect_equal(popped, 1)
+    expect_output(print(pv))
+    expect_equal(pv$values, c(2,3,4,5))
+    expect_equal(pv$length(), 4)
+    pv$push(6)
+    pv$push(c(7,8))
+    expect_output(print(pv))
+    expect_equal(pv$values, c(2,3,4,5,6,7,8))
+    pv <- pvector$new(c(1,2))
+    popped <- pv$pop()
+    popped <- pv$pop()
+    expect_equal(pv$length(), 0)
+    popped <- pv$pop()
+    expect_null(popped)
+    expect_equal(pv$length(), 0)
+})
+
 # Example genesets
 gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
 BIOCARTA <- gsets$BIOCARTA

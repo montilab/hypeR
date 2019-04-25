@@ -20,9 +20,14 @@ A push/pop capable vector
 
 \section{Methods}{
 
-\code{pvector$pop()} Pop vector.
 
-\code{pvector$push()} Push vector.
+\code{print(pvector)} prints vector values.
+
+\code{pvector$length()} returns length of vector values.
+ 
+\code{pvector$pop()} pops vector, returning popped value.
+
+\code{pvector$push()} pushes to vector.
 }
 
 \examples{
@@ -30,7 +35,7 @@ pv <- pvector$new(c(1,2,3))
 popped <- pv$pop()
 pv$push(4)
 pv$push(c(5,6))
-print(pv$values) 
+print(pv) 
 
 }
 \keyword{datasets}

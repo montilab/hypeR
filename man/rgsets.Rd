@@ -3,13 +3,13 @@
 \docType{data}
 \name{rgsets}
 \alias{rgsets}
-\title{Relational genes ets}
+\title{Relational genesets}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 rgsets
 }
 \description{
-Relational genes ets
+Relational genesets
 }
 \section{Arguments}{
 
