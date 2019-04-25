@@ -97,7 +97,7 @@ msigdb_path <- hypeR::msigdb_download(species="Homo sapiens")
 
     #> v6.2.1
     #> Downloading Gene Sets to...
-    #> /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//RtmpJycQwh
+    #> /var/folders/7j/bg701dss38lc2xq26vt_by240000gn/T//RtmpM532l4
     #> - C1 -> 326 Gene Sets 
     #> - C2.CGP -> 3433 Gene Sets 
     #> - C2.CP -> 252 Gene Sets 
@@ -203,7 +203,7 @@ hyp.df[1:5,1:2]
 hypeR::hyp_plot(hyp.obj)
 ```
 
-<img src="media/figs/fig_001.png" width="672"/>
+<img src="media/figs/fig_001.png" width="800"/>
 
 #### Enrichment map
 
@@ -211,7 +211,7 @@ hypeR::hyp_plot(hyp.obj)
 hypeR::hyp_emap(hyp.obj)
 ```
 
-<img src="media/figs/fig_002.png" width="672"/>
+<img src="media/figs/fig_002.png" width="800"/>
 
 #### Show data
 
@@ -219,7 +219,7 @@ hypeR::hyp_emap(hyp.obj)
 hypeR::hyp_show(hyp.obj)
 ```
 
-<img src="media/figs/fig_003.png" width="672"/>
+<img src="media/figs/fig_003.png" width="800"/>
 
 #### Multiple signatures
 
@@ -306,4 +306,4 @@ hypeR::hyp_to_rmd(lmultihyp.obj,
                   show_tables=T)
 ```
 
-<img src="media/figs/fig_004.png" width="672"/>
+<img src="media/figs/fig_004.png" width="800"/>
