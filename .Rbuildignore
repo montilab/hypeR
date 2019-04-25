@@ -1,6 +1,8 @@
+^data-raw$
+^dev$
+^figs$
+^workflow$
 ^\.git$
-^\dev$
-^\figs$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
