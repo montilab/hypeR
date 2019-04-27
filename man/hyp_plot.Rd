@@ -2,17 +2,21 @@
 % Please edit documentation in R/hyp_plot.R
 \name{hyp_plot}
 \alias{hyp_plot}
-\title{Visualize top enriched pathways from one or more signatures}
+\title{Visualize hyp or multihyp objects as a bar plot}
 \usage{
-hyp_plot(hyp_obj, top = 10, val = c("fdr", "pval"),
-  show_plots = TRUE, return_plots = FALSE)
+hyp_plot(hyp_obj, title = "", top = 10, val = c("fdr", "pval"),
+  multihyp_titles = TRUE, show_plots = TRUE, return_plots = FALSE)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
 
+\item{title}{Plot title}
+
 \item{top}{Limit number of pathways shown}
 
 \item{val}{Choose significance value e.g. c("fdr", "pval")}
+
+\item{multihyp_titles}{Use false to disable plot titles for multihyp objects}
 
 \item{show_plots}{An option to show plots}
 
@@ -22,7 +26,7 @@ hyp_plot(hyp_obj, top = 10, val = c("fdr", "pval"),
 A plotly object
 }
 \description{
-Visualize top enriched pathways from one or more signatures
+Visualize hyp or multihyp objects as a bar plot
 }
 \examples{
 # Grab a list of curated gene sets

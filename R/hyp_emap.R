@@ -26,7 +26,6 @@ overlap_similarity <- function(a, b) {
 #'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
-#' @importFrom stats setNames
 #' @importFrom plotly plotly_empty 
 #' @importFrom igraph graph.adjacency V
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction toVisNetworkData visIgraphLayout
@@ -125,6 +124,8 @@ overlap_similarity <- function(a, b) {
 #' @param show_plots An option to show plots
 #' @param return_plots An option to return plots
 #' @return A visNetwork object or list of visNetwork objects
+#'
+#' @importFrom stats setNames
 #'
 #' @export
 hyp_emap <- function(hyp_obj, 

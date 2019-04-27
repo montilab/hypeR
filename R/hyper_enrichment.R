@@ -3,7 +3,7 @@
 #' @param v A bool
 #' @param ... What to print
 #' @return None
-#'
+#' @keywords internal
 .VERBOSE <- function( v, ... )
 {
     if ( v ) cat( ... )
@@ -19,7 +19,7 @@
 #' @param verbose Use false to suppress logs
 #'
 #' @return a data.frame with rows indexed by the signature(s) tested
-#'
+#' @keywords internal
 .hyper_enrichment <- function (
     drawn,          # one or more sets of 'drawn' items (e.g., genes). Basically, a list of signatures.
     categories,     # gene sets (list of gene sets)

@@ -4,6 +4,7 @@
 #' @param ... Variables to format placeholders with
 #' @return A formatted string
 #'
+#' @keywords internal
 format_str <- function(string, ...) {
     args <- list(...)
     for (i in 1:length(args)) {
@@ -12,6 +13,23 @@ format_str <- function(string, ...) {
         string <- gsub(pattern, replacement, string)
     }
     return(string)
+}
+
+#' Convert an arguments list to string format
+#'
+#' @param args A list of keyword arguments (e.g. list(x=15, y="fdr" z=TRUE) )
+#' @return A string of keyword arguments
+#'
+#' @keywords internal
+string_args <- function(args) {
+    paste(paste(names(args), 
+                sapply(unname(args), function(x) {
+                    if (is.character(x)) {shQuote(x)}
+                    else if (is.null(x)) {"NULL"}
+                    else {x}
+                }), 
+                sep='='), 
+                collapse=",")
 }
 
 rmd_config <- "---
@@ -25,6 +43,7 @@ output:
     toc: true
     toc_float: true
     toc_depth: 1
+    code_folding: hide
     df_print: paged
 ---
 "
@@ -34,6 +53,7 @@ rmd_knitr <- "
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 library(kableExtra)
 ```
+
 "
 rmd_tabset <- "
 # {1}
@@ -42,22 +62,28 @@ rmd_tabset <- "
 
 rmd_tab <- "
 ### {1} 
-```{r {2}, echo = FALSE}
+```{r {2}, fig.width=8.25, fig.align='center'}
 hyp.obj <- tabsets[['{3}']][['{1}']] 
 {4}
 {5}
 {6}
+{7}
 ```
 "
 
 tab_plot <- "
 hyp.obj %>%
-hyp_plot(top={1}, val='{2}', show_plots=FALSE, return_plots=TRUE)
+hyp_plot({1})
 "
 
 tab_emap <- "
 hyp.obj %>%
-hyp_emap(top={1}, val='{2}', similarity_metric='{3}', similarity_cutoff={4}, show_plots=FALSE, return_plots=TRUE)
+hyp_emap({1})
+"
+
+tab_hmap <- "
+hyp.obj %>%
+hyp_hmap({1})
 "
 
 tab_table <- "
@@ -78,14 +104,12 @@ df
 #' @param author Authors of markdown report
 #' @param header Header name of tabset section
 #' @param show_plots Option to show plots in tabs
-#' @param show_emaps Option to show emaps in tabs
+#' @param show_emaps Option to show enrichment maps in tabs
+#' @param show_hmaps Option to show hiearchy maps in tabs
 #' @param show_tables Option to show table in tabs
-#' @param top_plot Limit number of pathways shown in plots
-#' @param top_emap Limit number of pathways shown in emaps
-#' @param val_plot Choose significance value in plots e.g. c("fdr", "pval")
-#' @param val_emap Choose significance value in emaps e.g. c("fdr", "pval")
-#' @param similarity_metric Similarity matric used in emaps
-#' @param similarity_cutoff Similarity cutoff used in emaps
+#' @param hyp_plot_args A list of keyword arguments passed to hyp_plot
+#' @param hyp_emap_args A list of keyword arguments passed to hyp_emap
+#' @param hyp_hmap_args A list of keyword arguments passed to hyp_hmap
 #' @param custom_rmd_config Replace configuration section of markdown report
 #' @param custom_pre_content Insert custom content before tabset section
 #' @param custom_post_content Insert custom content after tabset section
@@ -102,22 +126,34 @@ hyp_to_rmd <- function(hyp.obj,
                        header="Enrichment",
                        show_plots=TRUE,
                        show_emaps=TRUE,
+                       show_hmaps=FALSE,
                        show_tables=TRUE,
-                       top_plot=15,
-                       top_emap=15,
-                       val_plot=c("fdr", "pval"),
-                       val_emap=c("fdr", "pval"),
-                       similarity_metric=c("jaccard_similarity", "overlap_similarity"),
-                       similarity_cutoff=0.2,
+                       hyp_plot_args=list(top=15, 
+                                          val="fdr"),
+                       hyp_emap_args=list(top=25, 
+                                          val="fdr", 
+                                          similarity_metric="jaccard_similarity", 
+                                          similarity_cutoff=0.2),
+                       hyp_hmap_args=list(top=25,
+                                          val="fdr"),    
                        custom_rmd_config=NULL,
                        custom_pre_content=NULL,
                        custom_post_content=NULL) {
 
-    # Default arguments
-    val_plot <- match.arg(val_plot)
-    val_emap <- match.arg(val_emap)
-    similarity_metric <- match.arg(similarity_metric)
-
+    # Enfore plots retuns
+    if (show_plots) {
+        hyp_plot_args[["return_plots"]] = TRUE
+        hyp_plot_args[["show_plots"]] = FALSE
+    }
+    if (show_emaps) {
+        hyp_emap_args[["return_plots"]] = TRUE
+        hyp_emap_args[["show_plots"]] = FALSE
+    }    
+    if (show_hmaps) {
+        hyp_hmap_args[["return_plots"]] = TRUE
+        hyp_hmap_args[["show_plots"]] = FALSE
+    }
+    
     # Markdown configuration
     if (!is.null(custom_rmd_config)) {
         rmd_config <- custom_rmd_config
@@ -155,7 +191,7 @@ hyp_to_rmd <- function(hyp.obj,
         tabsets <- list(x = hyp.obj$data)
         names(tabsets) <- c(header)
     }
-    if (class(hyp.obj) == "list") {
+    if ("list" %in% class(hyp.obj)) {
         tabsets <- lapply(hyp.obj, function(x) {
             stopifnot("hyp" %in% class(x) | "multihyp" %in% class(x))
             if ("hyp" %in% class(x)) {
@@ -172,27 +208,29 @@ hyp_to_rmd <- function(hyp.obj,
 
         # Tabset header and init code
         rmd_tabset %>%
-            format_str(tabset) %>%
-            write(file = file_path, append = TRUE)
+        format_str(tabset) %>%
+        write(file=file_path, append=TRUE)
 
         # Tab content
         tabs <- tabsets[[tabset]]
         for (tab in names(tabs)) {
 
-            tab_id <- sample(1:100000000, 1)
-            plot_area <- ifelse(show_plots, format_str(tab_plot, top_plot, val_plot), "")
-            emap_area <- ifelse(show_emaps, format_str(tab_emap, top_emap, val_emap, similarity_metric, similarity_cutoff), "") 
+            tab_id <- sample(1:100000000000, 1)
+            
+            plot_area <- ifelse(show_plots, format_str(tab_plot, string_args(hyp_plot_args)), "")
+            emap_area <- ifelse(show_emaps, format_str(tab_emap, string_args(hyp_emap_args)), "")
+            hmap_area <- ifelse(show_hmaps, format_str(tab_hmap, string_args(hyp_hmap_args)), "")
             table_area <- ifelse(show_tables, tab_table, "")
 
             rmd_tab %>%
-                format_str(tab, tab_id, tabset, plot_area, emap_area, table_area) %>%
-                write(file = file_path, append = TRUE)
+            format_str(tab, tab_id, tabset, plot_area, emap_area, hmap_area, table_area) %>%
+            write(file = file_path, append=TRUE)
         }
     }
 
     # Content after hyper enrichment tabs
     if (!is.null(custom_post_content)) {
-        write(custom_post_content, file = file_path, append = TRUE)
+        write(custom_post_content, file=file_path, append=TRUE)
     }
 
     rmarkdown::render(input=file_path, 

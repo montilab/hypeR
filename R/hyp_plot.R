@@ -7,7 +7,11 @@
 #' @return A plotly object
 #'
 #' @importFrom plotly plot_ly plotly_empty add_trace add_annotations layout %>%
-.enrichment_plot <- function(df, title, top=10, val=c("fdr", "pval")) {
+#' @keywords internal
+.enrichment_plot <- function(df, 
+                             title, 
+                             top=10, 
+                             val=c("fdr", "pval")) {
 
     # Top pathways
     df <- head(df, top)
@@ -95,11 +99,13 @@
     return(p)
 }
 
-#' Visualize top enriched pathways from one or more signatures
+#'  Visualize hyp or multihyp objects as a bar plot
 #'
 #' @param hyp_obj A hyp or multihyp object
+#' @param title Plot title
 #' @param top Limit number of pathways shown
 #' @param val Choose significance value e.g. c("fdr", "pval")
+#' @param multihyp_titles Use false to disable plot titles for multihyp objects
 #' @param show_plots An option to show plots
 #' @param return_plots An option to return plots
 #' @return A plotly object
@@ -120,9 +126,17 @@
 #' # Visualize
 #' hyp_plot(hyp_obj, top=3, val="fdr")
 #'
+#' @importFrom stats setNames
 #' @importFrom plotly plot_ly add_trace add_annotations layout %>%
+#'
 #' @export
-hyp_plot <- function(hyp_obj, top=10, val=c("fdr", "pval"), show_plots=TRUE, return_plots=FALSE) {
+hyp_plot <- function(hyp_obj, 
+                     title="", 
+                     top=10, 
+                     val=c("fdr", "pval"), 
+                     multihyp_titles=TRUE, 
+                     show_plots=TRUE, 
+                     return_plots=FALSE) {
 
     stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
 
@@ -133,22 +147,19 @@ hyp_plot <- function(hyp_obj, top=10, val=c("fdr", "pval"), show_plots=TRUE, ret
     if ("multihyp" %in% class(hyp_obj)) {
         multihyp_obj <- hyp_obj
         n <- names(multihyp_obj$data)
-        res <- lapply(setNames(n, n), function(title) {
-
-            # Extract hyp dataframe
-            hyp_obj <- multihyp_obj$data[[title]]
-            df <- hyp_obj$data
-
-            p <- .enrichment_plot(df, title, top, val)
-            if (show_plots) {
-                show(p)
-            }
-            return(p)
-        })
+        res <- lapply(stats::setNames(n, n), function(x) {
+                   hyp_obj <- multihyp_obj$data[[x]]
+                   hyp_plot(hyp_obj,
+                            ifelse(multihyp_titles, x, ""),
+                            top,
+                            val,
+                            multihyp_titles,
+                            show_plots,
+                            return_plots)
+               })
     } else  {
-        # Extract hyp dataframe
         df <- hyp_obj$data
-        res <- .enrichment_plot(df, "Top Pathways", top, val)
+        res <- .enrichment_plot(df, title, top, val)
         if (show_plots) {
             show(res)
         }
