@@ -18,6 +18,7 @@ Imports:
     R6,
     magrittr,
     dplyr,
+    purrr,
     openxlsx,
     msigdbr,
     rmarkdown,

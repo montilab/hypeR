@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyp_emap.R
 \name{hyp_emap}
 \alias{hyp_emap}
-\title{Visualize enrichment map from one or more signatures}
+\title{Visualize hyp or multihyp objects as an enrichment map}
 \usage{
 hyp_emap(hyp_obj, similarity_metric = c("jaccard_similarity",
   "overlap_similarity"), similarity_cutoff = 0.2, pval_cutoff = 1,
@@ -32,5 +32,5 @@ hyp_emap(hyp_obj, similarity_metric = c("jaccard_similarity",
 A plotly object
 }
 \description{
-Visualize enrichment map from one or more signatures
+Visualize hyp or multihyp objects as an enrichment map
 }

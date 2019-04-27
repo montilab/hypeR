@@ -108,7 +108,7 @@ overlap_similarity <- function(a, b) {
                          visIgraphLayout(layout = "layout_nicely")
 }
 
-#' Visualize enrichment map from one or more signatures
+#' Visualize hyp or multihyp objects as an enrichment map
 #'
 #' @param hyp_obj A hyp or multihyp object
 #' @param similarity_metric Metric to calculate geneset similarity

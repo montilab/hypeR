@@ -14,8 +14,17 @@ Relational genesets
 \section{Arguments}{
 
 \describe{
-  \item{gsets}{A list of genesets}
-  \item{nodes}{A data frame of labeled nodes}
+  \item{gsets}{A list of genesets where list names refers to geneset
+  labels and values are geneset members represented as a vector}
+  \item{nodes}{A data frame of labeled nodes e.g.
+  \cr
+\tabular{rrrr}{
+  \tab label\cr
+  id.1 \tab Geneset Label 1 \tab\cr
+  id.2 \tab Geneset Label 2 \tab\cr
+  id.3 \tab Geneset Label 3 \tab\cr
+}
+  }
   \item{edges}{A data frame of directed edges}
 }
 }
