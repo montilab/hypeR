@@ -1,0 +1,82 @@
+---
+title: "Downloading Data"
+vignette: >
+  %\VignetteIndexEntry{Downloading Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    cache = FALSE)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+### Downloading Genesets
+
+#### Using msigdb
+For most user purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with hypeR.
+
+#### Available Genesets
+```{r}
+
+msigdb_info()
+
+```
+
+#### Downloading and Loading Genesets
+Use __*msigdb_get*__ to retrieve a downloaded geneset. In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of character vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
+```{r}
+
+msigdb_path <- hypeR::msigdb_download(species="Homo sapiens")
+
+BIOCARTA <- msigdb_get(msigdb_path, "C2.CP.BIOCARTA")
+KEGG     <- msigdb_get(msigdb_path, "C2.CP.KEGG")
+REACTOME <- msigdb_get(msigdb_path, "C2.CP.REACTOME")
+
+gsets <- c(BIOCARTA, KEGG, REACTOME)
+
+```
+
+```{r}
+
+names(gsets)[1:5]
+gsets$BIOCARTA_41BB_PATHWAY[1:5]
+
+```
+
+### Using hyperdb
+As mentioned previously, one can use custom genesets with hypeR. If msigdb genesets are not sufficient, we have also provided another set of functions for downloading and loading other open source genesets. This is facilitated by interfacing with the publicly available [libraries](https://amp.pharm.mssm.edu/Enrichr/#stats) hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/).
+
+#### Available Genesets
+```{r eval=FALSE}
+
+hyperdb_info()
+
+```
+
+#### Downloading and Loading Genesets
+```{r eval=FALSE}
+
+gsets <- hypeR::hyperdb_get("Cancer_Cell_Line_Encyclopedia")
+
+```
+
+### Custom Genesets
+As mentioned previously, one can use custom genesets with hypeR. In this example, we download one of the many publicly available genesets hosted by Enrichr. Once downloaded, one performs hyper enrichment as normal.
+```{r eval=FALSE}
+
+url = "http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Cancer_Cell_Line_Encyclopedia"
+r <- httr::GET(url)
+text <- httr::content(r, "text", encoding="ISO-8859-1")
+text.split <- strsplit(text, "\n")[[1]]
+gsets <- sapply(text.split, function(x) {
+    genes <- strsplit(x, "\t")[[1]]
+    return(genes[3:length(genes)])
+})
+names(gsets) <- unlist(lapply(text.split, function(x) strsplit(x, "\t")[[1]][1]))
+
+
+```

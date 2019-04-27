@@ -1,0 +1,70 @@
+---
+title: "Generating Reports"
+vignette: >
+  %\VignetteIndexEntry{Generating Reports}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    fig.align="center",
+    fig.width=8.75,
+    cache = FALSE)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+### Multiple Experiments
+Sometimes, we are generating reports for mutliple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with our collaborators.
+
+```{r}
+
+signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
+project <- signatures$project
+
+```
+
+```{r}
+
+names(project)
+names(project[[1]])
+head(project[[1]][[1]])
+
+```
+
+### Example of a Geneset
+Here we use an genesets example from *REACTOME*.
+```{r}
+
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+gsets <- gsets$REACTOME
+
+```
+
+### Hyper Enrichment
+All workflows begin with performing hyper enrichment with __*hypeR*__.
+```{r}
+
+lmultihyp_obj <- lapply(project, function(x) hypeR(x, gsets, bg=35423))
+
+```
+
+```{r}
+
+names(lmultihyp_obj)
+print(lmultihyp_obj[[1]])
+
+```
+
+#### Markdown Reports
+```{r eval=FALSE}
+hypeR::hyp_to_rmd(lmultihyp_obj,
+                  file_path="hyper-enrichment.rmd",
+                  title="Hyper Enrichment (hypeR)",
+                  subtitle="YAP, TNF, and TAZ Knockout Experiments",
+                  author="Anthony Federico, Stefano Monti",
+                  show_plots=T,
+                  show_emaps=T,
+                  show_tables=T)
+```

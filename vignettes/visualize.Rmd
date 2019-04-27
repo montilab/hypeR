@@ -1,0 +1,52 @@
+---
+title: "Visualize Results"
+vignette: >
+  %\VignetteIndexEntry{Visualize Results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    fig.align="center",
+    fig.width=8.75,
+    cache = FALSE)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+### Signature and Geneset
+Here we define our signature of interest as a group of genes randomly sampled from the *estrogen-dependent gene expression* gset and use an genesets example from *REACTOME*.
+```{r}
+
+signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
+signature <- signatures$signature
+
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+gsets <- gsets$REACTOME
+
+```
+
+### Hyper Enrichment
+All workflows begin with performing hyper enrichment with __*hypeR*__.
+```{r}
+
+hyp_obj <- hypeR(signature, gsets, bg=7842, fdr=0.05)
+
+```
+
+### Plot Results
+One can visualize the top enriched pathways using __*hyp_plot*__ which will returned a horizontal barplot. Each bar is a geneset, where dark blue represents the proportion of signature genes found in the entire geneset.
+```{r fig.height=5}
+
+hyp_plot(hyp_obj, return_plots=TRUE)
+
+```
+
+#### Enrichment Map
+One can visualize the top enriched pathways using __*hyp_emap*__ which will returned an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
+```{r fig.height=7}
+
+hyp_emap(hyp_obj, similarity_cutoff=0.5, return_plots=TRUE)
+
+```

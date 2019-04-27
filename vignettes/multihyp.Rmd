@@ -1,0 +1,113 @@
+---
+title: "Multiple Signatures"
+vignette: >
+  %\VignetteIndexEntry{Multiple Signatures}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    fig.align="center",
+    fig.width=8.75,
+    cache = FALSE)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+### Multiple Signatures
+Other times we are looking at multiple signatures that may have been defined in a single experiment. In this case, we can feed __*hypeR*__ a named list of signatures and a *multihyp object* will be returned. This object is essentially just multiple *hyp objects*. However it is recognized and handled differently by downstream visualization and analysis tools.
+```{r}
+
+signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
+experiment <- signatures$experiment
+
+```
+
+```{r}
+
+names(experiment)
+head(experiment[[1]])
+
+```
+
+### Example of a Geneset
+Here we use an genesets example from *REACTOME*.
+```{r}
+
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+gsets <- gsets$REACTOME
+
+```
+
+### Hyper Enrichment
+All workflows begin with performing hyper enrichment with __*hypeR*__.
+```{r}
+
+multihyp_obj <- hypeR(experiment, gsets, bg=35423)
+
+```
+
+```{r}
+
+print(multihyp_obj)
+
+```
+
+### Save Results to Excel
+When saving a *multihyp object* to excel, each signature is exported to its own tab.
+```{r, eval=FALSE}
+
+hyp_to_excel(multihyp_obj, file.path="pathways.xlsx")
+
+```
+
+### Save Results to Table
+When saving a *multihyp object* to a table, each signature is exported as its own table in a single directory.
+```{r, eval=FALSE}
+
+hyp_to_table(multihyp_obj, file.path="pathways.txt")
+
+```
+
+#### Plot Results
+When plotting a *multihyp object*, each signatures is plotted and returned separately.
+```{r}
+
+p <- hyp_plot(multihyp_obj, return_plots=TRUE)
+
+```
+
+```{r}
+
+names(p)
+
+```
+
+```{r fig.height=5}
+
+p[[1]]
+
+```
+
+#### Enrichment Map
+When plotting a *multihyp object*, each signatures is plotted and returned separately.
+```{r}
+
+p <- hyp_emap(multihyp_obj, top=100, similarity_cutoff=0.2, val="pval", multihyp_titles=FALSE, return_plots=TRUE)
+
+```
+
+```{r}
+
+names(p)
+
+```
+
+```{r fig.height=7}
+
+p[[1]]
+
+```
+
+
