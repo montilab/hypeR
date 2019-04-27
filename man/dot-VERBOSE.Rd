@@ -17,3 +17,4 @@ None
 \description{
 Function wrapper to control verbosity
 }
+\keyword{internal}

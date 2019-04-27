@@ -21,3 +21,4 @@ A plotly object
 \description{
 Plot top enriched pathways
 }
+\keyword{internal}

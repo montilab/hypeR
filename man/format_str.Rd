@@ -17,3 +17,4 @@ A formatted string
 \description{
 Format a string using placeholders
 }
+\keyword{internal}
