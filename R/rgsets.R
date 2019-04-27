@@ -94,8 +94,9 @@ rgsets <- R6Class("rgsets", list(
             }
         }
         ids <- unique(ids.subset$values)
-        self$gsets <- self$gsets[names(self$gsets) %in% labels]
-        self$nodes <- self$nodes[ids,,drop=F]
-        self$edges <- self$edges[self$edges$from %in% ids & self$edges$to %in% ids,,drop=F]
+        gsets <- self$gsets[names(self$gsets) %in% labels]
+        nodes <- self$nodes[ids,,drop=F]
+        edges <- self$edges[self$edges$from %in% ids & self$edges$to %in% ids,,drop=F]
+        return(rgsets$new(gsets, nodes, edges))
     }
 ))

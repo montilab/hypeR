@@ -11,7 +11,6 @@
 #'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
-#' @importFrom stats setNames
 #' @importFrom plotly plotly_empty 
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction
 #' 
@@ -36,14 +35,13 @@
     }
     
     # Subset relational genesets
-    rgsets.obj.copy <- rgsets.obj
-    rgsets.obj.copy$subset(hyp_df$category)
+    rgsets.obj.subset <- rgsets_obj$subset(hyp_df$category)
     
     # Extract hiearchy information
-    gsets <- rgsets.obj.copy$gsets
-    nodes <- rgsets.obj.copy$nodes
-    edges <- rgsets.obj.copy$edges 
-    
+    gsets <- rgsets.obj.subset$gsets
+    nodes <- rgsets.obj.subset$nodes
+    edges <- rgsets.obj.subset$edges
+
     # Node sizes set by geneset length
     size.scaler <- function(x) (x-min(x, na.rm=TRUE))/(max(x, na.rm=TRUE)-min(x, na.rm=TRUE))*30
     nodes$size <- sapply(size.scaler(nodes$length), function(x) ifelse(x < 15, 15, x))
@@ -93,6 +91,9 @@
 #' @param return_plots Use true to return plots
 #' @return A visNetwork object or list of visNetwork objects
 #'
+#' @importFrom stats setNames
+#' @importFrom rlang duplicate
+#'
 #' @export
 hyp_hmap <- function(hyp_obj,
                      title="",
@@ -129,7 +130,7 @@ hyp_hmap <- function(hyp_obj,
     # Handling hyp objects
     } else {
         hyp_df <- hyp_obj$data
-        rgsets_obj <- hyp_obj$args$gsets
+        rgsets_obj <- rlang::duplicate(hyp_obj$args$gsets)
         stopifnot("rgsets" %in% class(rgsets_obj))
         res <- .hiearchy_map(hyp_df,
                              rgsets_obj,
