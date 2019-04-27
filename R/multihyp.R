@@ -23,6 +23,14 @@ multihyp <- R6Class("multihyp", list(
   initialize = function(data) {
     self$data <- data
   },
+  print = function(...) {
+    for (i in names(self$data)) {
+        cat("multihyp object: \n")
+        cat(i,  "\n")
+        print(self$data[[i]])
+    }
+    invisible(self)
+  },
   as.list = function(...) {
     lapply(self$data, function(x) x$as.data.frame())
   }
