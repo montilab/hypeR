@@ -1,4 +1,4 @@
-#' Plot enrichment map
+#' Plot hiearchy map
 #'
 #' @param hyp_df A dataframe from a hyp object
 #' @param rgsets_obj A relatonal geneset from a hyp object

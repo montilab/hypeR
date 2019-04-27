@@ -4,13 +4,16 @@
 \alias{hyp_emap}
 \title{Visualize hyp or multihyp objects as an enrichment map}
 \usage{
-hyp_emap(hyp_obj, similarity_metric = c("jaccard_similarity",
-  "overlap_similarity"), similarity_cutoff = 0.2, pval_cutoff = 1,
-  fdr_cutoff = 1, val = c("fdr", "pval"), top = NULL,
+hyp_emap(hyp_obj, title = "",
+  similarity_metric = c("jaccard_similarity", "overlap_similarity"),
+  similarity_cutoff = 0.2, pval_cutoff = 1, fdr_cutoff = 1,
+  val = c("fdr", "pval"), top = NULL, multihyp_titles = TRUE,
   show_plots = TRUE, return_plots = FALSE)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
+
+\item{title}{Plot title}
 
 \item{similarity_metric}{Metric to calculate geneset similarity}
 
@@ -24,12 +27,14 @@ hyp_emap(hyp_obj, similarity_metric = c("jaccard_similarity",
 
 \item{top}{Limit number of pathways shown}
 
+\item{multihyp_titles}{Use false to disable plot titles for multihyp objects}
+
 \item{show_plots}{An option to show plots}
 
 \item{return_plots}{An option to return plots}
 }
 \value{
-A plotly object
+A visNetwork object or list of visNetwork objects
 }
 \description{
 Visualize hyp or multihyp objects as an enrichment map

@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyp_hmap.R
 \name{.hiearchy_map}
 \alias{.hiearchy_map}
-\title{Plot enrichment map}
+\title{Plot hiearchy map}
 \usage{
 .hiearchy_map(hyp_df, rgsets_obj, title = "", pval_cutoff = 1,
   fdr_cutoff = 1, val = c("fdr", "pval"), top = NULL)
@@ -26,6 +26,6 @@
 A visNetwork object
 }
 \description{
-Plot enrichment map
+Plot hiearchy map
 }
 \keyword{internal}

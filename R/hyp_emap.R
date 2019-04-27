@@ -13,7 +13,7 @@ overlap_similarity <- function(a, b) {
 
 #' Plot enrichment map
 #'
-#' @param df A dataframe
+#' @param hyp_df A dataframe from a hyp object
 #' @param gsets A list of genesets
 #' @param title Plot title
 #' @param similarity_metric Metric to calculate geneset similarity
@@ -22,13 +22,17 @@ overlap_similarity <- function(a, b) {
 #' @param fdr_cutoff Filter results to be less than fdr cutoff
 #' @param val Choose significance value shown above nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
-#' @return A plotly object
+#' @return A visNetwork object
 #'
-#' @import igraph
-#' @import visNetwork
+#' @importFrom purrr when
+#' @importFrom dplyr filter
+#' @importFrom stats setNames
 #' @importFrom plotly plotly_empty 
-#' @export
-.enrichment_map <- function(df,
+#' @importFrom igraph graph.adjacency V
+#' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction toVisNetworkData visIgraphLayout
+#' 
+#' @keywords internal
+.enrichment_map <- function(hyp_df,
                             gsets, 
                             title, 
                             similarity_metric=c("jaccard_similarity", "overlap_similarity"),
@@ -38,22 +42,19 @@ overlap_similarity <- function(a, b) {
                             val=c("fdr", "pval"),
                             top=NULL) {
 
-    # Top pathways
-    if (!is.null(top)) {
-        df <- head(df, top)   
-    }
-
+    # Subset results
+    hyp_df <- hyp_df %>%
+              dplyr::filter(pval <= pval_cutoff) %>%
+              dplyr::filter(fdr <= fdr_cutoff) %>%
+              purrr::when(!is.null(top) ~ head(., top), ~ .)
+        
     # Handle empty dataframes
-    if (nrow(df) == 0) {
+    if (nrow(hyp_df) == 0) {
         return(plotly_empty())
     }
-
-    # Significance cutoff
-    hyp.df <- df[df$pval <= pval_cutoff,,drop=FALSE]
-    hyp.df <- df[df$fdr <= fdr_cutoff,,drop=FALSE]
     
     # Geneset similarity matrix
-    hyp.gsets <- gsets[hyp.df$category]
+    hyp.gsets <- gsets[hyp_df$category]
     hyp.gsets.mat <- sapply(hyp.gsets, function(x) {
         sapply(hyp.gsets, function(y,x) {
             if (similarity_metric == "jaccard_similarity") jaccard_similarity(x, y)
@@ -61,74 +62,80 @@ overlap_similarity <- function(a, b) {
             else stop(paste(similarity_metric, "is an invalid metric"))
         }, x)
     })
+    
     m <- as.matrix(hyp.gsets.mat)
     
     # Sparsity settings
     m[m < similarity_cutoff] <- 0
     
     # Similarity matrix to weighted network
-    inet <- graph.adjacency(m, mode="undirected", weighted=TRUE, diag=FALSE)
+    inet <- igraph::graph.adjacency(m, mode="undirected", weighted=TRUE, diag=FALSE)
     
     # igraph to visnet
     vnet <- toVisNetworkData(inet)
 
-    # Add edge weights
-    vnet$edges$value <- vnet$edges$weight
+    nodes <- vnet$nodes
+    edges <- vnet$edges
     
+    # Add edge weights
+    edges$value <- vnet$edges$weight
+
     # Add node scaled sizes based on genset size
     size.scaler <- function(x) (x-min(x))/(max(x)-min(x))*30 
-    node.sizes <- sapply(V(inet), function(x) hyp.df[x, "category.annotated"])
-    node.sizes.scaled <- size.scaler(node.sizes)+20
-    vnet$nodes$size <- node.sizes.scaled
+    node.sizes <- sapply(igraph::V(inet), function(x) hyp_df[x, "category.annotated"])
+    nodes$size <-  size.scaler(node.sizes)+20
     
-    # Add node tooltip information
-    if (val == "fdr") {
-        node.info <- sapply(V(inet), function(x) hyp.df[x, "fdr"])
-        vnet$nodes$title <- paste("FDR", node.info, sep=": ")        
-    }
-    if (val == "pval") {
-        node.info <- sapply(V(inet), function(x) hyp.df[x, "pval"])
-        vnet$nodes$title <- paste("P-Value", node.info, sep=": ")        
-    }
+    val.pretty <- ifelse(val == "fdr", "FDR", "P-Value")
+    nodes$title <- sapply(igraph::V(inet), function(x) {
+                            paste(val.pretty, hyp_df[x, val], sep=": ")
+                        })
     
     # Add node scaled weights based on significance
     weight.scaler <- function(x) (x-max(x))/(min(x)-max(x))
-    node.weights <- sapply(V(inet), function(x) hyp.df[x, val])
-    node.weights.scaled <- weight.scaler(node.weights)
-    vnet$nodes$color.border <- "black"
-    vnet$nodes$color.background <- sapply(node.weights.scaled, function(x) {
-                                       paste("rgba(0,159,253,", round(x, 3), ")", sep="")
-                                   })
-    
-    output <- visNetwork(vnet$nodes, vnet$edges, main=list(text=title, style="font-family:Helvetica")) %>%
-                         visNodes(shadow=TRUE) %>%
-                         visEdges(color="red", hidden=FALSE, shadow=TRUE) %>%
-                         visOptions(highlightNearest=TRUE) %>%
-                         visInteraction(multiselect=TRUE, tooltipDelay=300) %>%
-                         visIgraphLayout(layout = "layout_nicely")
+    node.weights <- sapply(igraph::V(inet), function(x) hyp_df[x, val])
+    nodes$color.border <- "rgb(0,0,0)"
+    nodes$color.highlight <- "rgba(199,0,57,0.9)"
+    nodes$color.background <- sapply(weight.scaler(node.weights), function(x) { 
+                                  if (is.na(x)) {
+                                      return("rgba(199,0,57,0)")
+                                  } else{
+                                      return(paste("rgba(199,0,57,", round(x, 3), ")", sep=""))   
+                                  }
+                          })
+
+    visNetwork(nodes, edges, main=list(text=title, style="font-family:Helvetica")) %>%
+    visNodes(borderWidth=1, borderWidthSelected=0) %>%
+    visEdges(color="rgb(88,24,69)") %>%
+    visOptions(highlightNearest=TRUE) %>%
+    visInteraction(multiselect=TRUE, tooltipDelay=300) %>%
+    visIgraphLayout(layout="layout_nicely")
 }
 
 #' Visualize hyp or multihyp objects as an enrichment map
 #'
 #' @param hyp_obj A hyp or multihyp object
+#' @param title Plot title
 #' @param similarity_metric Metric to calculate geneset similarity
 #' @param similarity_cutoff Geneset similarity cutoff
 #' @param pval_cutoff Filter results to be less than pval cutoff
 #' @param fdr_cutoff Filter results to be less than fdr cutoff
 #' @param val Choose significance value shown above nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
+#' @param multihyp_titles Use false to disable plot titles for multihyp objects
 #' @param show_plots An option to show plots
 #' @param return_plots An option to return plots
-#' @return A plotly object
+#' @return A visNetwork object or list of visNetwork objects
 #'
 #' @export
 hyp_emap <- function(hyp_obj, 
+                     title="",
                      similarity_metric=c("jaccard_similarity", "overlap_similarity"),
                      similarity_cutoff=0.2,
                      pval_cutoff=1, 
                      fdr_cutoff=1,
                      val=c("fdr", "pval"),
                      top=NULL,
+                     multihyp_titles=TRUE,
                      show_plots=TRUE, 
                      return_plots=FALSE) {
 
@@ -142,36 +149,22 @@ hyp_emap <- function(hyp_obj,
     if ("multihyp" %in% class(hyp_obj)) {
         multihyp_obj <- hyp_obj
         n <- names(multihyp_obj$data)
-        res <- lapply(setNames(n, n), function(title) {
-
-            # Extract hyp dataframe
-            hyp_obj <- multihyp_obj$data[[title]]
-            df <- hyp_obj$data
-            # Check if gsets are relational
-            if (hyp_obj$args$gsets_relational) {
-                stopifnot("rgsets" %in% class(hyp_obj$args$gsets))
-                gsets <- hyp_obj$args$gsets$gsets
-            } else {
-                gsets <- hyp_obj$args$gsets
-            }
-
-            p <- .enrichment_map(df, 
-                                 gsets, 
-                                 title,
-                                 similarity_metric,
-                                 similarity_cutoff,
-                                 pval_cutoff, 
-                                 fdr_cutoff,
-                                 val,
-                                 top)
-            if (show_plots) {
-                show(p)
-            }
-            return(p)
-        })
+        res <- lapply(stats::setNames(n, n), function(x) {
+                   hyp_obj <- multihyp_obj$data[[x]]
+                   hyp_emap(hyp_obj,
+                            ifelse(multihyp_titles, x, ""),
+                            similarity_metric, 
+                            similarity_cutoff,
+                            pval_cutoff,
+                            fdr_cutoff,
+                            val,
+                            top,
+                            multihyp_titles,
+                            show_plots,
+                            return_plots)           
+               })
     } else {
-        # Extract hyp dataframe
-        df <- hyp_obj$data
+        hy_df <- hyp_obj$data
         # Check if gsets are relational
         if (hyp_obj$args$gsets_relational) {
             stopifnot("rgsets" %in% class(hyp_obj$args$gsets))
@@ -179,9 +172,9 @@ hyp_emap <- function(hyp_obj,
         } else {
             gsets <- hyp_obj$args$gsets
         }
-        res <- .enrichment_map(df,
+        res <- .enrichment_map(hy_df,
                                gsets, 
-                               "Enrichment Map",
+                               title,
                                similarity_metric,
                                similarity_cutoff,
                                pval_cutoff, 
