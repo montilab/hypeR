@@ -1,0 +1,75 @@
+url: https://github.com/montilab/hypeR
+
+development:
+  mode: auto
+
+authors:
+  Anthony Federico:
+    href: https://github.com/anfederico
+  Stefano Monti:
+    href: https://github.com/montilab
+
+reference:
+- title: Workflow Methods
+  desc: ~
+  contents:
+  - '`hypeR`'
+  - '`hyp_to_excel`'
+  - '`hyp_to_rmd`'
+  - '`hyp_to_table`'
+  - '`hyp_show`'
+  - '`hyp_plot`'
+  - '`hyp_emap`'
+  - '`hyp_hmap`'
+- title: Data Methods
+  desc: ~
+  contents:
+  - '`hyperdb_info`'
+  - '`hyperdb_get`'
+  - '`msigdb_info`'
+  - '`msigdb_get`'
+  - '`msigdb_download`'
+  - '`msigdb_helper`'
+- title: Classes
+  desc: ~
+  contents:
+  - '`hyp`'
+  - '`multihyp`'
+  - '`pvector`'
+  - '`rgsets`'
+
+navbar:
+  type: default
+  left:
+  - text: Home
+    href: index.html
+  - text: Reference
+    href: reference/index.html
+  - text: Tutorials
+    menu:
+    - text: Installation
+      href: articles/installation.html
+    - text: Basic Usage
+      href: articles/basics.html
+    - text: Visualize Results
+      href: articles/visualize.html
+    - text: Downloading Data
+      href: articles/data.html
+    - text: Relational Genesets
+      href: articles/relational.html
+    - text: Multiple Signatures
+      href: articles/multihyp.html
+    - text: Generating Reports
+      href: articles/reporting.html
+
+articles:
+- title: Tutorials
+  desc: ~
+  contents:
+  - '`installation`'
+  - '`basics`'
+  - '`visualize`'
+  - '`relational`'
+  - '`multihyp`'
+  - '`reporting`'
+  - '`data`'
