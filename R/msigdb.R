@@ -126,7 +126,7 @@ msigdb_info <- function() {
 #' @return A list of gene sets
 #'
 #' @examples
-#' msigdb_path <- msigdb_get_all("Homo sapiens")
+#' msigdb_path <- msigdb_download_all("Homo sapiens")
 #' REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
 #'
 #' @export

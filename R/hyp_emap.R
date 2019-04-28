@@ -164,14 +164,14 @@ hyp_emap <- function(hyp_obj,
                      show_plots=TRUE, 
                      return_plots=FALSE) {
 
-    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
+    stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
     # Default arguments
     similarity_metric <- match.arg(similarity_metric)
     val <- match.arg(val)
 
     # Handling of multiple signatures
-    if ("multihyp" %in% class(hyp_obj)) {
+    if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
         n <- names(multihyp_obj$data)
         res <- lapply(stats::setNames(n, n), function(x) {
@@ -192,7 +192,7 @@ hyp_emap <- function(hyp_obj,
         hy_df <- hyp_obj$data
         # Check if gsets are relational
         if (hyp_obj$args$gsets_relational) {
-            stopifnot("rgsets" %in% class(hyp_obj$args$gsets))
+            stopifnot(is(hyp_obj$args$gsets, "rgsets"))
             gsets <- hyp_obj$args$gsets$gsets
         } else {
             gsets <- hyp_obj$args$gsets

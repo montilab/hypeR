@@ -39,12 +39,12 @@ hypeR <- function(symbols,
     
     # Check if gsets are relational
     if (gsets_relational) {
-        stopifnot("rgsets" %in% class(gsets))
+        stopifnot(is(gsets, "rgsets"))
         gsets <- gsets$gsets
     }
-    
+
     # Handling of multiple signatures
-    if (class(symbols) == "list") {
+    if (is(symbols, "list")) {
         lhyp <- lapply(symbols, hypeR, args$gsets, 
                                        args$gsets_relational, 
                                        args$bg, 

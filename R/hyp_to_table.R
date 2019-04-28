@@ -26,11 +26,11 @@
 #' @export
 hyp_to_table <- function(hyp_obj, file_path, sep="\t", cols=NULL) {
 
-    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
+    stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
 
     # A multihyp object results in multiple tables within a director named file_path
-    if ("multihyp" %in% class(hyp_obj)) {
+    if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
 
         # Create directory if not exists

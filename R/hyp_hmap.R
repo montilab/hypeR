@@ -120,13 +120,13 @@ hyp_hmap <- function(hyp_obj,
                      return_plots=FALSE) {
     
     # Checks and warnings
-    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
+    stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
     
     # Default arguments
     val <- match.arg(val)
 
     # Handling multihyp objects
-    if ("multihyp" %in% class(hyp_obj)) {
+    if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
         n <- names(multihyp_obj$data)
         res <- lapply(stats::setNames(n, n), function(x) {
@@ -145,7 +145,7 @@ hyp_hmap <- function(hyp_obj,
     } else {
         hyp_df <- hyp_obj$data
         rgsets_obj <- rlang::duplicate(hyp_obj$args$gsets)
-        stopifnot("rgsets" %in% class(rgsets_obj))
+        stopifnot(is(rgsets_obj, "rgsets"))
         res <- .hiearchy_map(hyp_df,
                              rgsets_obj,
                              title,

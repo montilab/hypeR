@@ -25,10 +25,10 @@
 #' @export
 hyp_to_excel <- function(hyp_obj, file_path, cols=NULL) {
     
-    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
+    stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
     # Handle hyp objects
-    if ("hyp" %in% class(hyp_obj)) {
+    if (is(hyp_obj, "hyp")) {
         multihyp_obj <- multihyp$new(data=list(" "=hyp_obj))
     } else {
         multihyp_obj <- hyp_obj

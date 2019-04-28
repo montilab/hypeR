@@ -138,13 +138,13 @@ hyp_plot <- function(hyp_obj,
                      show_plots=TRUE, 
                      return_plots=FALSE) {
 
-    stopifnot("hyp" %in% class(hyp_obj) | "multihyp" %in% class(hyp_obj))
+    stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
     # Default arguments
     val <- match.arg(val)
 
     # Handling of multiple signatures
-    if ("multihyp" %in% class(hyp_obj)) {
+    if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
         n <- names(multihyp_obj$data)
         res <- lapply(stats::setNames(n, n), function(x) {

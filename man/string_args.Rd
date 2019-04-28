@@ -16,7 +16,9 @@ A string of keyword arguments
 Convert an arguments list to string format
 }
 \examples{
+\dontrun{
 string_args(list(x=15, y="fdr", z=TRUE))
+}
 
 }
 \keyword{internal}

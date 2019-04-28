@@ -5,7 +5,9 @@
 #' @return A formatted string
 #' 
 #' @examples
+#' \dontrun{
 #' format_str("Format with {1} and {2}", "x", "y")
+#' }
 #'
 #' @keywords internal
 format_str <- function(string, ...) {
@@ -24,7 +26,9 @@ format_str <- function(string, ...) {
 #' @return A string of keyword arguments
 #'
 #' @examples
+#' \dontrun{
 #' string_args(list(x=15, y="fdr", z=TRUE))
+#' }
 #'
 #' @keywords internal
 string_args <- function(args) {
@@ -189,21 +193,21 @@ hyp_to_rmd <- function(hyp.obj,
 
     # A single set of tabs
     # ----------------------
-    if ("hyp" %in% class(hyp.obj)) {
+    if (is(hyp.obj, "hyp")) {
         tabsets <- list(x = list(" " = hyp.obj))
         names(tabsets) <- c(header)
     }
-    if ("multihyp" %in% class(hyp.obj)) {
+    if (is(hyp.obj, "multihyp")) {
         tabsets <- list(x = hyp.obj$data)
         names(tabsets) <- c(header)
     }
-    if ("list" %in% class(hyp.obj)) {
+    if (is(hyp.obj, "list")) {
         tabsets <- lapply(hyp.obj, function(x) {
-            stopifnot("hyp" %in% class(x) | "multihyp" %in% class(x))
-            if ("hyp" %in% class(x)) {
+            stopifnot(is(x, "hyp")| is(x, "multihyp"))
+            if (is(x, "hyp")) {
                 return(list(" " = x))
             }
-            if ("multihyp" %in% class(x)) {
+            if (is(x, "multihyp")) {
                 return(x$data)
             }
         })

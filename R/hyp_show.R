@@ -25,7 +25,7 @@
 #' @export
 hyp_show <- function(hyp_obj, simple=TRUE, stylish=FALSE) {
 
-    stopifnot("hyp" %in% class(hyp_obj))
+    stopifnot(is(hyp_obj, "hyp"))
 
     # Extract hyp dataframe
     df <- hyp_obj$data
