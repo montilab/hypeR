@@ -13,7 +13,6 @@
 #' @importFrom dplyr filter
 #' @importFrom plotly plotly_empty 
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction
-#' 
 #' @keywords internal
 .hiearchy_map <- function(hyp_df,
                           rgsets_obj,
@@ -91,9 +90,24 @@
 #' @param return_plots Use true to return plots
 #' @return A visNetwork object or list of visNetwork objects
 #'
+#' @examples
+#' # Grab a list of curated gene sets
+#' rgsets_lst <- readRDS(system.file("extdata/rgsets.rds", package="hypeR"))
+#' rgsets_obj <- rgsets_lst$REACTOME
+#'
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#'
+#' # Perform hyper enrichment
+#' hyp_obj <- hypeR(symbols, rgsets_obj, gsets_relational=TRUE, bg=7842, fdr=0.05)
+#'
+#' # Visualize
+#' hyp_hmap(hyp_obj, top=60)
+#'
 #' @importFrom stats setNames
 #' @importFrom rlang duplicate
-#'
 #' @export
 hyp_hmap <- function(hyp_obj,
                      title="",

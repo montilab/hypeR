@@ -18,8 +18,6 @@ A list containing the output directory and version number of gene sets
 Download all gsets from msigdb for a species
 }
 \examples{
-\dontrun{
 msigdb_path <- msigdb_download_all("Homo sapiens")
-}
 
 }

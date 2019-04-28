@@ -25,7 +25,6 @@
 #' print(pv) 
 #'
 #' @importFrom R6 R6Class
-#'
 #' @export
 pvector <- R6Class("pvector", list(
     values = NULL,

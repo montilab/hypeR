@@ -6,14 +6,11 @@
 #' @return A list of gene sets
 #'
 #' @examples
-#' \dontrun{
 #' HALLMARK <- msigdb_download_one("Homo sapiens", "H", "")
-#' }
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom msigdbr msigdbr
-#'
 #' @export
 msigdb_download_one <- function(species="Homo sapiens", category, subcategory="") {
 
@@ -36,14 +33,11 @@ msigdb_download_one <- function(species="Homo sapiens", category, subcategory=""
 #' @return A list containing the output directory and version number of gene sets
 #'
 #' @examples
-#' \dontrun{
 #' msigdb_path <- msigdb_download_all("Homo sapiens")
-#' }
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select arrange
 #' @importFrom msigdbr msigdbr
-#'
 #' @export
 msigdb_download_all <- function(species="Homo sapiens", output_dir=NULL) {
 
@@ -97,9 +91,7 @@ msigdb_download_all <- function(species="Homo sapiens", output_dir=NULL) {
 #' @return A table of values
 #'
 #' @examples
-#' \dontrun{
 #' msigdb_info()
-#' }
 #'
 #' @export
 msigdb_info <- function() {
@@ -134,10 +126,8 @@ msigdb_info <- function() {
 #' @return A list of gene sets
 #'
 #' @examples
-#' \dontrun{
 #' msigdb_path <- msigdb_get_all("Homo sapiens")
 #' REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
-#' }
 #'
 #' @export
 msigdb_fetch <- function(msigdb_path,

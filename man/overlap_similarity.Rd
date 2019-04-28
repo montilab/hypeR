@@ -6,6 +6,14 @@
 \usage{
 overlap_similarity(a, b)
 }
+\arguments{
+\item{a}{A vector}
+
+\item{b}{A vector}
+}
+\value{
+A numerical value
+}
 \description{
 Calculate overlap similarity of two sets
 }

@@ -4,12 +4,9 @@
 #' @return A character vector of available genesets
 #'
 #' @examples
-#' \dontrun{
 #' hyperdb_info()
-#' }
 #'
 #' @importFrom gh gh
-#'
 #' @export
 hyperdb_info <- function(quiet=FALSE) {
     response <- gh("/repos/:owner/:repo/contents/:path", owner="montilab", repo="hyperdb", path="data/genesets")
@@ -25,9 +22,7 @@ hyperdb_info <- function(quiet=FALSE) {
 #' @return A list of gene sets
 #'
 #' @examples
-#' \dontrun{
 #' gsets <- hyperdb_fetch("Cancer_Cell_Line_Encyclopedia")
-#' }
 #'
 #' @export
 hyperdb_fetch <- function(gset) {

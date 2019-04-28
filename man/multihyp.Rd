@@ -29,4 +29,12 @@ A multihyp object
 \code{hyp}
 }
 
+\examples{
+data <- data.frame(replicate(5,sample(0:1,10,rep=TRUE)))
+args <- list("arg_1"=1, "arg_2"=2, "arg_3"=3)
+hyp_obj <- hyp$new(data, args)
+data <- list("hyp_1"=hyp_obj, "hyp_2"=hyp_obj,"hyp_3"=hyp_obj)
+multihyp_obj <- multihyp$new(data)
+
+}
 \keyword{datasets}

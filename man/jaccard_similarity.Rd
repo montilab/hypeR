@@ -6,6 +6,14 @@
 \usage{
 jaccard_similarity(a, b)
 }
+\arguments{
+\item{a}{A vector}
+
+\item{b}{A vector}
+}
+\value{
+A numerical value
+}
 \description{
 Calculate jaccard similarity of two sets
 }

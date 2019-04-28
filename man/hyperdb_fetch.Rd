@@ -16,8 +16,6 @@ A list of gene sets
 Fetch gsets from hyperdb
 }
 \examples{
-\dontrun{
 gsets <- hyperdb_fetch("Cancer_Cell_Line_Encyclopedia")
-}
 
 }

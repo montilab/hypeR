@@ -232,7 +232,7 @@ WikiPathways_2016 437 5966 51.0
 WikiPathways_2019_Human 472 6201 45.0 
 WikiPathways_2019_Mouse 176 4558 54.0"
 
-df = read.table(text=info, sep=" ", header=T, fill=T, row.names=1)
+df = read.table(text=info, sep=" ", header=TRUE, fill=TRUE, row.names=1)
 ```
 
 #### Available genesets

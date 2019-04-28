@@ -20,9 +20,7 @@ A list of gene sets
 Fetch gsets from msigdb
 }
 \examples{
-\dontrun{
 msigdb_path <- msigdb_get_all("Homo sapiens")
 REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
-}
 
 }

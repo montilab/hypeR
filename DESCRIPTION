@@ -6,7 +6,7 @@ Author:
     Stefano Monti <smonti@bu.edu>
 Maintainer: Anthony Federico <anfed@bu.edu>
 Description: Geneset enrichment analysis based on hyper-geometric test.
-Depends: R (>= 3.0.0)
+Depends: R (>= 3.5.0)
 License: GPL-3 + file LICENSE
 URL: https://github.com/montilab/hypeR
 Encoding: UTF-8
@@ -19,6 +19,7 @@ Imports:
     magrittr,
     dplyr,
     purrr,
+    stats,
     rlang,
     openxlsx,
     msigdbr,

@@ -34,4 +34,21 @@ A visNetwork object
 \description{
 Plot enrichment map
 }
+\examples{
+# Grab a list of curated gene sets
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+REACTOME <- gsets$REACTOME
+
+# Genes involed in tricarboxylic acid cycle
+symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+             "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+             "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+
+# Perform hyper enrichment
+hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+
+# Visualize
+hyp_emap(hyp_obj, top=30, val="fdr")
+
+}
 \keyword{internal}

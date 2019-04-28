@@ -33,3 +33,20 @@ A visNetwork object or list of visNetwork objects
 \description{
 Visualize hyp/multihyp objects as a hiearchy map
 }
+\examples{
+# Grab a list of curated gene sets
+rgsets_lst <- readRDS(system.file("extdata/rgsets.rds", package="hypeR"))
+rgsets_obj <- rgsets_lst$REACTOME
+
+# Genes involed in tricarboxylic acid cycle
+symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+             "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+             "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+
+# Perform hyper enrichment
+hyp_obj <- hypeR(symbols, rgsets_obj, gsets_relational=TRUE, bg=7842, fdr=0.05)
+
+# Visualize
+hyp_hmap(hyp_obj, top=60)
+
+}

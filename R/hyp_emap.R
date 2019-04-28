@@ -1,10 +1,19 @@
 #' Calculate jaccard similarity of two sets
 #'
+#' @param a A vector
+#' @param b A vector
+#' @return A numerical value
+#'
 #' @keywords internal
 jaccard_similarity <- function(a, b) {
     length( intersect(a, b) ) / length( union(a, b) )
 }
+
 #' Calculate overlap similarity of two sets
+#'
+#' @param a A vector
+#' @param b A vector
+#' @return A numerical value
 #'
 #' @keywords internal
 overlap_similarity <- function(a, b) {
@@ -24,12 +33,27 @@ overlap_similarity <- function(a, b) {
 #' @param top Limit number of pathways shown
 #' @return A visNetwork object
 #'
+#' @examples
+#' # Grab a list of curated gene sets
+#' gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+#' REACTOME <- gsets$REACTOME
+#'
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#'
+#' # Perform hyper enrichment
+#' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#'
+#' # Visualize
+#' hyp_emap(hyp_obj, top=30, val="fdr")
+#'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
 #' @importFrom plotly plotly_empty 
 #' @importFrom igraph graph.adjacency V
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction toVisNetworkData visIgraphLayout
-#' 
 #' @keywords internal
 .enrichment_map <- function(hyp_df,
                             gsets, 

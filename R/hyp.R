@@ -19,8 +19,12 @@
 #' 
 #' \code{multihyp}
 #'
-#' @importFrom R6 R6Class
+#' @examples
+#' data <- data.frame(replicate(5,sample(0:1,10,rep=TRUE)))
+#' args <- list("arg_1"=1, "arg_2"=2, "arg_3"=3)
+#' hyp_obj <- hyp$new(data, args)
 #'
+#' @importFrom R6 R6Class
 #' @export
 hyp <- R6Class("hyp", list(
   data = NULL,

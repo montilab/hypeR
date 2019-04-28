@@ -15,10 +15,10 @@ download.file(gsets.url, destfile = gsets.tmp, mode = "wb")
 gsets.raw <- read.gmt(unzip(gsets.tmp))
 
 # Nodes
-nodes.raw <- read.delim(nodes.url, sep="\t", header=F, fill=T, col.names=c("id", "label", "species"), stringsAsFactors=F)
+nodes.raw <- read.delim(nodes.url, sep="\t", header=FALSE, fill=TRUE, col.names=c("id", "label", "species"), stringsAsFactors=FALSE)
 
 # Edges
-edges.raw <- read.delim(edges.url, sep="\t", header=F, fill=T, col.names=c("from", "to"), stringsAsFactors=F)
+edges.raw <- read.delim(edges.url, sep="\t", header=FALSE, fill=TRUE, col.names=c("from", "to"), stringsAsFactors=FALSE)
 # --
 
 # Clean data -- 
@@ -29,7 +29,7 @@ nodes <- nodes.raw %>%
          filter( species == "Homo sapiens" ) %>%
          filter(! duplicated(id) ) %>%
          set_rownames( .$id ) %>%
-         { .[, "label", drop=F] }
+         { .[, "label", drop=FALSE] }
 
 # Species-specific edges
 edges <- edges.raw %>%

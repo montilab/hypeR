@@ -16,8 +16,6 @@ A character vector of available genesets
 Print hyperdb gsets
 }
 \examples{
-\dontrun{
 hyperdb_info()
-}
 
 }

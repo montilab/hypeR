@@ -13,8 +13,6 @@ A table of values
 Print msigdb gsets
 }
 \examples{
-\dontrun{
 msigdb_info()
-}
 
 }

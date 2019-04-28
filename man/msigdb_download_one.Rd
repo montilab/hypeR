@@ -21,8 +21,6 @@ A list of gene sets
 Fetch gsets from msigdb
 }
 \examples{
-\dontrun{
 HALLMARK <- msigdb_download_one("Homo sapiens", "H", "")
-}
 
 }

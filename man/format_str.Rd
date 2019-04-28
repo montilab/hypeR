@@ -18,7 +18,7 @@ A formatted string
 Format a string using placeholders
 }
 \examples{
-format_str("Format with {1} and {2}", "x", "y"))
+format_str("Format with {1} and {2}", "x", "y")
 
 }
 \keyword{internal}

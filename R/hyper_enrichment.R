@@ -3,6 +3,7 @@
 #' @param v A bool
 #' @param ... What to print
 #' @return None
+#'
 #' @keywords internal
 .VERBOSE <- function( v, ... )
 {
@@ -19,6 +20,8 @@
 #' @param verbose Use false to suppress logs
 #'
 #' @return a data.frame with rows indexed by the signature(s) tested
+#'
+#' @importFrom stats p.adjust quantile phyper
 #' @keywords internal
 .hyper_enrichment <- function (
     drawn,          # one or more sets of 'drawn' items (e.g., genes). Basically, a list of signatures.
@@ -93,7 +96,7 @@
         enrich <- enrich[seq_len(base),,drop=FALSE]
         if (mht) {
             .VERBOSE(verbose,"MHT-correction across multiple draws ..")
-            enrich[,"fdr"] <- p.adjust(as.numeric(enrich[,"pval"]), method="fdr")
+            enrich[,"fdr"] <- stats::p.adjust(as.numeric(enrich[,"pval"]), method="fdr")
             .VERBOSE(verbose,"done.\n")
         }
         .VERBOSE(verbose,
@@ -101,7 +104,7 @@
                 "Candidate sets:    ",rjust(length(drawn),4),"\n",
                 "Sets tested:       ",rjust(ntst,4),"\n",
                 "Items tested:      ",rjust(sum(sapply(drawn,length)),4)," (min,med,max: ",
-                paste(quantile(sapply(drawn,length),probs=c(0,.5,1)),collapse=","),")\n",
+                paste(stats::quantile(sapply(drawn,length),probs=c(0,.5,1)),collapse=","),")\n",
                 "N(FDR<=0.25):      ",rjust(sum(enrich[,"fdr"]<=.25),4),"\n",
                 "N(FDR<=0.05):      ",rjust(sum(enrich[,"fdr"]<=.05),4),"\n",
                 "N(FDR<=0.01):      ",rjust(sum(enrich[,"fdr"]<=.01),4),"\n",
@@ -125,9 +128,9 @@
     nleft <- ntotal-ncats
 
     ## compute P[X>=nhits]
-    enrich <- suppressWarnings(phyper(q=nhits-1,m=ncats,n=nleft,k=ndrawn,lower.tail=FALSE))
+    enrich <- suppressWarnings(stats::phyper(q=nhits-1,m=ncats,n=nleft,k=ndrawn,lower.tail=FALSE))
     enrich <- cbind(pval=enrich,
-                    fdr=p.adjust(enrich, method="fdr"),
+                    fdr=stats::p.adjust(enrich, method="fdr"),
                     nhits=nhits,
                     ndrawn=ndrawn,
                     ncats=ncats,

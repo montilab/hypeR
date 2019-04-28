@@ -23,6 +23,7 @@
 #' # Perform hyper enrichment
 #' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 #'
+#' @importFrom stats complete.cases
 #' @export
 hypeR <- function(symbols,
                   gsets,
@@ -84,7 +85,7 @@ hypeR <- function(symbols,
     if (!is.null(results)) {
         df <- data.frame(results, stringsAsFactors=FALSE)
         df[,seq_len(6)] <- lapply(df[,seq_len(6)], as.numeric)
-        df <- df[complete.cases(df),,drop=FALSE]
+        df <- df[stats::complete.cases(df),,drop=FALSE]
         df <- df[df$pval <= pval_cutoff,,drop=FALSE]
         df <- df[df$fdr <= fdr_cutoff,,drop=FALSE]
     }

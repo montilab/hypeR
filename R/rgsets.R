@@ -1,8 +1,14 @@
 #' Find geneset members
 #'
+#' @param id A vector of ids
+#' @param gsets A list of genesets (see \code{rgsets})
+#' @param nodes A data frame of labeled nodes (see \code{rgsets})
+#' @param edges A data frame of directed edges (see \code{rgsets})
+#' @return A vector of ids
+#'
 #' @importFrom dplyr filter pull %>%
 #' @keywords internal
-find.members <- function(id, gsets, nodes, edges) {
+find_members <- function(id, gsets, nodes, edges) {
     label <- nodes[id, "label"]
     if (label %in% names(gsets)) {
         gsets[[label]]
@@ -10,7 +16,7 @@ find.members <- function(id, gsets, nodes, edges) {
         edges %>%
         dplyr::filter(from == id) %>%
         dplyr::pull(to) %>%
-        lapply(find.members, gsets, nodes, edges) %>%
+        lapply(find_members, gsets, nodes, edges) %>%
         unlist() %>%
         unique()
     }
@@ -25,26 +31,43 @@ find.members <- function(id, gsets, nodes, edges) {
 #'   \item{gsets}{A list of genesets where list names refers to geneset
 #'   labels and values are geneset members represented as a vector}
 #'   \item{nodes}{A data frame of labeled nodes e.g.
-#'   \cr
-#' \tabular{rrrr}{
-#'   \tab label\cr
-#'   id.1 \tab Geneset Label 1 \tab\cr
-#'   id.2 \tab Geneset Label 2 \tab\cr
-#'   id.3 \tab Geneset Label 3 \tab\cr
-#' }
+#'     \cr
+#'     \tabular{rrrr}{
+#'       \tab label\cr
+#'       G1 \tab Geneset 1 \tab\cr
+#'       G2 \tab Geneset 2 \tab\cr
+#'       G3 \tab Geneset 3 \tab\cr
+#'     }
 #'   }
-#'   \item{edges}{A data frame of directed edges}
+#'   \item{edges}{A data frame of directed edges
+#'     \cr
+#'     \tabular{rrrr}{
+#'       from \tab to\cr
+#'       G1 \tab G2 \tab\cr
+#'       G1 \tab G3 \tab\cr
+#'     }
+#'   }
 #' }
 #'
 #' @section Methods:
+#'
+#' \code{print(rgsets)} shows some information about the object data
+#'
+#' \code{rgsets$subset(labels)} returns an rgsets object subsetted
+#' on geneset labels
 #' 
 #' @section See Also:
 #' 
 #' \code{pvector}
 #'
+#' @examples
+#' testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
+#' rgsets_obj <- rgsets$new(gsets=testdat$gsets,
+#'                          nodes=testdat$nodes,
+#'                          edges=testdat$edges)
+#'
 #' @importFrom R6 R6Class
 #' @importFrom dplyr filter pull %>%
-#'
 #' @export
 rgsets <- R6Class("rgsets", list(
     gsets = NULL,
@@ -55,7 +78,7 @@ rgsets <- R6Class("rgsets", list(
         self$nodes <- nodes
         self$edges <- edges
         self$nodes$id <- rownames(self$nodes)
-        self$nodes$length <- sapply(self$nodes$id, function(x) {length(find.members(x, gsets, nodes, edges))})
+        self$nodes$length <- sapply(self$nodes$id, function(x) {length(find_members(x, gsets, nodes, edges))})
     },
     print = function(...) {
         cat("gsets\n\n")
