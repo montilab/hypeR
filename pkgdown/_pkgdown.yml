@@ -15,8 +15,8 @@ reference:
   contents:
   - '`hypeR`'
   - '`hyp_to_excel`'
-  - '`hyp_to_rmd`'
   - '`hyp_to_table`'
+  - '`hyp_to_rmd`'
   - '`hyp_show`'
   - '`hyp_plot`'
   - '`hyp_emap`'
@@ -25,11 +25,11 @@ reference:
   desc: ~
   contents:
   - '`hyperdb_info`'
-  - '`hyperdb_get`'
+  - '`hyperdb_fetch`'
   - '`msigdb_info`'
-  - '`msigdb_get`'
-  - '`msigdb_download`'
-  - '`msigdb_helper`'
+  - '`msigdb_fetch`'
+  - '`msigdb_download_one`'
+  - '`msigdb_download_all`'
 - title: Classes
   desc: ~
   contents:
@@ -51,10 +51,10 @@ navbar:
       href: articles/installation.html
     - text: Basic Usage
       href: articles/basics.html
-    - text: Visualize Results
-      href: articles/visualize.html
     - text: Downloading Data
       href: articles/data.html
+    - text: Visualize Results
+      href: articles/visualize.html
     - text: Relational Genesets
       href: articles/relational.html
     - text: Multiple Signatures
@@ -68,8 +68,8 @@ articles:
   contents:
   - '`installation`'
   - '`basics`'
+  - '`data`'
   - '`visualize`'
   - '`relational`'
   - '`multihyp`'
   - '`reporting`'
-  - '`data`'
