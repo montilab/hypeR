@@ -1,6 +1,7 @@
-^data-raw$
 ^dev$
 ^art$
+^docs$
+^pkgdown$
 ^media$
 ^workflow$
 ^\.git$

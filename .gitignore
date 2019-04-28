@@ -3,6 +3,7 @@ dev/
 docs/
 art/
 workflow/
+pkgdown/favicon
 
 # General
 .DS_Store
