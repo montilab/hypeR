@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyp_plot.R
 \name{hyp_plot}
 \alias{hyp_plot}
-\title{Visualize hyp or multihyp objects as a bar plot}
+\title{Visualize hyp/multihyp objects as a bar plot}
 \usage{
 hyp_plot(hyp_obj, title = "", top = 10, val = c("fdr", "pval"),
   multihyp_titles = TRUE, show_plots = TRUE, return_plots = FALSE)
@@ -26,7 +26,7 @@ hyp_plot(hyp_obj, title = "", top = 10, val = c("fdr", "pval"),
 A plotly object
 }
 \description{
-Visualize hyp or multihyp objects as a bar plot
+Visualize hyp/multihyp objects as a bar plot
 }
 \examples{
 # Grab a list of curated gene sets

@@ -1,9 +1,15 @@
-#' Print available gene sets
+#' Print hyperdb gsets
 #'
 #' @param quiet Use true to suppress printing of available genesets
 #' @return A character vector of available genesets
 #'
+#' @examples
+#' \dontrun{
+#' hyperdb_info()
+#' }
+#'
 #' @importFrom gh gh
+#'
 #' @export
 hyperdb_info <- function(quiet=FALSE) {
     response <- gh("/repos/:owner/:repo/contents/:path", owner="montilab", repo="hyperdb", path="data/genesets")
@@ -13,13 +19,18 @@ hyperdb_info <- function(quiet=FALSE) {
     return(gsets)
 }
 
-#' Fetch a gene sets from hyperdb
+#' Fetch gsets from hyperdb
 #'
 #' @param gset A name corresponding to an available gene set
 #' @return A list of gene sets
 #'
+#' @examples
+#' \dontrun{
+#' gsets <- hyperdb_fetch("Cancer_Cell_Line_Encyclopedia")
+#' }
+#'
 #' @export
-hyperdb_get <- function(gset) {
+hyperdb_fetch <- function(gset) {
     url <- "https://github.com/montilab/hyperdb/raw/master/data/genesets/{0}.rds"
     temp <- tempfile(fileext=".rds")
     httr::GET(gsub("\\{0}", gset, url), 

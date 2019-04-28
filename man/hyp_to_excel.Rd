@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyp_to_excel.R
 \name{hyp_to_excel}
 \alias{hyp_to_excel}
-\title{Export hyp or multihyp object to excel}
+\title{Export hyp/multihyp object to excel}
 \usage{
 hyp_to_excel(hyp_obj, file_path, cols = NULL)
 }
@@ -17,7 +17,7 @@ hyp_to_excel(hyp_obj, file_path, cols = NULL)
 None
 }
 \description{
-Export hyp or multihyp object to excel
+Export hyp/multihyp object to excel
 }
 \examples{
 # Grab a list of curated gene sets

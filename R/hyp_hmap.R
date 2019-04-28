@@ -78,7 +78,7 @@
     visOptions(highlightNearest=TRUE, collapse=list(enabled=TRUE, clusterOptions=list(color.border="black")))
 }
 
-#' Visualize hyp or multihyp objects as a hiearchy map
+#' Visualize hyp/multihyp objects as a hiearchy map
 #'
 #' @param hyp_obj A hyp or multihyp object
 #' @param title Plot title

@@ -1,19 +1,21 @@
-#' Fetch a gene sets from msigdb
+#' Fetch gsets from msigdb
 #'
 #' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)
 #' @param category Gene set category (refer to ?msigdbr::msigdbr for avilable categories)
 #' @param subcategory Gene set subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)
 #' @return A list of gene sets
 #'
+#' @examples
+#' \dontrun{
+#' HALLMARK <- msigdb_download_one("Homo sapiens", "H", "")
+#' }
+#'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom msigdbr msigdbr
 #'
-#' @examples
-#' HALLMARK <- msigdb_helper("Homo sapiens", "H", "")
-#'
 #' @export
-msigdb_helper <- function(species="Homo sapiens", category, subcategory) {
+msigdb_download_one <- function(species="Homo sapiens", category, subcategory="") {
 
     # Download genesets
     mdf <- msigdbr(species, category, subcategory) %>%
@@ -27,21 +29,23 @@ msigdb_helper <- function(species="Homo sapiens", category, subcategory) {
     return(gsets)
 }
 
-#' Download all gene sets from msigdb for a given species
+#' Download all gsets from msigdb for a species
 #'
 #' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)
 #' @param output_dir A directory path where gene sets are downloaded instead of to the package location
 #' @return A list containing the output directory and version number of gene sets
 #'
 #' @examples
-#' msigdb_path <- msigdb_download()
+#' \dontrun{
+#' msigdb_path <- msigdb_download_all("Homo sapiens")
+#' }
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select arrange
 #' @importFrom msigdbr msigdbr
 #'
 #' @export
-msigdb_download <- function(species="Homo sapiens", output_dir=NULL) {
+msigdb_download_all <- function(species="Homo sapiens", output_dir=NULL) {
 
     if (is.null(output_dir)) {
         output_dir <- tempdir()
@@ -70,7 +74,7 @@ msigdb_download <- function(species="Homo sapiens", output_dir=NULL) {
         subcategory <- as.character(res[i,2])
 
         # Download gsets
-        gsets <- msigdb_helper(species, category, subcategory)
+        gsets <- msigdb_download_one(species, category, subcategory)
 
         # Filename formatting
         nm <- ifelse(subcategory == "", category, paste(category, subcategory, sep="."))
@@ -88,12 +92,14 @@ msigdb_download <- function(species="Homo sapiens", output_dir=NULL) {
     return(list("output_dir" = output_dir, "vs" = vs))
 }
 
-#' Print available gene sets
+#' Print msigdb gsets
 #'
 #' @return A table of values
 #'
 #' @examples
+#' \dontrun{
 #' msigdb_info()
+#' }
 #'
 #' @export
 msigdb_info <- function() {
@@ -121,34 +127,36 @@ msigdb_info <- function() {
     cat("|------------------------------------------------------------|\n")
 }
 
-#' Fetch downloaded gene sets from msigdb
+#' Fetch gsets from msigdb
 #'
 #' @param symbol A symbol corresponding to a msigdb gene set
 #' @param msigdb_path A list containing the gene set directory and version number of gene sets
 #' @return A list of gene sets
 #'
 #' @examples
-#' msigdb_path <- msigdb_download()
-#' REACTOME <- msigdb_get(msigdb_path, "C2.CP.REACTOME")
+#' \dontrun{
+#' msigdb_path <- msigdb_get_all("Homo sapiens")
+#' REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
+#' }
 #'
 #' @export
-msigdb_get <- function(msigdb_path,
-                   symbol=c("C1",
-                            "C2.CGP",
-                            "C2.CP",
-                            "C2.CP.BIOCARTA",
-                            "C2.CP.KEGG",
-                            "C2.CP.REACTOME",
-                            "C3.MIR",
-                            "C3.TFT",
-                            "C4.CGN",
-                            "C4.CM",
-                            "C5.BP",
-                            "C5.CC",
-                            "C5.MF",
-                            "C6",
-                            "C7",
-                            "H")) {
+msigdb_fetch <- function(msigdb_path,
+                        symbol=c("C1",
+                                 "C2.CGP",
+                                 "C2.CP",
+                                 "C2.CP.BIOCARTA",
+                                 "C2.CP.KEGG",
+                                 "C2.CP.REACTOME",
+                                 "C3.MIR",
+                                 "C3.TFT",
+                                 "C4.CGN",
+                                 "C4.CM",
+                                 "C5.BP",
+                                 "C5.CC",
+                                 "C5.MF",
+                                 "C6",
+                                 "C7",
+                                 "H")) {
 
     symbol <- match.arg(symbol)
     path <- file.path(msigdb_path$output_dir, paste(symbol, msigdb_path$vs, "rds", sep="."))

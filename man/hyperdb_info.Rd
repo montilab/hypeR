@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyperdb.R
 \name{hyperdb_info}
 \alias{hyperdb_info}
-\title{Print available gene sets}
+\title{Print hyperdb gsets}
 \usage{
 hyperdb_info(quiet = FALSE)
 }
@@ -13,5 +13,11 @@ hyperdb_info(quiet = FALSE)
 A character vector of available genesets
 }
 \description{
-Print available gene sets
+Print hyperdb gsets
+}
+\examples{
+\dontrun{
+hyperdb_info()
+}
+
 }

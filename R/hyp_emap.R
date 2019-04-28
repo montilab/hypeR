@@ -110,7 +110,7 @@ overlap_similarity <- function(a, b) {
     visIgraphLayout(layout="layout_nicely")
 }
 
-#' Visualize hyp or multihyp objects as an enrichment map
+#' Visualize hyp/multihyp objects as an enrichment map
 #'
 #' @param hyp_obj A hyp or multihyp object
 #' @param title Plot title

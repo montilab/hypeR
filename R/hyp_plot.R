@@ -99,7 +99,7 @@
     return(p)
 }
 
-#'  Visualize hyp or multihyp objects as a bar plot
+#'  Visualize hyp/multihyp objects as a bar plot
 #'
 #' @param hyp_obj A hyp or multihyp object
 #' @param title Plot title

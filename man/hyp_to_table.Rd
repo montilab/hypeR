@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyp_to_table.R
 \name{hyp_to_table}
 \alias{hyp_to_table}
-\title{Export hyp or multihyp object to table}
+\title{Export hyp/multihyp object to table}
 \usage{
 hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL)
 }
@@ -19,7 +19,7 @@ hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL)
 None
 }
 \description{
-Export hyp or multihyp object to table
+Export hyp/multihyp object to table
 }
 \examples{
 # Grab a list of curated gene sets

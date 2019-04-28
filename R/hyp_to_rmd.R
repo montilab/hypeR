@@ -1,8 +1,11 @@
 #' Format a string using placeholders
 #'
-#' @param string A an unformatted string with placeholders (e.g. "Format with {1} and {2}")
+#' @param string A an unformatted string with placeholders
 #' @param ... Variables to format placeholders with
 #' @return A formatted string
+#' 
+#' @examples
+#' format_str("Format with {1} and {2}", "x", "y"))
 #'
 #' @keywords internal
 format_str <- function(string, ...) {
@@ -17,8 +20,11 @@ format_str <- function(string, ...) {
 
 #' Convert an arguments list to string format
 #'
-#' @param args A list of keyword arguments (e.g. list(x=15, y="fdr" z=TRUE) )
+#' @param args A list of keyword arguments
 #' @return A string of keyword arguments
+#'
+#' @examples
+#' string_args(list(x=15, y="fdr" z=TRUE))
 #'
 #' @keywords internal
 string_args <- function(args) {

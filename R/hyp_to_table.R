@@ -1,4 +1,4 @@
-#' Export hyp or multihyp object to table
+#' Export hyp/multihyp object to table
 #'
 #' @param hyp_obj A hyp or multihyp object
 #' @param file_path Output file path

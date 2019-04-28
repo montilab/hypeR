@@ -7,12 +7,16 @@
 string_args(args)
 }
 \arguments{
-\item{args}{A list of keyword arguments (e.g. list(x=15, y="fdr" z=TRUE) )}
+\item{args}{A list of keyword arguments}
 }
 \value{
 A string of keyword arguments
 }
 \description{
 Convert an arguments list to string format
+}
+\examples{
+string_args(list(x=15, y="fdr" z=TRUE))
+
 }
 \keyword{internal}

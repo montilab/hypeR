@@ -7,7 +7,7 @@
 format_str(string, ...)
 }
 \arguments{
-\item{string}{A an unformatted string with placeholders (e.g. "Format with {1} and {2}")}
+\item{string}{A an unformatted string with placeholders}
 
 \item{...}{Variables to format placeholders with}
 }
@@ -16,5 +16,9 @@ A formatted string
 }
 \description{
 Format a string using placeholders
+}
+\examples{
+format_str("Format with {1} and {2}", "x", "y"))
+
 }
 \keyword{internal}

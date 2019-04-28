@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyp_emap.R
 \name{hyp_emap}
 \alias{hyp_emap}
-\title{Visualize hyp or multihyp objects as an enrichment map}
+\title{Visualize hyp/multihyp objects as an enrichment map}
 \usage{
 hyp_emap(hyp_obj, title = "",
   similarity_metric = c("jaccard_similarity", "overlap_similarity"),
@@ -37,5 +37,5 @@ hyp_emap(hyp_obj, title = "",
 A visNetwork object or list of visNetwork objects
 }
 \description{
-Visualize hyp or multihyp objects as an enrichment map
+Visualize hyp/multihyp objects as an enrichment map
 }

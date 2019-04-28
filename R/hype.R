@@ -1,8 +1,8 @@
 #' Perform hyper enrichment
 #'
-#' @param symbols A character vector of gene symbols
+#' @param symbols A vector of gene symbols
 #' @param gsets A list of gene sets
-#' @param gsets_relational Use true to inform gsets is relational
+#' @param gsets_relational Use true to inform gsets are relational
 #' @param bg Size or character vector of background population genes
 #' @param min_drawsize Min number of drawn items that must be among categories items
 #' @param pval_cutoff Filter results to be less than pval cutoff

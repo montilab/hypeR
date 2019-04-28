@@ -1,4 +1,4 @@
-#' Export hyp or multihyp object to excel
+#' Export hyp/multihyp object to excel
 #'
 #' @param hyp_obj A hyp or multihyp object
 #' @param file_path Output file path

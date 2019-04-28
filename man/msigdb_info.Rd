@@ -2,7 +2,7 @@
 % Please edit documentation in R/msigdb.R
 \name{msigdb_info}
 \alias{msigdb_info}
-\title{Print available gene sets}
+\title{Print msigdb gsets}
 \usage{
 msigdb_info()
 }
@@ -10,9 +10,11 @@ msigdb_info()
 A table of values
 }
 \description{
-Print available gene sets
+Print msigdb gsets
 }
 \examples{
+\dontrun{
 msigdb_info()
+}
 
 }

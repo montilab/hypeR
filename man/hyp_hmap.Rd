@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyp_hmap.R
 \name{hyp_hmap}
 \alias{hyp_hmap}
-\title{Visualize hyp or multihyp objects as a hiearchy map}
+\title{Visualize hyp/multihyp objects as a hiearchy map}
 \usage{
 hyp_hmap(hyp_obj, title = "", pval_cutoff = 1, fdr_cutoff = 1,
   val = c("fdr", "pval"), top = NULL, multihyp_titles = TRUE,
@@ -31,5 +31,5 @@ hyp_hmap(hyp_obj, title = "", pval_cutoff = 1, fdr_cutoff = 1,
 A visNetwork object or list of visNetwork objects
 }
 \description{
-Visualize hyp or multihyp objects as a hiearchy map
+Visualize hyp/multihyp objects as a hiearchy map
 }

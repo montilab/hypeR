@@ -9,11 +9,11 @@ hypeR(symbols, gsets, gsets_relational = FALSE, bg = 23467,
   verbose = FALSE)
 }
 \arguments{
-\item{symbols}{A character vector of gene symbols}
+\item{symbols}{A vector of gene symbols}
 
 \item{gsets}{A list of gene sets}
 
-\item{gsets_relational}{Use true to inform gsets is relational}
+\item{gsets_relational}{Use true to inform gsets are relational}
 
 \item{bg}{Size or character vector of background population genes}
 
