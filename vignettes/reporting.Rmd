@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
-#### Multiple experiments
+### Multiple experiments
 Sometimes, we are generating reports for mutliple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with our collaborators.
 ```{r}
 
@@ -32,7 +32,7 @@ head(project[[1]][[1]])
 
 ```
 
-#### Example genesets
+### Example genesets
 Here we use an genesets example from [REACTOME](https://reactome.org/).
 ```{r}
 
@@ -41,7 +41,7 @@ gsets <- gsets$REACTOME
 
 ```
 
-#### Hyper enrichment
+### Hyper enrichment
 All workflows begin with performing hyper enrichment with __*hypeR*__.
 ```{r}
 
@@ -56,7 +56,7 @@ print(lmultihyp_obj[[1]])
 
 ```
 
-#### Markdown reports
+### Markdown reports
 __*hyp_to_rmd*__ will accept multiple formats, including a single __*hyp*__ or __*multihyp*__ objects as well as a list of either, including a list of __*hyp*__ or __*multihyp*__ objects together. When a list of __*multihyp*__ objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for __*hyp_plot*__, __*hyp_emap*__, and __*hyp_hmap*__, allowing customization of their functionality per report.
 ```{r eval=FALSE}
 

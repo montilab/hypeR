@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
-#### Multiple signatures
+### Multiple signatures
 Other times we are looking at multiple signatures that may have been defined in a single experiment. In this case, we can feed __*hypeR*__ a named list of signatures and a __*multihyp*__ object will be returned. This object is essentially just multiple __*hyp*__ objects. However it is recognized and handled differently by downstream visualization and analysis tools.
 ```{r}
 
@@ -31,7 +31,7 @@ head(experiment[[1]])
 
 ```
 
-#### Example genesets
+### Example genesets
 Here we use an genesets example from [REACTOME](https://reactome.org/).
 ```{r}
 
@@ -40,7 +40,7 @@ gsets <- gsets$REACTOME
 
 ```
 
-#### Hyper enrichment
+### Hyper enrichment
 All workflows begin with performing hyper enrichment with __*hypeR*__.
 ```{r}
 
@@ -54,7 +54,7 @@ print(multihyp_obj)
 
 ```
 
-#### Save results to excel
+### Save results to excel
 When saving a __*multihyp*__ object to excel, each signature is exported to its own tab.
 ```{r, eval=FALSE}
 
@@ -72,7 +72,7 @@ hyp_to_table(multihyp_obj, file_path="pathways.txt")
 
 When plotting a __*multihyp*__ object, each signatures is plotted and returned separately.
 
-#### Plot results
+### Plot results
 ```{r}
 
 p <- hyp_plot(multihyp_obj, return_plots=TRUE)
@@ -91,7 +91,7 @@ p[[1]]
 
 ```
 
-#### Enrichment map
+### Enrichment map
 ```{r}
 
 p <- hyp_emap(multihyp_obj, top=100, similarity_cutoff=0.2, val="pval", multihyp_titles=FALSE, return_plots=TRUE)

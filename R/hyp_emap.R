@@ -33,22 +33,6 @@ overlap_similarity <- function(a, b) {
 #' @param top Limit number of pathways shown
 #' @return A visNetwork object
 #'
-#' @examples
-#' # Grab a list of curated gene sets
-#' gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
-#' REACTOME <- gsets$REACTOME
-#'
-#' # Genes involed in tricarboxylic acid cycle
-#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
-#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
-#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#'
-#' # Perform hyper enrichment
-#' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#'
-#' # Visualize
-#' hyp_emap(hyp_obj, top=30, val="fdr")
-#'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
 #' @importFrom plotly plotly_empty 
@@ -149,8 +133,23 @@ overlap_similarity <- function(a, b) {
 #' @param return_plots An option to return plots
 #' @return A visNetwork object or list of visNetwork objects
 #'
-#' @importFrom stats setNames
+#' @examples
+#' # Grab a list of curated gene sets
+#' gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+#' REACTOME <- gsets$REACTOME
 #'
+#' # Genes involed in tricarboxylic acid cycle
+#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#'
+#' # Perform hyper enrichment
+#' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#'
+#' # Visualize
+#' hyp_emap(hyp_obj, top=30, val="fdr")
+#'
+#' @importFrom stats setNames
 #' @export
 hyp_emap <- function(hyp_obj, 
                      title="",

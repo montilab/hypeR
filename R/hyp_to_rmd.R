@@ -124,7 +124,7 @@ df
 #' @param custom_pre_content Insert custom content before tabset section
 #' @param custom_post_content Insert custom content after tabset section
 #' @return None
-#' 
+#'
 #' @importFrom rmarkdown render
 #' @importFrom magrittr %>%
 #' @export

@@ -3,6 +3,10 @@ url: https://github.com/montilab/hypeR
 development:
   mode: auto
 
+template:
+  params:
+    bootswatch: cosmo
+
 authors:
   Anthony Federico:
     href: https://github.com/anfederico

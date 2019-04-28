@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# hypeR <img src="media/logo.png" align="right" width="120"/>
+# hypeR
 
 [![](https://img.shields.io/badge/bioconductor-3.9-3a6378.svg)](https://doi.org/doi:10.18129/B9.bioc.hypeR)
 [![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
