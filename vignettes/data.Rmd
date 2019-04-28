@@ -6,66 +6,58 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
-```{r setup, include = FALSE}
+```{r setup, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(
     comment = "#>",
     cache = FALSE)
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
-### Downloading Genesets
-
-#### Using msigdb
+### Downloading genesets from msigdb
 For most user purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with hypeR.
 
-#### Available Genesets
+#### Available genesets
 ```{r}
 
 msigdb_info()
 
 ```
 
-#### Downloading and Loading Genesets
-Use __*msigdb_get*__ to retrieve a downloaded geneset. In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of character vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
+#### Downloading and loading genesets
+Use __*msigdb_download_one*__ to download a single geneset into memory.
 ```{r}
 
-msigdb_path <- hypeR::msigdb_download(species="Homo sapiens")
+HALLMARK <- msigdb_download_one(species="Homo sapiens", category="H")
 
-BIOCARTA <- msigdb_get(msigdb_path, "C2.CP.BIOCARTA")
-KEGG     <- msigdb_get(msigdb_path, "C2.CP.KEGG")
-REACTOME <- msigdb_get(msigdb_path, "C2.CP.REACTOME")
+```
+
+```{r}
+
+head(names(HALLMARK))
+head(HALLMARK[[1]])
+
+```
+
+Use __*msigdb_download_all*__ to retrieve all genesets for a given species. By default, genesets are cached to a temporary directory, therefore a path object is returned. Use the path object with __*msigdb_fetch*__ to load genesets into memory. Users can also specify a directory to download to for repeated use.
+```{r}
+
+msigdb_path <- msigdb_download_all(species="Homo sapiens")
+
+BIOCARTA <- msigdb_fetch(msigdb_path, "C2.CP.BIOCARTA")
+KEGG     <- msigdb_fetch(msigdb_path, "C2.CP.KEGG")
+REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
+
+```
+
+In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
+```{r}
 
 gsets <- c(BIOCARTA, KEGG, REACTOME)
 
 ```
 
-```{r}
-
-names(gsets)[1:5]
-gsets$BIOCARTA_41BB_PATHWAY[1:5]
-
-```
-
-### Using hyperdb
-As mentioned previously, one can use custom genesets with hypeR. If msigdb genesets are not sufficient, we have also provided another set of functions for downloading and loading other open source genesets. This is facilitated by interfacing with the publicly available [libraries](https://amp.pharm.mssm.edu/Enrichr/#stats) hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/).
-
-#### Available Genesets
-```{r eval=FALSE}
-
-hyperdb_info()
-
-```
-
-#### Downloading and Loading Genesets
-```{r eval=FALSE}
-
-gsets <- hypeR::hyperdb_get("Cancer_Cell_Line_Encyclopedia")
-
-```
-
-### Custom Genesets
-As mentioned previously, one can use custom genesets with hypeR. In this example, we download one of the many publicly available genesets hosted by Enrichr. Once downloaded, one performs hyper enrichment as normal.
+### Defining custom genesets
+As mentioned previously, one can use custom genesets with hypeR. In this example, we download one of the many publicly available genesets hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/). Once downloaded, one performs hyper enrichment as normal.
 ```{r eval=FALSE}
 
 url = "http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Cancer_Cell_Line_Encyclopedia"
@@ -78,5 +70,185 @@ gsets <- sapply(text.split, function(x) {
 })
 names(gsets) <- unlist(lapply(text.split, function(x) strsplit(x, "\t")[[1]][1]))
 
+```
+
+### Downloading genesets from hyperdb
+If msigdb genesets are not sufficient, we have also provided another set of functions for downloading and loading other open source genesets. Essentially, we wrap the method used in the example defining custom genesets. This is facilitated by interfacing with the publicly available [libraries](https://amp.pharm.mssm.edu/Enrichr/#stats) hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/).
+
+#### Downloading and loading genesets
+```{r eval=FALSE}
+
+gsets <- hyperdb_fetch("Cancer_Cell_Line_Encyclopedia")
+
+```
+
+```{r include=FALSE}
+info="Geneset_Library Terms Gene_Coverage Genes_Per_Term 
+Genes_Associated_with_NIH_Grants 32876 15886 9.0 
+Cancer_Cell_Line_Encyclopedia 967 15797 176.0 
+Achilles_fitness_decrease 216 4271 128.0 
+Achilles_fitness_increase 216 4320 129.0 
+Aging_Perturbations_from_GEO_down 286 16129 292.0 
+Aging_Perturbations_from_GEO_up 286 15309 308.0 
+Allen_Brain_Atlas_down 2192 13877 304.0 
+Allen_Brain_Atlas_up 2192 13121 305.0 
+ARCHS4_Cell-lines 125 23601 2395.0 
+ARCHS4_IDG_Coexp 352 20883 299.0 
+ARCHS4_Kinases_Coexp 498 19612 299.0 
+ARCHS4_TFs_Coexp 1724 25983 299.0 
+ARCHS4_Tissues 108 21809 2316.0 
+BioCarta_2013 249 1295 18.0 
+BioCarta_2015 239 1678 21.0 
+BioCarta_2016 237 1348 19.0 
+BioPlex_2017 3915 10271 22.0 
+ChEA_2013 353 47172 1370.0 
+ChEA_2015 395 48230 1429.0 
+ChEA_2016 645 49238 1550.0 
+Chromosome_Location 386 32740 85.0 
+Chromosome_Location_hg19 36 27360 802.0 
+CORUM 1658 2741 5.0 
+Data_Acquisition_Method_Most_Popular_Genes 12 1073 100.0 
+dbGaP 345 5613 36.0 
+Disease_Perturbations_from_GEO_down 839 23939 293.0 
+Disease_Perturbations_from_GEO_up 839 23561 307.0 
+Disease_Signatures_from_GEO_down_2014 142 15406 300.0 
+Disease_Signatures_from_GEO_up_2014 142 15057 300.0 
+Drug_Perturbations_from_GEO_2014 701 47107 509.0 
+Drug_Perturbations_from_GEO_down 906 23877 302.0 
+Drug_Perturbations_from_GEO_up 906 24350 299.0 
+DrugMatrix 7876 5209 300.0 
+DSigDB 4026 19513 117.0 
+ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X 104 15562 887.0 
+ENCODE_Histone_Modifications_2013 109 15852 912.0 
+ENCODE_Histone_Modifications_2015 412 29065 2123.0 
+ENCODE_TF_ChIP-seq_2014 498 21493 3713.0 
+ENCODE_TF_ChIP-seq_2015 816 26382 1811.0 
+Enrichr_Libraries_Most_Popular_Genes 121 5902 109.0 
+Enrichr_Submissions_TF-Gene_Coocurrence 1722 12486 299.0 
+Epigenomics_Roadmap_HM_ChIP-seq 383 22288 4368.0 
+ESCAPE 315 25651 807.0 
+GeneSigDB 2139 23726 127.0 
+Genome_Browser_PWMs 615 13362 275.0 
+GO_Biological_Process_2013 941 7682 78.0 
+GO_Biological_Process_2015 5192 14264 58.0 
+GO_Biological_Process_2017 3166 13822 21.0 
+GO_Biological_Process_2017b 10125 13247 49.0 
+GO_Biological_Process_2018 5103 14433 36.0 
+GO_Cellular_Component_2013 205 7324 172.0 
+GO_Cellular_Component_2015 641 13236 82.0 
+GO_Cellular_Component_2017 636 10427 38.0 
+GO_Cellular_Component_2017b 816 8002 143.0 
+GO_Cellular_Component_2018 446 8655 61.0 
+GO_Molecular_Function_2013 402 8469 122.0 
+GO_Molecular_Function_2015 1136 12753 57.0 
+GO_Molecular_Function_2017 972 10601 25.0 
+GO_Molecular_Function_2017b 3271 10089 45.0 
+GO_Molecular_Function_2018 1151 11459 39.0 
+GTEx_Tissue_Sample_Gene_Expression_Profiles_down 2918 16725 1443.0 
+GTEx_Tissue_Sample_Gene_Expression_Profiles_up 2918 19249 1443.0 
+GWAS_Catalog_2019 1737 19378 37.0 
+HMDB_Metabolites 3906 3723 47.0 
+HomoloGene 12 19129 1594.0 
+Human_Gene_Atlas 84 13373 258.0 
+Human_Phenotype_Ontology 1779 3096 31.0 
+HumanCyc_2015 125 756 12.0 
+HumanCyc_2016 152 934 13.0 
+huMAP 995 2243 19.0 
+Jensen_COMPARTMENTS 2283 18329 161.0 
+Jensen_DISEASES 1811 15755 28.0 
+Jensen_TISSUES 1842 19586 545.0 
+KEA_2013 474 4533 37.0 
+KEA_2015 428 3102 25.0 
+KEGG_2013 200 4128 48.0 
+KEGG_2015 179 3800 48.0 
+KEGG_2016 293 7010 87.0 
+Kinase_Perturbations_from_GEO_down 285 17850 300.0 
+Kinase_Perturbations_from_GEO_up 285 17660 300.0 
+Ligand_Perturbations_from_GEO_down 261 15090 282.0 
+Ligand_Perturbations_from_GEO_up 261 15103 318.0 
+LINCS_L1000_Chem_Pert_down 33132 9448 63.0 
+LINCS_L1000_Chem_Pert_up 33132 9559 73.0 
+LINCS_L1000_Kinase_Perturbations_down 3644 12668 300.0 
+LINCS_L1000_Kinase_Perturbations_up 3644 12638 300.0 
+LINCS_L1000_Ligand_Perturbations_down 96 3788 159.0 
+LINCS_L1000_Ligand_Perturbations_up 96 3357 153.0 
+MCF7_Perturbations_from_GEO_down 401 15022 290.0 
+MCF7_Perturbations_from_GEO_up 401 15676 310.0 
+MGI_Mammalian_Phenotype_2013 476 10496 201.0 
+MGI_Mammalian_Phenotype_2017 5231 8184 24.0 
+MGI_Mammalian_Phenotype_Level_3 71 10406 715.0 
+MGI_Mammalian_Phenotype_Level_4 476 10493 200.0 
+Microbe_Perturbations_from_GEO_down 312 15854 279.0 
+Microbe_Perturbations_from_GEO_up 312 15015 321.0 
+miRTarBase_2017 3240 14893 128.0 
+Mouse_Gene_Atlas 96 19270 388.0 
+MSigDB_Computational 858 10061 106.0 
+MSigDB_Oncogenic_Signatures 189 11250 166.0 
+NCI-60_Cancer_Cell_Lines 93 12232 343.0 
+NCI-Nature_2015 209 2541 39.0 
+NCI-Nature_2016 209 2541 39.0 
+NIH_Funded_PIs_2017_AutoRIF_ARCHS4_Predictions 12558 16964 200.0 
+NIH_Funded_PIs_2017_GeneRIF_ARCHS4_Predictions 5684 17258 200.0 
+NIH_Funded_PIs_2017_Human_AutoRIF 12558 13464 45.0 
+NIH_Funded_PIs_2017_Human_GeneRIF 5687 13072 26.0 
+NURSA_Human_Endogenous_Complexome 1796 10231 158.0 
+Old_CMAP_down 6100 8695 100.0 
+Old_CMAP_up 6100 11251 100.0 
+OMIM_Disease 90 1759 25.0 
+OMIM_Expanded 187 2178 89.0 
+Panther_2015 104 1918 39.0 
+Panther_2016 112 2041 42.0 
+Pfam_InterPro_Domains 311 7588 35.0 
+Phosphatase_Substrates_from_DEPOD 59 280 9.0 
+PPI_Hub_Proteins 385 16399 247.0 
+Rare_Diseases_AutoRIF_ARCHS4_Predictions 3725 13787 200.0 
+Rare_Diseases_AutoRIF_Gene_Lists 3725 10471 76.0 
+Rare_Diseases_GeneRIF_ARCHS4_Predictions 2244 13929 200.0 
+Rare_Diseases_GeneRIF_Gene_Lists 2244 10352 58.0 
+Reactome_2013 78 3185 73.0 
+Reactome_2015 1389 6768 47.0 
+Reactome_2016 1530 8973 64.0 
+RNA-Seq_Disease_Gene_and_Drug_Signatures_from_GEO 1302 22440 505.0 
+SILAC_Phosphoproteomics 84 5655 342.0 
+Single_Gene_Perturbations_from_GEO_down 2460 30832 302.0 
+Single_Gene_Perturbations_from_GEO_up 2460 31132 298.0 
+SubCell_BarCode 104 12419 491.0 
+SysMyo_Muscle_Gene_Sets 1135 19500 137.0 
+TargetScan_microRNA 222 7504 155.0 
+TargetScan_microRNA_2017 683 17598 1208.0 
+TF-LOF_Expression_from_GEO 269 34061 641.0 
+TF_Perturbations_Followed_by_Expression 1958 19741 270.0 
+Tissue_Protein_Expression_from_Human_Proteome_Map 30 6454 301.0 
+Tissue_Protein_Expression_from_ProteomicsDB 207 13572 301.0 
+Transcription_Factor_PPIs 290 6002 77.0 
+TRANSFAC_and_JASPAR_PWMs 326 27884 1284.0 
+TRRUST_Transcription_Factors_2019 571 3264 22.0 
+Virus_Perturbations_from_GEO_down 323 17576 300.0 
+Virus_Perturbations_from_GEO_up 323 17711 300.0 
+VirusMINT 85 851 15.0 
+WikiPathways_2013 199 2854 34.0 
+WikiPathways_2015 404 5863 51.0 
+WikiPathways_2016 437 5966 51.0 
+WikiPathways_2019_Human 472 6201 45.0 
+WikiPathways_2019_Mouse 176 4558 54.0"
+
+df = read.table(text=info, sep=" ", header=T, fill=T, row.names=1)
+```
+
+#### Available genesets
+```{r eval=FALSE}
+
+hyperdb_info()
+
+```
+
+```{r echo=FALSE}
+
+datatable(data=df[,c(1,2,3)],
+          style='bootstrap',
+          class='table-bordered table-condensed',
+          escape=TRUE,
+          fillContainer=TRUE, 
+          rownames=TRUE)
 
 ```

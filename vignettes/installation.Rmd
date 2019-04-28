@@ -27,7 +27,7 @@ devtools::install_github("montilab/hypeR", ref="dev")
 
 ```
 
-Load the package into R session.
+Load the package into an R session.
 ```{r, eval=FALSE}
 
 library(hypeR)
