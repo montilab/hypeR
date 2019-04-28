@@ -27,3 +27,4 @@ a data.frame with rows indexed by the signature(s) tested
 \description{
 Carry out set enrichment test based on hyper-geometric distribution
 }
+\keyword{internal}

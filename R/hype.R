@@ -1,17 +1,19 @@
 #' Perform hyper enrichment
 #'
-#' @param symbols A character vector of gene symbols
+#' @param symbols A vector of gene symbols
 #' @param gsets A list of gene sets
+#' @param gsets_relational Use true to inform gsets are relational
 #' @param bg Size or character vector of background population genes
-#' @param min.drawsize Min number of drawn items that must be among categories items
-#' @param pval.cutoff Filter results to be less than pval cutoff
-#' @param fdr.cutoff Filter results to be less than fdr cutoff
+#' @param min_drawsize Min number of drawn items that must be among categories items
+#' @param pval_cutoff Filter results to be less than pval cutoff
+#' @param fdr_cutoff Filter results to be less than fdr cutoff
 #' @param verbose Use false to suppress logs
-#' @return A hyper dataframe
+#' @return A hyp object
 #'
 #' @examples
 #' # Grab a list of curated gene sets
-#' REACTOME <- ex_get("C2.CP.REACTOME")
+#' gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+#' REACTOME <- gsets$REACTOME
 #'
 #' # Genes involed in tricarboxylic acid cycle
 #' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
@@ -19,278 +21,76 @@
 #'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
+#' hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
 #'
+#' @importFrom stats complete.cases
 #' @export
 hypeR <- function(symbols,
                   gsets,
+                  gsets_relational=FALSE,
                   bg=23467,
-                  min.drawsize=4,
-                  pval.cutoff=1,
-                  fdr.cutoff=1,
+                  min_drawsize=4,
+                  pval_cutoff=1,
+                  fdr_cutoff=1,
                   verbose=FALSE) {
 
+    # Save original arguments
+    args <- as.list(environment())
+    
+    # Check if gsets are relational
+    if (gsets_relational) {
+        stopifnot(is(gsets, "rgsets"))
+        gsets <- gsets$gsets
+    }
+
+    # Handling of multiple signatures
+    if (is(symbols, "list")) {
+        lhyp <- lapply(symbols, hypeR, args$gsets, 
+                                       args$gsets_relational, 
+                                       args$bg, 
+                                       args$min_drawsize, 
+                                       args$pval_cutoff,
+                                       args$fdr_cutoff, 
+                                       args$verbose
+                )
+        # Wrap list of hyp objects in multihyp object
+        multihyp.obj <- multihyp$new(data=lhyp)
+        return(multihyp.obj)
+    }
     # Handling a background population
     if ("character" %in% is(bg) & "vector" %in% is(bg)) {
         gsets <- lapply(gsets, function(x) intersect(x, bg))
         bg <- length(bg)
     }
 
-    cat("Number of genes = ", length(symbols), "\n")
-    cat("Number of gene sets = ", length(gsets), "\n")
-    cat("Background population size = ", bg, "\n")
-    cat("P-Value cutoff = ", pval.cutoff, "\n")
-    cat("FDR cutoff = ", fdr.cutoff, "\n")
+    if (verbose) {
+        cat("Number of genes = ", length(symbols), "\n")
+        cat("Number of gene sets = ", length(gsets), "\n")
+        cat("Background population size = ", bg, "\n")
+        cat("P-Value cutoff = ", pval_cutoff, "\n")
+        cat("FDR cutoff = ", fdr_cutoff, "\n")
+    }
 
     df <- data.frame(matrix(ncol=8, nrow=0))
     colnames(df) <- c("pval","fdr","set.annotated","set.size","category.annotated","total.annotated","category","hits")
 
-    hyp <- .hyper_enrichment(drawn=symbols,
-                             categories=gsets,
-                             ntotal=bg,
-                             min.drawsize=min.drawsize,
-                             mht=TRUE,
-                             verbose=verbose)
+    results <- .hyper_enrichment(drawn=symbols,
+                                 categories=gsets,
+                                 ntotal=bg,
+                                 min.drawsize=min_drawsize,
+                                 mht=TRUE,
+                                 verbose=verbose)
 
     # If hits are found format dataframe
-    if (!is.null(hyp)) {
-        df <- data.frame(hyp, stringsAsFactors=FALSE)
+    if (!is.null(results)) {
+        df <- data.frame(results, stringsAsFactors=FALSE)
         df[,seq_len(6)] <- lapply(df[,seq_len(6)], as.numeric)
-        df <- df[complete.cases(df),,drop=FALSE]
-        df <- df[df$pval <= pval.cutoff,,drop=FALSE]
-        df <- df[df$fdr <= fdr.cutoff,,drop=FALSE]
-    }
-    return(df)
-}
-
-#' Convert hyper dataframe to an interactive datatable
-#'
-#' @param df A hyper dataframe
-#' @param simple Use true to only include essential dataframe columns
-#' @param stylish Use true to add a bootstrap styling theme to datatable
-#' @return A datatable object
-#'
-#' @examples
-#' # Grab a list of curated gene sets
-#' REACTOME <- ex_get("C2.CP.REACTOME")
-#'
-#' # Genes involed in tricarboxylic acid cycle
-#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
-#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
-#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#'
-#' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#'
-#' # Export
-#' hyp_show(hyp)
-#'
-#' @importFrom DT datatable
-#' @export
-hyp_show <- function(df, simple=TRUE, stylish=FALSE) {
-    if (simple) {
-        cols <- c(1,2,7,8)
-    } else {
-        cols <- seq_len(ncol(df))
+        df <- df[stats::complete.cases(df),,drop=FALSE]
+        df <- df[df$pval <= pval_cutoff,,drop=FALSE]
+        df <- df[df$fdr <= fdr_cutoff,,drop=FALSE]
     }
 
-    # Gene symbols converted to hyperlinks
-    url <- "https://www.genecards.org/cgi-bin/carddisp.pl?gene="
-    df$hits <- lapply(df$hits, function(x) {
-                   vapply(symbols, function(x) {
-                       paste('<a href="',
-                             url,
-                             x,
-                             '">',
-                             x,
-                             '</a>',
-                             sep="")
-                   }, character(1))
-               })
-
-    if (stylish) {
-        datatable(data = df[,cols,drop=FALSE],
-                  style = 'bootstrap',
-                  class = 'table-bordered table-condensed',
-                  escape = TRUE,
-                  rownames = FALSE)
-    } else {
-        datatable(data = df[,cols,drop=FALSE],
-                  escape = TRUE,
-                  rownames = FALSE)
-    }
-}
-
-#' Export hyper dataframe to excel
-#'
-#' @param df A hyper dataframe
-#' @param file.path Output file path
-#' @param cols Dataframe columns to include
-#' @return None
-#'
-#' @examples
-#' # Grab a list of curated gene sets
-#' REACTOME <- ex_get("C2.CP.REACTOME")
-#'
-#' # Genes involed in tricarboxylic acid cycle
-#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
-#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
-#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#'
-#' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#'
-#' # Export
-#' hyp_to_excel(hyp, file.path="pathways.xlsx")
-#'
-#' @importFrom openxlsx write.xlsx
-#' @export
-hyp_to_excel <- function(df, file.path, cols=seq_len(ncol(df))) {
-    write.xlsx(x = df[,cols,drop=FALSE],
-               file = file.path,
-               col.names = TRUE,
-               row.names = FALSE)
-}
-
-#' Export hyper dataframe to table
-#'
-#' @param df A hyper dataframe
-#' @param file.path Output file path
-#' @param sep The field separator string
-#' @param cols Dataframe columns to include
-#' @return None
-#'
-#' @examples
-#' # Grab a list of curated gene sets
-#' REACTOME <- ex_get("C2.CP.REACTOME")
-#'
-#' # Genes involed in tricarboxylic acid cycle
-#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
-#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
-#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#'
-#' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#'
-#' # Export
-#' hyp_to_table(hyp, file.path="pathways.txt")
-#'
-#' @export
-hyp_to_table <- function(df, file.path, sep="\t", cols=seq_len(ncol(df))) {
-    write.table(x = df[,cols,drop=FALSE],
-                file = file.path,
-                quote = FALSE,
-                sep = sep,
-                col.names = TRUE,
-                row.names = FALSE)
-}
-
-#' Visualize top enriched pathways
-#'
-#' @param df A hyper dataframe
-#' @param top Limit number of pathways shown
-#' @param val Choose significance value e.g. c("pval", "fdr")
-#' @return A plotly object
-#'
-#' @examples
-#' # Grab a list of curated gene sets
-#' REACTOME <- ex_get("C2.CP.REACTOME")
-#'
-#' # Genes involed in tricarboxylic acid cycle
-#' symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
-#'              "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
-#'              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
-#'
-#' # Perform hyper enrichment
-#' hyp <- hypeR(symbols, REACTOME, bg=2522, fdr=0.05)
-#'
-#' # Visualize
-#' hyp_plot(hyp, top=3, val="fdr")
-#'
-#' @importFrom plotly plot_ly add_trace add_annotations layout %>%
-#' @export
-hyp_plot <- function(df, top=10, val=c("fdr", "pval")) {
-
-    # Default arguments
-    val <- match.arg(val)
-
-    # Top pathways
-    df <- head(df, top)
-
-    # Subset data based on significance value
-    if (val == "pval") {
-        df.1 <- df[,c(7,1,5,3)]
-        val.pretty <- "P-Value"
-    } else if (val == "fdr") {
-        df.1 <- df[,c(7,2,5,3)]
-        val.pretty <- "FDR"
-    }
-
-    # Calculate bar heights
-    colnames(df.1) <- c("y", "x", "x1", "x2")
-    df.2 <- df.1
-    df.2$x <- -log10(df.1$x) # Total bar height
-    df.2$x2 <- df.1$x2/df.1$x1*df.2$x # Second bar height
-    df.2$x1 <- df.2$x-df.2$x2 # First bar height
-    y <- factor(df.2$y, levels=df.2$y) # Force order of rownames
-
-    p <- plot_ly(df.2,
-                 x = ~x1,
-                 y = ~y,
-                 type = 'bar',
-                 orientation = 'h',
-                 hoverinfo = 'y',
-                 marker = list(color = '#4CA1AF',
-                               line = list(color = 'white',
-                                           width = 1))) %>%
-
-                 # Split bars
-                 add_trace(x = ~x2, marker = list(color = '#C4E0E5')) %>%
-
-                 # Plot settings
-                 layout(title = "Top Pathways",
-                        xaxis = list(title = paste("-log<sub>10</sub>(",
-                                                   val.pretty,
-                                                   ")",
-                                                   sep=""),
-                                     tickvals=c(-log10(0.05),
-                                                -log10(0.01),
-                                                -log10(0.001),
-                                                seq(5, 1000, 5)),
-                                     ticktext=c("-log(0.05)",
-                                                "-log(0.01)",
-                                                "-log(0.001)"),
-                                     tickfont=list(size=9),
-                                     showgrid = TRUE,
-                                     showline = TRUE,
-                                     showticklabels = TRUE,
-                                     zeroline = TRUE,
-                                     domain = c(0.16, 1)),
-                        yaxis = list(title = "",
-                                     categoryarray = rev(y),
-                                     categoryorder = 'array',
-                                     showgrid = TRUE,
-                                     showline = TRUE,
-                                     showticklabels = FALSE,
-                                     zeroline = TRUE),
-                        barmode = 'stack',
-                        paper_bgcolor = 'white',
-                        plot_bgcolor = 'white',
-                        margin = list(l = 300, r = 0, t = 30, b = 40),
-                        showlegend = FALSE) %>%
-
-                 # Labeling the y-axis
-                 add_annotations(xref = 'paper',
-                                 yref = 'y',
-                                 x = 0.15,
-                                 y = y,
-                                 xanchor = 'right',
-                                 text = y,
-                                 categoryorder = 'array',
-                                 font = list(family = 'Arial',
-                                             size = 10,
-                                             color = 'black'),
-                                 showarrow = FALSE,
-                                 align = 'right')
-    return(p)
+    # Wrap dataframe in hyp object
+    hyp.obj <- hyp$new(data=df, args=args)
+    return(hyp.obj)
 }

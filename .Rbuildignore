@@ -1,6 +1,10 @@
+^dev$
+^art$
+^docs$
+^pkgdown$
+^media$
+^workflow$
 ^\.git$
-^\dev$
-^\figs$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$

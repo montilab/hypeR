@@ -1,0 +1,73 @@
+---
+title: "Generating Reports"
+vignette: >
+  %\VignetteIndexEntry{Generating Reports}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(
+    comment = "#>",
+    fig.align="center",
+    fig.width=8.75,
+    cache = FALSE)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+### Multiple experiments
+Sometimes, we are generating reports for mutliple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with our collaborators.
+```{r}
+
+signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
+project <- signatures$project
+
+```
+
+```{r}
+
+names(project)
+names(project[[1]])
+head(project[[1]][[1]])
+
+```
+
+### Example genesets
+Here we use an genesets example from [REACTOME](https://reactome.org/).
+```{r}
+
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+gsets <- gsets$REACTOME
+
+```
+
+### Hyper enrichment
+All workflows begin with performing hyper enrichment with __*hypeR*__.
+```{r}
+
+lmultihyp_obj <- lapply(project, function(x) hypeR(x, gsets, bg=35423))
+
+```
+
+```{r}
+
+names(lmultihyp_obj)
+print(lmultihyp_obj[[1]])
+
+```
+
+### Markdown reports
+__*hyp_to_rmd*__ will accept multiple formats, including a single __*hyp*__ or __*multihyp*__ objects as well as a list of either, including a list of __*hyp*__ or __*multihyp*__ objects together. When a list of __*multihyp*__ objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for __*hyp_plot*__, __*hyp_emap*__, and __*hyp_hmap*__, allowing customization of their functionality per report.
+```{r eval=FALSE}
+
+hyp_to_rmd(lmultihyp_obj,
+           file_path="hyper-enrichment.rmd",
+           title="Hyper Enrichment (hypeR)",
+           subtitle="YAP, TNF, and TAZ Knockout Experiments",
+           author="Anthony Federico, Stefano Monti",
+           show_plots=T,
+           show_emaps=T,
+           show_hmaps=T,
+           show_tables=T)
+
+```
