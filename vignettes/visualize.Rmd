@@ -35,7 +35,7 @@ hyp_obj <- hypeR(signature, gsets, bg=7842, fdr=0.05)
 
 ```
 
-### Plot Results
+### Plot results
 One can visualize the top enriched pathways using __*hyp_plot*__ which will return a horizontal bar plot. Each bar is a geneset, where dark blue represents the proportion of signature genes found in the entire geneset.
 ```{r fig.height=5}
 
@@ -43,7 +43,7 @@ hyp_plot(hyp_obj, return_plots=TRUE)
 
 ```
 
-### Enrichment Map
+### Enrichment map
 One can visualize the top enriched pathways using __*hyp_emap*__ which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
 ```{r fig.height=7}
 

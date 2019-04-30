@@ -2,7 +2,7 @@
 % Please edit documentation in R/hyperdb.R
 \name{hyperdb_fetch}
 \alias{hyperdb_fetch}
-\title{Fetch gsets from hyperdb}
+\title{Fetch gsets from hypeR-db}
 \usage{
 hyperdb_fetch(gset)
 }
@@ -13,7 +13,7 @@ hyperdb_fetch(gset)
 A list of gene sets
 }
 \description{
-Fetch gsets from hyperdb
+Fetch gsets from hypeR-db
 }
 \examples{
 gsets <- hyperdb_fetch("Cancer_Cell_Line_Encyclopedia")

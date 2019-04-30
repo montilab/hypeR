@@ -73,7 +73,7 @@ rmd_tabset <- "
 rmd_tab <- "
 ### {1} 
 ```{r {2}, fig.width=8.25, fig.align='center'}
-hyp.obj <- tabsets[['{3}']][['{1}']] 
+hyp_obj <- tabsets[['{3}']][['{1}']] 
 {4}
 {5}
 {6}
@@ -82,22 +82,22 @@ hyp.obj <- tabsets[['{3}']][['{1}']]
 "
 
 tab_plot <- "
-hyp.obj %>%
+hyp_obj %>%
 hyp_plot({1})
 "
 
 tab_emap <- "
-hyp.obj %>%
+hyp_obj %>%
 hyp_emap({1})
 "
 
 tab_hmap <- "
-hyp.obj %>%
+hyp_obj %>%
 hyp_hmap({1})
 "
 
 tab_table <- "
-df <- hyp.obj$as.data.frame()
+df <- hyp_obj$as.data.frame()
 df$abrv.name <- substr(rownames(df), 1, 30) 
 col_ix <- match(c('pval', 'fdr', 'abrv.name'), colnames(df))
 df <- df[, c(col_ix, (1:ncol(df))[-col_ix])]
@@ -107,7 +107,7 @@ df
 
 #' Export hyp object to rmarkdown
 #'
-#' @param hyp.obj A hyp object, multihyp object, or list of multihyp objects
+#' @param hyp_obj A hyp object, multihyp object, or list of multihyp objects
 #' @param file_path Output file path
 #' @param title Title of markdown report
 #' @param subtitle Subtitle of markdown report
@@ -128,7 +128,7 @@ df
 #' @importFrom rmarkdown render
 #' @importFrom magrittr %>%
 #' @export
-hyp_to_rmd <- function(hyp.obj,
+hyp_to_rmd <- function(hyp_obj,
                        file_path,
                        title="hypeR Enrichment Report",
                        subtitle="",
@@ -193,16 +193,16 @@ hyp_to_rmd <- function(hyp.obj,
 
     # A single set of tabs
     # ----------------------
-    if (is(hyp.obj, "hyp")) {
-        tabsets <- list(x = list(" " = hyp.obj))
+    if (is(hyp_obj, "hyp")) {
+        tabsets <- list(x = list(" " = hyp_obj))
         names(tabsets) <- c(header)
     }
-    if (is(hyp.obj, "multihyp")) {
-        tabsets <- list(x = hyp.obj$data)
+    if (is(hyp_obj, "multihyp")) {
+        tabsets <- list(x = hyp_obj$data)
         names(tabsets) <- c(header)
     }
-    if (is(hyp.obj, "list")) {
-        tabsets <- lapply(hyp.obj, function(x) {
+    if (is(hyp_obj, "list")) {
+        tabsets <- lapply(hyp_obj, function(x) {
             stopifnot(is(x, "hyp")| is(x, "multihyp"))
             if (is(x, "hyp")) {
                 return(list(" " = x))

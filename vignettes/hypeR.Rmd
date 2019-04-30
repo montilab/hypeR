@@ -1,0 +1,346 @@
+---
+title: "hypeR"
+author:
+- name: Anthony Federico
+  affiliation:
+  - &1 Boston University School of Medicine, Boston, MA
+  - &2 Bioinformatics Program, Boston University, Boston, MA
+- name: Stefano Monti
+  affiliation:
+  - *1
+  - *2
+date: '`r format(Sys.Date(), "%B %e, %Y")`'
+package: hypeR
+output:
+    BiocStyle::html_document
+vignette: >
+    %\VignetteIndexEntry{hypeR}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+    chunk_output_type: console
+---
+
+```{r include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(message=FALSE, fig.width=6.75)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+# Introduction
+Geneset enrichment is an important step in many biological data analysis workflows, particularly in bioinformatics and computational biology. At a basic level, one is testing if a group of genes is overrepresented in a series of pre-defined sets of genes, which typically signify some biological relevance. The R package hypeR enables users to easily perform this type of analysis via a hypergeometric test with a focus on easing downstream visualization, analysis, and reporting. Additionally, users can use custom genesets that are easily defined, extending the analysis of genes to other areas of interest such as proteins, microbes, metabolites etc. The hypeR package is designed to make routine geneset enrichment seamless for scientist working in R. 
+
+# Installation
+Download the package from Bioconductor.
+```{r get_package, eval=FALSE}
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("hypeR")
+
+```
+
+Or install the development version of the package from Bioconductor.
+```{r, eval=FALSE}
+
+BiocManager::install("montilab/hypeR")
+
+```
+
+If not using the current version of R, try installing from our dev branch.
+```{r, eval=FALSE}
+
+devtools::install_github("montilab/hypeR", ref="dev")
+
+```
+
+Load the package into an R session.
+```{r, eval=FALSE}
+
+library(hypeR)
+
+```
+
+# Basics
+## Example Data
+### Example of a signature
+Here we define our signature of interest as a group of genes randomly sampled from the *estrogen-dependent gene expression* gset. A signature is simply a vector of symbols.
+```{r}
+
+signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
+signature <- signatures$signature
+
+```
+
+```{r}
+
+head(signature)
+
+```
+
+### Example of a geneset
+Here we use a genesets example from [REACTOME](https://reactome.org/). A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
+```{r}
+
+gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
+gsets <- gsets$REACTOME
+
+```
+
+```{r}
+
+head(names(gsets))
+head(gsets[[1]])
+
+```
+
+## Hyper enrichment
+All workflows begin with performing hyper enrichment with __*hypeR*__. Often we are just interested in a single signature, as described above. In this case, __*hypeR*__ will return a __*hyp*__ object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+```{r}
+
+hyp_obj <- hypeR(signature, gsets, fdr=0.05)
+
+```
+
+```{r}
+
+print(hyp_obj)
+hyp_df <- hyp_obj$as.data.frame()
+print(hyp_df[5:10,1:4])
+
+```
+
+### Show an interactive table
+```{r, eval=FALSE}
+
+hyp_show(hyp_obj, simple=FALSE, stylish=TRUE)
+
+```
+
+### Set background population size
+Because genomic experiments often vary in the number of genes probed, it is important to be able to adjust the background population size accordingly to ensure accurate enrichment statistics. 
+```{r}
+
+hyp_obj <- hypeR(signature, gsets, bg=10000, fdr=0.05)
+
+```
+
+### Save results to excel
+```{r, eval=FALSE}
+
+hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
+
+```
+
+### Save results to table
+```{r, eval=FALSE}
+
+hyp_to_table(hyp_obj, file_path="pathways.txt")
+
+```
+
+## Visualizations
+
+### Plot results
+One can visualize the top enriched pathways using __*hyp_plot*__ which will return a horizontal bar plot. Each bar is a geneset, where dark blue represents the proportion of signature genes found in the entire geneset.
+```{r}
+
+hyp_plot(hyp_obj, return_plots=TRUE)
+
+```
+
+### Enrichment map
+One can visualize the top enriched pathways using __*hyp_emap*__ which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
+```{r}
+
+hyp_emap(hyp_obj, similarity_cutoff=0.5, return_plots=TRUE)
+
+```
+
+# Advanced
+## Relational genesets
+When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called __*rgsets*__.
+
+```{r}
+
+rgsets_lst <- readRDS(system.file("extdata/rgsets.rds", package="hypeR"))
+rgsets_obj <- rgsets_lst$REACTOME
+
+```
+
+Relational genesets have three data atrributes including gsets, nodes, and edges. Using hierarchical terms, the *gsets* attribute includes the geneset information for the *leaf nodes* of the hiearchy, the *nodes* attribute describes all nodes in the hiearchical, including *internal nodes*, and the *edges* attribute describes the edges in the hiearchy.
+
+#### $gsets
+```{r}
+
+gsets <- rgsets_obj$gsets
+names(gsets)[800:805]
+
+```
+
+#### $nodes
+```{r}
+
+nodes <- rgsets_obj$nodes
+nodes[1123:1128,]
+
+```
+
+#### $edges
+```{r}
+
+edges <- rgsets_obj$edges
+edges[1994:1999,]
+
+```
+
+All workflows begin with performing hyper enrichment with __*hypeR*__. Note that when passing an __*rgsets*__ object, ensure `gsets_relational=TRUE`. Otherwise, __*hypeR*__ will treat it as a list of unstructured gsets. 
+```{r}
+
+hyp_obj <- hypeR(signature, rgsets_obj, gsets_relational=TRUE, bg=7842, fdr=0.05)
+
+```
+
+### Hierarchy map
+One can visualize the top enriched pathways using __*hyp_hmap*__ which will return a hiearchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the *leaf nodes* to view the raw value. Double click *internal nodes* to cluster their first degree connections.s Edges represent a directed relationship between genesets in the hiearchy.
+```{r}
+
+hyp_hmap(hyp_obj, top=60, return_plots=TRUE)
+
+```
+
+## Multiple signatures
+Other times we are looking at multiple signatures that may have been defined in a single experiment. In this case, we can feed __*hypeR*__ a named list of signatures and a __*multihyp*__ object will be returned. This object is essentially just multiple __*hyp*__ objects. However it is recognized and handled differently by downstream visualization and analysis tools.
+```{r}
+
+signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
+experiment <- signatures$experiment
+
+```
+
+```{r}
+
+names(experiment)
+head(experiment[[1]])
+
+```
+
+```{r}
+
+multihyp_obj <- hypeR(experiment, gsets, bg=35423)
+
+```
+
+```{r}
+
+print(multihyp_obj)
+
+```
+
+### Save results to excel
+When saving a __*multihyp*__ object to excel, each signature is exported to its own tab.
+```{r, eval=FALSE}
+
+hyp_to_excel(multihyp_obj, file_path="pathways.xlsx")
+
+```
+
+### Save results to table
+When saving a __*multihyp*__ object to a table, each signature is exported as its own table in a single directory.
+```{r, eval=FALSE}
+
+hyp_to_table(multihyp_obj, file_path="pathways.txt")
+
+```
+
+When plotting a __*multihyp*__ object, each signatures is plotted and returned separately.
+
+### Plot results
+```{r}
+
+p <- hyp_plot(multihyp_obj, return_plots=TRUE)
+
+```
+
+```{r}
+
+names(p)
+
+```
+
+```{r fig.height=5}
+
+p[[1]]
+
+```
+
+### Enrichment map
+```{r}
+
+p <- hyp_emap(multihyp_obj, top=100, similarity_cutoff=0.2, val="pval", multihyp_titles=FALSE, return_plots=TRUE)
+
+```
+
+```{r}
+
+names(p)
+
+```
+
+```{r}
+
+p[[1]]
+
+```
+
+## Multiple experiments
+Sometimes, we are generating reports for mutliple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with our collaborators.
+```{r}
+
+signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
+project <- signatures$project
+
+```
+
+```{r}
+
+names(project)
+names(project[[1]])
+head(project[[1]][[1]])
+
+```
+
+```{r}
+
+lmultihyp_obj <- lapply(project, function(x) hypeR(x, gsets, bg=35423))
+
+```
+
+```{r}
+
+names(lmultihyp_obj)
+print(lmultihyp_obj[[1]])
+
+```
+
+## Markdown reports
+__*hyp_to_rmd*__ will accept multiple formats, including a single __*hyp*__ or __*multihyp*__ objects as well as a list of either, including a list of __*hyp*__ or __*multihyp*__ objects together. When a list of __*multihyp*__ objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for __*hyp_plot*__, __*hyp_emap*__, and __*hyp_hmap*__, allowing customization of their functionality per report.
+```{r eval=FALSE}
+
+hyp_to_rmd(lmultihyp_obj,
+           file_path="hyper-enrichment.rmd",
+           title="Hyper Enrichment (hypeR)",
+           subtitle="YAP, TNF, and TAZ Knockout Experiments",
+           author="Anthony Federico, Stefano Monti",
+           show_plots=T,
+           show_emaps=T,
+           show_hmaps=T,
+           show_tables=T)
+
+```
+
+# Session Info
+```{r}
+
+sessionInfo()
+
+```

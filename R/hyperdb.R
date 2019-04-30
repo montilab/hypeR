@@ -1,4 +1,4 @@
-#' Print hyperdb gsets
+#' Print hypeR-db gsets
 #'
 #' @param quiet Use true to suppress printing of available genesets
 #' @return A character vector of available genesets
@@ -16,7 +16,7 @@ hyperdb_info <- function(quiet=FALSE) {
     return(gsets)
 }
 
-#' Fetch gsets from hyperdb
+#' Fetch gsets from hypeR-db
 #'
 #' @param gset A name corresponding to an available gene set
 #' @return A list of gene sets
@@ -26,7 +26,7 @@ hyperdb_info <- function(quiet=FALSE) {
 #'
 #' @export
 hyperdb_fetch <- function(gset) {
-    url <- "https://github.com/montilab/hyperdb/raw/master/data/genesets/{0}.rds"
+    url <- "https://github.com/montilab/hypeR-db/raw/master/data/genesets/{0}.rds"
     temp <- tempfile(fileext=".rds")
     httr::GET(gsub("\\{0}", gset, url), 
               .send_headers = c("Accept" = "application/octet-stream"),
