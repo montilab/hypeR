@@ -6,7 +6,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE, messages=FALSE, warnings=FALSE}
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(
     comment = "#>",
     fig.align="center",
@@ -16,7 +16,7 @@ devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
 ### Multiple experiments
-Sometimes, we are generating reports for mutliple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with our collaborators.
+Sometimes, we are generating reports for multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with collaborators.
 ```{r}
 
 signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
@@ -42,7 +42,7 @@ gsets <- gsets$REACTOME
 ```
 
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with __*hypeR*__.
+All workflows begin with performing hyper enrichment with `hypeR`.
 ```{r}
 
 lmultihyp_obj <- lapply(project, function(x) hypeR(x, gsets, bg=35423))
@@ -57,8 +57,8 @@ print(lmultihyp_obj[[1]])
 ```
 
 ### Markdown reports
-__*hyp_to_rmd*__ will accept multiple formats, including a single __*hyp*__ or __*multihyp*__ objects as well as a list of either, including a list of __*hyp*__ or __*multihyp*__ objects together. When a list of __*multihyp*__ objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for __*hyp_plot*__, __*hyp_emap*__, and __*hyp_hmap*__, allowing customization of their functionality per report.
-```{r eval=FALSE}
+`hyp_to_rmd` will accept multiple formats, including a single `hyp` or `multihyp` object as well as a list of either, including a list of `hyp` or `multihyp` objects together. When a list of `multihyp` objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for `hyp_plot`, `hyp_emap`, and `hyp_hmap`, allowing customization of their functionality per report.
+```{r, eval=FALSE}
 
 hyp_to_rmd(lmultihyp_obj,
            file_path="hyper-enrichment.rmd",

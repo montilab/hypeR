@@ -6,7 +6,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE, messages=FALSE, warnings=FALSE}
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(
     comment = "#>",
     fig.align="center",
@@ -28,7 +28,7 @@ gsets <- gsets$REACTOME
 ```
 
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with __*hypeR*__.
+All workflows begin with performing hyper enrichment with `hypeR`.
 ```{r}
 
 hyp_obj <- hypeR(signature, gsets, bg=7842, fdr=0.05)
@@ -36,16 +36,16 @@ hyp_obj <- hypeR(signature, gsets, bg=7842, fdr=0.05)
 ```
 
 ### Plot results
-One can visualize the top enriched pathways using __*hyp_plot*__ which will return a horizontal bar plot. Each bar is a geneset, where dark blue represents the proportion of signature genes found in the entire geneset.
-```{r fig.height=5}
+One can visualize the top enriched pathways using `hyp_plot` which returns a horizontal bar plot. Each bar is a geneset, where dark blue represents the proportion of signature genes found in the entire geneset.
+```{r, fig.height=5}
 
 hyp_plot(hyp_obj, return_plots=TRUE)
 
 ```
 
 ### Enrichment map
-One can visualize the top enriched pathways using __*hyp_emap*__ which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
-```{r fig.height=7}
+One can visualize the top enriched pathways using `hyp_emap` which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
+```{r, fig.height=7}
 
 hyp_emap(hyp_obj, similarity_cutoff=0.5, return_plots=TRUE)
 

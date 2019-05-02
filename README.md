@@ -99,8 +99,8 @@ hyp_obj <- hypeR(signature, gsets, fdr=0.05)
 
 #### Downstream methods
 
-Please visit the [documentation](https://montilab.github.io/hypeR/) for
-detailed functionality. Below is a brief list of some methods.
+Please visit the [documentation](https://montilab.github.io/hypeR-docs/)
+for detailed functionality. Below is a brief list of some methods.
 
 ##### Downloading genesets
 

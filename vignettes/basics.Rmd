@@ -6,7 +6,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE, messages=FALSE, warnings=FALSE}
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(
     comment = "#>",
     cache = FALSE)
@@ -14,7 +14,7 @@ devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
 ### Example of a signature
-Here we define our signature of interest as a group of genes randomly sampled from the *estrogen-dependent gene expression* gset. A signature is simply a vector of symbols.
+Here we define our signature of interest as a group of genes randomly sampled from the *estrogen-dependent gene expression* geneset. A signature is simply a vector of symbols.
 ```{r}
 
 signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
@@ -29,7 +29,7 @@ head(signature)
 ```
 
 ### Example of a geneset
-Here we use a genesets example from [REACTOME](https://reactome.org/). A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
+Here we use a genesets example from [REACTOME](https://reactome.org/). A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it is appropriately defined.
 ```{r}
 
 gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
@@ -45,7 +45,7 @@ head(gsets[[1]])
 ```
 
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with __*hypeR*__. Often we are just interested in a single signature, as described above. In this case, __*hypeR*__ will return a __*hyp*__ object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+All workflows begin with performing hyper enrichment with `hypeR`. Often we're just interested in a single signature, as described above. In this case, `hypeR` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
 ```{r}
 
 hyp_obj <- hypeR(signature, gsets, fdr=0.05)
@@ -68,7 +68,7 @@ hyp_show(hyp_obj, simple=FALSE, stylish=TRUE)
 ```
 
 ### Set background population size
-Because genomic experiments often vary in the number of genes probed, it is important to be able to adjust the background population size accordingly to ensure accurate enrichment statistics. 
+Because genomic experiments often vary in the number of genes probed, it's important to be able to adjust the background population size accordingly, to ensure accurate enrichment statistics. 
 ```{r}
 
 hyp_obj <- hypeR(signature, gsets, bg=10000, fdr=0.05)
@@ -76,15 +76,16 @@ hyp_obj <- hypeR(signature, gsets, bg=10000, fdr=0.05)
 ```
 
 ### Specify a background population of genes
-In cases where the background population is small it is advisable to first reduce genesets to their intersection with the background population of genes. By providing a vector of background genes instead of an integer, hypeR will do just that. Here is an example of an experiment that only uses sex-linked genes and therefore genesets are restricted to only those included in the background population.
-
+In cases where the background population is small it is advisable to first reduce genesets to their intersection with the background population of genes. By providing a vector of background genes instead of an integer, `hypeR` will do just that. Here is an example of an experiment that only uses sex-linked genes and therefore genesets are restricted to just those included in the background population.
 ```{r}
+
 url = "https://www.genenames.org/cgi-bin/download/custom?col=gd_app_sym&chr=X&chr=Y&format=text"
 r <- httr::GET(url)
 text <- httr::content(r, "text", encoding="ISO-8859-1")
 text.split <- strsplit(text, "\n")[[1]]
 bg <- text.split[2:length(text.split)]
 head(bg)
+
 ```
 
 ```{r}
