@@ -1,0 +1,11 @@
+test_that("hyp object is working", {
+    data <- data.frame(replicate(5,sample(0:1,10,rep=TRUE)))
+    args <- list("arg_1"=1, "arg_2"=2, "arg_3"=3)
+    hyp_obj <- hyp$new(data, args=args)
+    expect_is(hyp_obj, "hyp")
+    expect_is(hyp_obj, "R6")
+    expect_output(print(hyp_obj))
+    expect_is(hyp_obj$as.data.frame(), "data.frame")
+    expect_equal(names(hyp_obj$args), c("arg_1", "arg_2", "arg_3"))
+    expect_equal(dim(hyp_obj$data), c(10, 5))
+})

@@ -13,6 +13,8 @@
 \item{gsets}{A list of genesets}
 
 \item{bg}{Size of background population genes}
+
+\item{do.plots}{Use true to generate plots}
 }
 \value{
 A list of data and plots

@@ -1,0 +1,13 @@
+test_that("multihyp object is working", {
+    data <- data.frame(replicate(5,sample(0:1,10,rep=TRUE)))
+    args <- list("arg_1"=1, "arg_2"=2, "arg_3"=3)
+    hyp_obj <- hyp$new(data, args=args)
+    data <- list("hyp_1"=hyp_obj, "hyp_2"=hyp_obj,"hyp_3"=hyp_obj)
+    multihyp_obj <- multihyp$new(data)
+    expect_is(multihyp_obj, "multihyp")
+    expect_is(multihyp_obj, "R6")
+    expect_equal(names(multihyp_obj$data), c("hyp_1", "hyp_2", "hyp_3"))
+    expect_is(multihyp_obj$as.list(), "list")
+    expect_equal(names(multihyp_obj$as.list()), c("hyp_1", "hyp_2", "hyp_3"))
+    expect_equal(dim(multihyp_obj$as.list()[[1]]), c(10, 5))
+})

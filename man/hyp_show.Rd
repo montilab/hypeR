@@ -4,7 +4,7 @@
 \alias{hyp_show}
 \title{Convert hyp object to an interactive datatable}
 \usage{
-hyp_show(hyp_obj, simple = TRUE, stylish = FALSE)
+hyp_show(hyp_obj, simple = FALSE, stylish = FALSE)
 }
 \arguments{
 \item{hyp_obj}{A hyp object}

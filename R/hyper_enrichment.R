@@ -3,6 +3,7 @@
 #' @param signature A vector of symbols
 #' @param gsets A list of genesets
 #' @param bg Size of background population genes
+#' @param do.plots Use true to generate plots
 #' @return A list of data and plots
 #'
 #' @importFrom stats phyper p.adjust
@@ -12,16 +13,12 @@
                               bg=length(unique(unlist(gsets))),
                               do.plots=TRUE) {
 
-    if (!is(signature, "vector")) {
-        stop("Error: Expected signature to be a vector of symbols\n")
-    }
-    if (!is(gsets, "list")) {
-        stop("Error: Expected gsets to be a list of gene sets\n")
-    }
+    if (!is(signature, "vector")) stop("Error: Expected signature to be a vector of symbols\n")
+    if (!is(gsets, "list")) stop("Error: Expected gsets to be a list of gene sets\n")
     
     signature.found <- signature[signature %in% unique(unlist(gsets))]
 
-    n.hits <- sapply(gsets, function(x, y) length(intersect(x,y)), signature.found)
+    n.hits <- sapply(gsets, function(x, y) length(intersect(x, y)), signature.found)
     n.drawn <- length(signature)
     n.gsets <- sapply(gsets, length)
     n.left <- bg-n.gsets
@@ -50,7 +47,7 @@
         
         names(plots) <- names(gsets)
     } else {
-        plots <- lapply(gsets, function(x) {NULL})
+        plots <- lapply(gsets, function(x) {ggempty()})
     }
     
     return(list(data=data, plots=plots))

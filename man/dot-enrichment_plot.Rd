@@ -4,10 +4,10 @@
 \alias{.enrichment_plot}
 \title{Plot top enriched pathways}
 \usage{
-.enrichment_plot(df, title, top = 10, val = c("fdr", "pval"))
+.enrichment_plot(hyp_df, title, top = 10, val = c("fdr", "pval"))
 }
 \arguments{
-\item{df}{A dataframe}
+\item{hyp_df}{A dataframe from a hyp object}
 
 \item{title}{Plot title}
 

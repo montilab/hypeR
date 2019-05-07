@@ -6,6 +6,20 @@
 \usage{
 ggeplot(n, positions, x_axis, y_axis, title = "")
 }
+\arguments{
+\item{n}{The length of a ranked list}
+
+\item{positions}{A vector of positions in the ranked list}
+
+\item{x_axis}{The x-axis of a running enrichment score}
+
+\item{y_axis}{The y-axis of a running enrichment score}
+
+\item{title}{Plot title}
+}
+\value{
+A ggplot object
+}
 \description{
 Enrichment plot implemented in ggplot
 }

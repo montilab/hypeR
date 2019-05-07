@@ -2,13 +2,18 @@
 #' 
 #' @param signature A vector of symbols
 #' @param gsets A list of genesets
-#' @param gsets_relational Use true to inform gsets are relational
+#' @param test Choose an enrichment type e.g. c("hypergeometric", "kstest")
 #' @param bg Size or character vector of background population genes
+#' @param is_rgsets Use true to inform gsets are relational
 #' @param pval_cutoff Filter results to be less than pval cutoff
 #' @param fdr_cutoff Filter results to be less than fdr cutoff
+#' @param weights Weights for weighted score (Subramanian et al.)
+#' @param weights_pwr Exponent for weights (Subramanian et al.)
+#' @param absolute Takes max-min score rather than the max deviation from null
+#' @param do_plots Use true to generate plots
 #' @param verbose Use false to suppress logs
 #' @return A hyp object
-#' 
+#'
 #' @examples
 #' # Grab a list of curated gene sets
 #' gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
@@ -22,12 +27,13 @@
 #' # Perform hyper enrichment
 #' hyp_obj <- hypeR(signature, REACTOME, bg=2522, fdr_cutoff=0.05)
 #'
+#' @importFrom magrittr %>%
 #' @export
 hypeR <- function(signature,
                   gsets,
                   test=c("hypergeometric", "kstest"),
                   bg=23467,
-                  gsets_relational=FALSE,
+                  is_rgsets=FALSE,
                   pval_cutoff=1,
                   fdr_cutoff=1,
                   weights=NULL,
@@ -43,25 +49,44 @@ hypeR <- function(signature,
     args <- as.list(environment())
     
     # Check if gsets are relational
-    if (gsets_relational) {
+    if (is_rgsets) {
         stopifnot(is(gsets, "rgsets"))
         gsets <- gsets$gsets
     }
 
     # Handling of multiple signatures
     if (is(signature, "list")) {
-        lhyp <- lapply(signature, hypeR, args$gsets,
-                                         args$test,
-                                         args$bg,
-                                         args$gsets_relational, 
-                                         args$pval_cutoff,
-                                         args$fdr_cutoff, 
-                                         args$weights,
-                                         args$weights_pwr,
-                                         args$absolute,
-                                         args$do_plots,
-                                         args$verbose)
-                       
+        if (is.null(weights)) {
+            # Without weights run normally
+            lhyp <- lapply(signature, hypeR, args$gsets,
+                                             args$test,
+                                             args$bg,
+                                             args$is_rgsets, 
+                                             args$pval_cutoff,
+                                             args$fdr_cutoff, 
+                                             args$weights,
+                                             args$weights_pwr,
+                                             args$absolute,
+                                             args$do_plots,
+                                             args$verbose)
+        } else {
+            # With weights they must be mapped to signatures
+            stopifnot(length(signature) == length(weights))
+            lhyp <- mapply(function(signature, weights) {
+                        hypeR(signature,
+                              gsets,
+                              test,
+                              bg,
+                              is_rgsets, 
+                              pval_cutoff,
+                              fdr_cutoff, 
+                              weights,
+                              weights_pwr,
+                              absolute,
+                              do_plots,
+                              verbose)
+                    }, signature, weights)
+        }
         # Wrap list of hyp objects in multihyp object
         multihyp.obj <- multihyp$new(data=lhyp)
         return(multihyp.obj)
@@ -84,7 +109,7 @@ hypeR <- function(signature,
     if (test == "hypergeometric") {
         data <- data.frame(matrix(ncol=5, nrow=0))
         colnames(data) <- c("pval", "fdr", "gset.size", "genes.overlap", "hits")
-        plots <- NULL
+        plots <- ggempty()
         results <- .hyper_enrichment(signature, 
                                      gsets, 
                                      bg,
@@ -94,7 +119,7 @@ hypeR <- function(signature,
     if (test == "kstest") {
         data <- data.frame(matrix(ncol=5, nrow=0))
         colnames(data) <- c("score", "pval", "fdr", "gsets.size", "genes.found")
-        plots <- NULL
+        plots <- ggempty()
         results <- .ks_enrichment(signature, 
                                   gsets, 
                                   weights,
@@ -110,9 +135,7 @@ hypeR <- function(signature,
                 .[.$fdr <= fdr_cutoff,,drop=FALSE] %>%
                 .[order(.$pval),,drop=FALSE]
             
-        if (do_plots) {
-            plots <- results$plots[rownames(data)]
-        }
+        plots <- results$plots[rownames(data)]
     }
     
     # Wrap dataframe in hyp object

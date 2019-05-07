@@ -1,22 +1,34 @@
+#' One-sided Kolmogorov–Smirnov test
+#'
+#' @param n.x The length of a ranked list
+#' @param y A vector of positions in the ranked list
+#' @param weights Weights for weighted score (Subramanian et al.)
+#' @param weights.pwr Exponent for weights (Subramanian et al.)
+#' @param absolute Takes max-min score rather than the max deviation from null
+#' @param do.plot Use true to generate plot
+#' @param plot.title Plot title
+#' @return A list of data and plots
+#'
 #' @importFrom stats ks.test
 #' @keywords internal
 .kstest <- function(n.x,
                     y, 
                     weights=NULL,
-                    weights.p=1,
+                    weights.pwr=1,
                     absolute=FALSE, 
                     do.plot=FALSE, 
                     plot.title="") {
     
     n.y <- length(y)
-    if ( n.y < 1 )  stop("Not enough y data")
-    if ( any(y > n.x) ) stop( "y must be <= n.x: ", max(y) )
-    if ( any(y < 1) ) stop( "y must be positive: ", min(y) )
-        
+    if (n.y < 1 )  stop("Not enough y data")
+    if (any(y > n.x)) stop("y must be <= n.x: ", max(y))
+    if (any(y < 1)) stop("y must be positive: ", min(y))
+
     x.axis <- y.axis <- NULL
     
+    # If weights are provided
     if (!is.null(weights)) {
-        weights <- abs(weights[y])^weights.p
+        weights <- abs(weights[y])^weights.pwr
     
         Pmis <- rep(1, n.x); Pmis[y] <- 0; Pmis <- cumsum(Pmis); Pmis <- Pmis/(n.x-n.y)
         Phit <- rep(0, n.x); Phit[y] <- weights; Phit <- cumsum(Phit); Phit <- Phit/Phit[n.x]
@@ -26,10 +38,11 @@
         
         x.axis <- 1:n.x
         y.axis <- z
-
+    
+    # Without weights
     } else {
         y <- sort(y)
-        n <- n.x * n.y / (n.x + n.y)
+        n <- n.x*n.y/(n.x + n.y)
         hit <- 1/n.y
         mis <- 1/n.x
         
@@ -41,49 +54,54 @@
         zero <- which(D == 0)[-1]
         D[zero] <- D[zero-1]
         
-        z <- D*hit - Y*mis
+        z <- D*hit-Y*mis
         
         score <- if (absolute) max(z)-min(z) else z[which.max(abs(z))]
         
         x.axis <- Y
         y.axis <- z
         
-        if ( Y[1] > 0 ) {
+        if (Y[1] > 0) {
             x.axis <- c(0, x.axis)
             y.axis <- c(0, y.axis)
         }
-        if ( max(Y) < n.x ) {
+        if (max(Y) < n.x) {
             x.axis <- c(x.axis, n.x)
             y.axis <- c(y.axis, 0)
         }    
     }
-
+    
+    # One-sided Kolmogorov–Smirnov test
     results <- suppressWarnings(ks.test(1:n.x, y, alternative="less"))
     
-    if (do.plot) {
-        p <- ggeplot(n.x, y, x.axis, y.axis, plot.title)
-    } else {
-        p <- NULL
-    }
-    
+    # Enrichment plot
+    p <- if (do.plot) ggeplot(n.x, y, x.axis, y.axis, plot.title) else ggempty()
+
     return(list(score=as.numeric(results$statistic), 
                 pval=results$p.value, 
                 plot=p))
 }
 
+#' Enrichment test via one-sided Kolmogorov–Smirnov test
+#' 
+#' @param signature A vector of ranked symbols
+#' @param gsets A list of genesets
+#' @param weights Weights for weighted score (Subramanian et al.)
+#' @param weights.pwr Exponent for weights (Subramanian et al.)
+#' @param absolute Takes max-min score rather than the max deviation from null
+#' @param do.plot Use true to generate plot
+#' @return A list of data and plots
+#' 
+#' @keywords internal
 .ks_enrichment <- function(signature,
                            gsets,
                            weights=NULL,
-                           weights.p=1,
+                           weights.pwr=1,
                            absolute=FALSE,
                            do.plots=TRUE) {
   
-    if (!is(gsets, "list")) {
-        stop("Error: Expected gsets to be a list of gene sets\n")
-    }
-    if (!is.null(weights)) {
-        stopifnot(length(signature) == length(weights))
-    }
+    if (!is(gsets, "list")) stop("Error: Expected gsets to be a list of gene sets\n")
+    if (!is.null(weights)) stopifnot(length(signature) == length(weights))
     
     results <- lapply(seq_len(length(gsets)), function(i) {
                     
@@ -96,24 +114,24 @@
                     results <- .kstest(length(signature), 
                                        ranks,
                                        weights=weights,
-                                       weights.p=weights.p,
+                                       weights.pwr=weights.pwr,
                                        absolute=absolute, 
                                        do.plot=do.plots,
                                        plot.title=names(gsets)[[i]])
                     
-                    results[['gsets.size']] <- length(gset)
+                    results[['gset.size']] <- length(gset)
                     results[['genes.found']] <- length(ranks)
                     return(results)
                 })
     
     names(results) <- names(gsets)
-    
-    df <- data.frame(do.call(rbind, results))
-    df <- df[order(df$pval),]
-    df$fdr <- p.adjust(df$pval, method="fdr")
-    plots <- setNames(df$plot, rownames(df))
-    
-    data <- df[,c("score", "pval", "fdr", "gsets.size", "genes.found")]
+    results <- do.call(rbind, results)
+    data <- data.frame(apply(results[,c("score", "pval", "gset.size", "genes.found")], 2, unlist))
+    data$score <- signif(data$score, 2)
+    data$pval <- signif(data$pval, 2)
+    data$fdr <- signif(p.adjust(data$pval, method="fdr"), 2)
+    data <- data[,c("pval", "fdr", "gset.size", "genes.found", "score")]
+    plots <- results[,"plot"]
     
     return(list(data=data, plots=plots))
 }

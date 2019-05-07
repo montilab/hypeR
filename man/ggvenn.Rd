@@ -6,6 +6,20 @@
 \usage{
 ggvenn(a, b, ga, gb, title = "")
 }
+\arguments{
+\item{a}{A vector for group a}
+
+\item{b}{A vector for group b}
+
+\item{ga}{A string label for group a}
+
+\item{gb}{A string label for group b}
+
+\item{title}{Plot title}
+}
+\value{
+A ggplot object
+}
 \description{
 Venn diagram implemented in ggplot
 }

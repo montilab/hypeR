@@ -101,6 +101,7 @@ df <- hyp_obj$as.data.frame()
 df$abrv.name <- substr(rownames(df), 1, 30) 
 col_ix <- match(c('pval', 'fdr', 'abrv.name'), colnames(df))
 df <- df[, c(col_ix, (1:ncol(df))[-col_ix])]
+df$gset <- rownames(df)
 rownames(df) <- NULL
 df
 "

@@ -1,7 +1,13 @@
 #' Venn diagram implemented in ggplot
 #'
-#' @name ggvenn
+#' @param a A vector for group a
+#' @param b A vector for group b
+#' @param ga A string label for group a
+#' @param gb A string label for group b
+#' @param title Plot title
+#' @return A ggplot object
 #'
+#' @importFrom magrittr %>%
 #' @importFrom ggplot2 ggplot aes coord_fixed theme_void theme labs element_text
 #' @importFrom ggforce geom_circle
 #' @export
@@ -20,6 +26,7 @@ ggvenn <- function(a, b, ga, gb, title="") {
     r.a <- sqrt(nx.a/pi); d.a <- r.a*2
     r.b <- sqrt(nx.b/pi); d.b <- r.b*2
     
+    # Overlay circles by percent overlap of smaller group
     ol <- ifelse(x.a < x.b, d.a*x.u/x.a, d.b*x.u/x.b)
     
     data.frame(x=c(-r.b-r.a+ol, 0),

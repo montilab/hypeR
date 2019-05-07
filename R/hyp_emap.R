@@ -49,19 +49,21 @@ overlap_similarity <- function(a, b) {
                             val=c("fdr", "pval"),
                             top=NULL) {
 
+    hyp_df$gsets <- rownames(hyp_df)
+
     # Subset results
     hyp_df <- hyp_df %>%
               dplyr::filter(pval <= pval_cutoff) %>%
               dplyr::filter(fdr <= fdr_cutoff) %>%
               purrr::when(!is.null(top) ~ head(., top), ~ .)
-        
+
     # Handle empty dataframes
     if (nrow(hyp_df) == 0) {
         return(plotly_empty())
     }
-    
+
     # Geneset similarity matrix
-    hyp.gsets <- gsets[hyp_df$category]
+    hyp.gsets <- gsets[hyp_df$gsets]
     hyp.gsets.mat <- sapply(hyp.gsets, function(x) {
         sapply(hyp.gsets, function(y,x) {
             if (similarity_metric == "jaccard_similarity") jaccard_similarity(x, y)
@@ -71,7 +73,7 @@ overlap_similarity <- function(a, b) {
     })
     
     m <- as.matrix(hyp.gsets.mat)
-    
+
     # Sparsity settings
     m[m < similarity_cutoff] <- 0
     
@@ -89,7 +91,7 @@ overlap_similarity <- function(a, b) {
 
     # Add node scaled sizes based on genset size
     size.scaler <- function(x) (x-min(x))/(max(x)-min(x))*30 
-    node.sizes <- sapply(igraph::V(inet), function(x) hyp_df[x, "category.annotated"])
+    node.sizes <- sapply(igraph::V(inet), function(x) hyp_df[x, "gset.size"])
     nodes$size <-  size.scaler(node.sizes)+20
     
     val.pretty <- ifelse(val == "fdr", "FDR", "P-Value")
@@ -190,7 +192,7 @@ hyp_emap <- function(hyp_obj,
     } else {
         hy_df <- hyp_obj$data
         # Check if gsets are relational
-        if (hyp_obj$args$gsets_relational) {
+        if (hyp_obj$args$is_rgsets) {
             stopifnot(is(hyp_obj$args$gsets, "rgsets"))
             gsets <- hyp_obj$args$gsets$gsets
         } else {

@@ -23,43 +23,24 @@
 #'
 #' @importFrom DT datatable
 #' @export
-hyp_show <- function(hyp_obj, simple=TRUE, stylish=FALSE) {
+hyp_show <- function(hyp_obj, simple=FALSE, stylish=FALSE) {
 
     stopifnot(is(hyp_obj, "hyp"))
 
     # Extract hyp dataframe
     df <- hyp_obj$data
 
-    if (simple) {
-        cols <- c(1,2,7,8)
-    } else {
-        cols <- seq_len(ncol(df))
-    }
-
-    # Gene symbols converted to hyperlinks
-    url <- "https://www.genecards.org/cgi-bin/carddisp.pl?gene="
-    df$hits <- lapply(df$hits, function(x) {
-                   symbols <- unlist(strsplit(x, ","))
-                   vapply(symbols, function(y) {
-                       paste('<a href="',
-                             url,
-                             y,
-                             '">',
-                             y,
-                             '</a>',
-                             sep="")
-                   }, character(1))
-               })
+    cols <- if(simple) c(1,2) else seq_len(ncol(df))
 
     if (stylish) {
         datatable(data = df[,cols,drop=FALSE],
                   style = 'bootstrap',
                   class = 'table-bordered table-condensed',
                   escape = TRUE,
-                  rownames = FALSE)
+                  rownames = TRUE)
     } else {
         datatable(data = df[,cols,drop=FALSE],
                   escape = TRUE,
-                  rownames = FALSE)
+                  rownames = TRUE)
     }
 }

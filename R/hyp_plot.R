@@ -1,6 +1,6 @@
 #' Plot top enriched pathways
 #'
-#' @param df A dataframe
+#' @param hyp_df A dataframe from a hyp object
 #' @param title Plot title
 #' @param top Limit number of pathways shown
 #' @param val Choose significance value e.g. c("fdr", "pval")
@@ -8,13 +8,15 @@
 #'
 #' @importFrom plotly plot_ly plotly_empty add_trace add_annotations layout %>%
 #' @keywords internal
-.enrichment_plot <- function(df, 
+.enrichment_plot <- function(hyp_df, 
                              title, 
                              top=10, 
                              val=c("fdr", "pval")) {
 
+    hyp_df$gsets <- rownames(hyp_df)
+
     # Top pathways
-    df <- head(df, top)
+    df <- head(hyp_df, top)
 
     # Handle empty dataframes
     if (nrow(df) == 0) {
@@ -158,8 +160,8 @@ hyp_plot <- function(hyp_obj,
                             return_plots)
                })
     } else  {
-        df <- hyp_obj$data
-        res <- .enrichment_plot(df, title, top, val)
+        hyp_df <- hyp_obj$data
+        res <- .enrichment_plot(hyp_df, title, top, val)
         if (show_plots) {
             show(res)
         }

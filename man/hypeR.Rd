@@ -5,22 +5,32 @@
 \title{Perform hyper enrichment}
 \usage{
 hypeR(signature, gsets, test = c("hypergeometric", "kstest"),
-  bg = 23467, gsets_relational = FALSE, pval_cutoff = 1,
-  fdr_cutoff = 1, weights = NULL, weights_pwr = 1,
-  absolute = FALSE, do_plots = FALSE, verbose = FALSE)
+  bg = 23467, is_rgsets = FALSE, pval_cutoff = 1, fdr_cutoff = 1,
+  weights = NULL, weights_pwr = 1, absolute = FALSE,
+  do_plots = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{signature}{A vector of symbols}
 
 \item{gsets}{A list of genesets}
 
+\item{test}{Choose an enrichment type e.g. c("hypergeometric", "kstest")}
+
 \item{bg}{Size or character vector of background population genes}
 
-\item{gsets_relational}{Use true to inform gsets are relational}
+\item{is_rgsets}{Use true to inform gsets are relational}
 
 \item{pval_cutoff}{Filter results to be less than pval cutoff}
 
 \item{fdr_cutoff}{Filter results to be less than fdr cutoff}
+
+\item{weights}{Weights for weighted score (Subramanian et al.)}
+
+\item{weights_pwr}{Exponent for weights (Subramanian et al.)}
+
+\item{absolute}{Takes max-min score rather than the max deviation from null}
+
+\item{do_plots}{Use true to generate plots}
 
 \item{verbose}{Use false to suppress logs}
 }
