@@ -2,29 +2,22 @@
 % Please edit documentation in R/hyper_enrichment.R
 \name{.hyper_enrichment}
 \alias{.hyper_enrichment}
-\title{Carry out set enrichment test based on hyper-geometric distribution}
+\title{Overrepresentation test via hyper-geometric distribution}
 \usage{
-.hyper_enrichment(drawn, categories,
-  ntotal = length(unique(unlist(categories))), min.drawsize = 4,
-  mht = TRUE, verbose = FALSE)
+.hyper_enrichment(signature, gsets, bg = length(unique(unlist(gsets))),
+  do.plots = TRUE)
 }
 \arguments{
-\item{drawn}{One or more sets of 'drawn' items (e.g., genes). Basically, a list of signatures.}
+\item{signature}{A vector of symbols}
 
-\item{categories}{list of gene sets (e.g., MSigDB c2)}
+\item{gsets}{A list of genesets}
 
-\item{ntotal}{background population, i.e., the total no. of items from which items are supposed to have been drawn}
-
-\item{min.drawsize}{min no. of drawn items that must be among categories' items}
-
-\item{mht}{correct for multiple hypothesis testing across multiple 'draws'}
-
-\item{verbose}{Use false to suppress logs}
+\item{bg}{Size of background population genes}
 }
 \value{
-a data.frame with rows indexed by the signature(s) tested
+A list of data and plots
 }
 \description{
-Carry out set enrichment test based on hyper-geometric distribution
+Overrepresentation test via hyper-geometric distribution
 }
 \keyword{internal}

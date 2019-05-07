@@ -5,6 +5,7 @@
 #' @section Arguments:
 #' \describe{
 #'   \item{data}{A dataframe returned by \code{hypeR}}
+#'   \item{plots}{A list of plots returned by \code{hypeR}}
 #'   \item{args}{A list of arguments passed to \code{hypeR}}
 #' }
 #'
@@ -27,11 +28,13 @@
 #' @importFrom R6 R6Class
 #' @export
 hyp <- R6Class("hyp", list(
-  data = NULL,
-  args = NULL,
-  initialize = function(data, args=NULL) {
-    self$data <- data
-    self$args <- args
+  data  = NULL,
+  plots = NULL,
+  args  = NULL,
+  initialize = function(data, plots=NULL, args=NULL) {
+    self$data  <- data
+    self$plots <- plots
+    self$args  <- args
   },
   print = function(...) {
     cat("hyp object: \n")

@@ -15,6 +15,7 @@ A hyp object
 
 \describe{
   \item{data}{A dataframe returned by \code{hypeR}}
+  \item{plots}{A list of plots returned by \code{hypeR}}
   \item{args}{A list of arguments passed to \code{hypeR}}
 }
 }

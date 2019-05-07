@@ -4,20 +4,19 @@
 \alias{hypeR}
 \title{Perform hyper enrichment}
 \usage{
-hypeR(symbols, gsets, gsets_relational = FALSE, bg = 23467,
-  min_drawsize = 4, pval_cutoff = 1, fdr_cutoff = 1,
-  verbose = FALSE)
+hypeR(signature, gsets, test = c("hypergeometric", "kstest"),
+  bg = 23467, gsets_relational = FALSE, pval_cutoff = 1,
+  fdr_cutoff = 1, weights = NULL, weights_pwr = 1,
+  absolute = FALSE, do_plots = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{symbols}{A vector of gene symbols}
+\item{signature}{A vector of symbols}
 
-\item{gsets}{A list of gene sets}
-
-\item{gsets_relational}{Use true to inform gsets are relational}
+\item{gsets}{A list of genesets}
 
 \item{bg}{Size or character vector of background population genes}
 
-\item{min_drawsize}{Min number of drawn items that must be among categories items}
+\item{gsets_relational}{Use true to inform gsets are relational}
 
 \item{pval_cutoff}{Filter results to be less than pval cutoff}
 
@@ -37,11 +36,11 @@ gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
 REACTOME <- gsets$REACTOME
 
 # Genes involed in tricarboxylic acid cycle
-symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
-             "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
-             "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+               "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+               "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp_obj <- hypeR(symbols, REACTOME, bg=2522, fdr_cutoff=0.05)
+hyp_obj <- hypeR(signature, REACTOME, bg=2522, fdr_cutoff=0.05)
 
 }
