@@ -7,46 +7,93 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    fig.align="center",
-    fig.width=8.75,
-    cache = FALSE)
+knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
+library(dplyr)
+library(magrittr)
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
-### Load example signature and genesets
-Here we define our signature of interest as a group of genes randomly sampled from the *estrogen-dependent gene expression* geneset and use a genesets example from [REACTOME](https://reactome.org/).
+### Example Data
 ```{r}
 
-signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
-signature <- signatures$signature
+data(hypdat)
+limma <- hypdat$limma
 
-gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
-gsets <- gsets$REACTOME
+ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
+gsets <- hypdat$gsets
 
 ```
 
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with `hypeR`.
+All workflows begin with performing hyper enrichment with `hypeR()`.
 ```{r}
 
-hyp_obj <- hypeR(signature, gsets, bg=7842, fdr=0.05)
+hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01)
 
 ```
 
-### Plot results
-One can visualize the top enriched pathways using `hyp_plot` which returns a horizontal bar plot. Each bar is a geneset, where dark blue represents the proportion of signature genes found in the entire geneset.
+### Dots plot
+One can visualize the top enriched pathways using `hyp_dots()` which returns a horizontal dots plot. Each dot is a geneset, where the color represents the significance and the size signifies the geneset size.
 ```{r, fig.height=5}
 
-hyp_plot(hyp_obj, return_plots=TRUE)
+hyp_dots(hyp_obj)
 
 ```
 
 ### Enrichment map
-One can visualize the top enriched pathways using `hyp_emap` which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
+One can visualize the top enriched pathways using `hyp_emap()` which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
 ```{r, fig.height=7}
 
-hyp_emap(hyp_obj, similarity_cutoff=0.5, return_plots=TRUE)
+hyp_emap(hyp_obj, similarity_cutoff=0.8, return_plots=TRUE)
+
+```
+
+### Hiearchy map
+#### Relational genesets
+When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`.
+```{r}
+
+rgsets <- hypdat$rgsets
+
+```
+
+Relational genesets have three data atrributes including gsets, nodes, and edges. The `gsets` attribute includes the geneset information for the leaf nodes of the hiearchy, the `nodes` attribute describes all nodes in the hiearchical, including internal nodes, and the `edges` attribute describes the edges in the hiearchy.
+
+##### $gsets
+```{r}
+
+gsets <- rgsets$gsets
+names(gsets)[800:805]
+
+```
+
+##### $nodes
+```{r}
+
+nodes <- rgsets$nodes
+nodes[1123:1128,]
+
+```
+
+##### $edges
+```{r}
+
+edges <- rgsets$edges
+edges[1994:1999,]
+
+```
+
+All workflows begin with performing hyper enrichment with `hypeR()`. Note that when passing an `rgsets` object, ensure `is_rgsets=TRUE`. Otherwise, `hypeR()` will treat it as a list of unstructured gsets. 
+```{r}
+
+hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", is_rgsets=TRUE, fdr_cutoff=0.01)
+
+```
+
+### Hierarchy map
+One can visualize the top enriched pathways using `hyp_hmap()` which will return a hiearchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy.
+```{r, fig.height=7}
+
+hyp_hmap(hyp_obj, top=30, return_plots=TRUE)
 
 ```

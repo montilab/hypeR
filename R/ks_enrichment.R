@@ -18,11 +18,12 @@
                     absolute=FALSE, 
                     do.plot=FALSE, 
                     plot.title="") {
-    
+
     n.y <- length(y)
-    if (n.y < 1 )  stop("Not enough y data")
-    if (any(y > n.x)) stop("y must be <= n.x: ", max(y))
-    if (any(y < 1)) stop("y must be positive: ", min(y))
+    err = list(score=0, pval=1, plot=ggempty())
+    if (n.y < 1 ) return(err)
+    if (any(y > n.x)) return(err)
+    if (any(y < 1)) return(err)
 
     x.axis <- y.axis <- NULL
     
@@ -126,11 +127,12 @@
     
     names(results) <- names(gsets)
     results <- do.call(rbind, results)
-    data <- data.frame(apply(results[,c("score", "pval", "gset.size", "genes.found")], 2, unlist))
+    data <- data.frame(apply(results[,c("score", "pval", "gset.size", "genes.found")], 2, unlist), stringsAsFactors=FALSE)
     data$score <- signif(data$score, 2)
     data$pval <- signif(data$pval, 2)
     data$fdr <- signif(p.adjust(data$pval, method="fdr"), 2)
-    data <- data[,c("pval", "fdr", "gset.size", "genes.found", "score")]
+    data$label <- names(gsets)
+    data <- data[,c("label", "pval", "fdr", "gset.size", "genes.found", "score")]
     plots <- results[,"plot"]
     
     return(list(data=data, plots=plots))

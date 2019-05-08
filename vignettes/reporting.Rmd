@@ -7,65 +7,45 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    fig.align="center",
-    fig.width=8.75,
-    cache = FALSE)
+knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
 ### Multiple experiments
 Sometimes, we are generating reports for multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with collaborators.
-```{r}
 
-signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
-project <- signatures$project
-
-```
+In the following example, we are interested in exploring the signatures from a weighted gene co-expression analysis (WGCNA) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. The `hyp_to_rmd()` will help us process and this data in a concise and reproducible manner.
 
 ```{r}
 
-names(project)
-names(project[[1]])
-head(project[[1]][[1]])
+data(hypdat)
+wgcna <- hypdat$wgcna
+names(wgcna)
+names(wgcna[["NON-CARC"]])
+names(wgcna[["CARCINOGEN"]])
 
-```
-
-### Example genesets
-Here we use an genesets example from [REACTOME](https://reactome.org/).
-```{r}
-
-gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
-gsets <- gsets$REACTOME
+rgsets <- hypdat$rgsets
 
 ```
 
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with `hypeR`.
-```{r}
+All workflows begin with performing hyper enrichment with `hypeR()`.
+```{r, eval=FALSE}
 
-lmultihyp_obj <- lapply(project, function(x) hypeR(x, gsets, bg=35423))
-
-```
-
-```{r}
-
-names(lmultihyp_obj)
-print(lmultihyp_obj[[1]])
+lmultihyp_obj <- hypeR(wgcna, rgsets, test="hypergeometric", is_rgsets=TRUE, bg=50000, fdr_cutoff=0.01, do_plots=FALSE)
 
 ```
 
 ### Markdown reports
-`hyp_to_rmd` will accept multiple formats, including a single `hyp` or `multihyp` object as well as a list of either, including a list of `hyp` or `multihyp` objects together. When a list of `multihyp` objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for `hyp_plot`, `hyp_emap`, and `hyp_hmap`, allowing customization of their functionality per report.
+`hyp_to_rmd()` will accept multiple formats, including a single `hyp` or `multihyp` object as well as a list of either, including a list of `hyp` or `multihyp` objects together. When a list of `multihyp` objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`, allowing customization of their functionality per report.
 ```{r, eval=FALSE}
 
 hyp_to_rmd(lmultihyp_obj,
            file_path="hyper-enrichment.rmd",
            title="Hyper Enrichment (hypeR)",
-           subtitle="YAP, TNF, and TAZ Knockout Experiments",
+           subtitle="Weighted Gene Co-expression Analysis",
            author="Anthony Federico, Stefano Monti",
-           show_plots=T,
+           show_dots=T,
            show_emaps=T,
            show_hmaps=T,
            show_tables=T)

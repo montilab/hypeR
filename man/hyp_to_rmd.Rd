@@ -6,8 +6,8 @@
 \usage{
 hyp_to_rmd(hyp_obj, file_path, title = "hypeR Enrichment Report",
   subtitle = "", author = "", header = "Enrichment",
-  show_plots = TRUE, show_emaps = TRUE, show_hmaps = FALSE,
-  show_tables = TRUE, hyp_plot_args = list(top = 15, val = "fdr"),
+  show_dots = TRUE, show_emaps = TRUE, show_hmaps = FALSE,
+  show_tables = TRUE, hyp_dots_args = list(top = 15, val = "fdr"),
   hyp_emap_args = list(top = 25, val = "fdr", similarity_metric =
   "jaccard_similarity", similarity_cutoff = 0.2),
   hyp_hmap_args = list(top = 25, val = "fdr"),
@@ -27,7 +27,7 @@ hyp_to_rmd(hyp_obj, file_path, title = "hypeR Enrichment Report",
 
 \item{header}{Header name of tabset section}
 
-\item{show_plots}{Option to show plots in tabs}
+\item{show_dots}{Option to show dots plots in tabs}
 
 \item{show_emaps}{Option to show enrichment maps in tabs}
 
@@ -35,7 +35,7 @@ hyp_to_rmd(hyp_obj, file_path, title = "hypeR Enrichment Report",
 
 \item{show_tables}{Option to show table in tabs}
 
-\item{hyp_plot_args}{A list of keyword arguments passed to hyp_plot}
+\item{hyp_dots_args}{A list of keyword arguments passed to hyp_dots}
 
 \item{hyp_emap_args}{A list of keyword arguments passed to hyp_emap}
 

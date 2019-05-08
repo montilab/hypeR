@@ -81,9 +81,9 @@ hyp_obj <- tabsets[['{3}']][['{1}']]
 ```
 "
 
-tab_plot <- "
+tab_dots <- "
 hyp_obj %>%
-hyp_plot({1})
+hyp_dots({1})
 "
 
 tab_emap <- "
@@ -98,10 +98,9 @@ hyp_hmap({1})
 
 tab_table <- "
 df <- hyp_obj$as.data.frame()
-df$abrv.name <- substr(rownames(df), 1, 30) 
+df$abrv.name <- substr(df$label, 1, 30) 
 col_ix <- match(c('pval', 'fdr', 'abrv.name'), colnames(df))
 df <- df[, c(col_ix, (1:ncol(df))[-col_ix])]
-df$gset <- rownames(df)
 rownames(df) <- NULL
 df
 "
@@ -114,11 +113,11 @@ df
 #' @param subtitle Subtitle of markdown report
 #' @param author Authors of markdown report
 #' @param header Header name of tabset section
-#' @param show_plots Option to show plots in tabs
+#' @param show_dots Option to show dots plots in tabs
 #' @param show_emaps Option to show enrichment maps in tabs
 #' @param show_hmaps Option to show hiearchy maps in tabs
 #' @param show_tables Option to show table in tabs
-#' @param hyp_plot_args A list of keyword arguments passed to hyp_plot
+#' @param hyp_dots_args A list of keyword arguments passed to hyp_dots
 #' @param hyp_emap_args A list of keyword arguments passed to hyp_emap
 #' @param hyp_hmap_args A list of keyword arguments passed to hyp_hmap
 #' @param custom_rmd_config Replace configuration section of markdown report
@@ -135,11 +134,11 @@ hyp_to_rmd <- function(hyp_obj,
                        subtitle="",
                        author="",
                        header="Enrichment",
-                       show_plots=TRUE,
+                       show_dots=TRUE,
                        show_emaps=TRUE,
                        show_hmaps=FALSE,
                        show_tables=TRUE,
-                       hyp_plot_args=list(top=15, 
+                       hyp_dots_args=list(top=15, 
                                           val="fdr"),
                        hyp_emap_args=list(top=25, 
                                           val="fdr", 
@@ -152,9 +151,9 @@ hyp_to_rmd <- function(hyp_obj,
                        custom_post_content=NULL) {
 
     # Enfore plots retuns
-    if (show_plots) {
-        hyp_plot_args[["return_plots"]] = TRUE
-        hyp_plot_args[["show_plots"]] = FALSE
+    if (show_dots) {
+        hyp_dots_args[["return_plots"]] = TRUE
+        hyp_dots_args[["show_plots"]] = FALSE
     }
     if (show_emaps) {
         hyp_emap_args[["return_plots"]] = TRUE
@@ -228,13 +227,13 @@ hyp_to_rmd <- function(hyp_obj,
 
             tab_id <- sample(1:100000000000, 1)
             
-            plot_area <- ifelse(show_plots, format_str(tab_plot, string_args(hyp_plot_args)), "")
+            dots_area <- ifelse(show_dots, format_str(tab_dots, string_args(hyp_dots_args)), "")
             emap_area <- ifelse(show_emaps, format_str(tab_emap, string_args(hyp_emap_args)), "")
             hmap_area <- ifelse(show_hmaps, format_str(tab_hmap, string_args(hyp_hmap_args)), "")
             table_area <- ifelse(show_tables, tab_table, "")
 
             rmd_tab %>%
-            format_str(tab, tab_id, tabset, plot_area, emap_area, hmap_area, table_area) %>%
+            format_str(tab, tab_id, tabset, dots_area, emap_area, hmap_area, table_area) %>%
             write(file = file_path, append=TRUE)
         }
     }

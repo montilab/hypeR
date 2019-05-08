@@ -7,48 +7,68 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    cache = FALSE)
+knitr::opts_chunk$set(comment="#>", cache=FALSE)
+library(dplyr)
+library(magrittr)
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
-### Example of a signature
-Here we define our signature of interest as a group of genes randomly sampled from the *estrogen-dependent gene expression* geneset. A signature is simply a vector of symbols.
+### Terminology
+#### Signature
+__hypeR__ employs multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea). Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR` expects.
 ```{r}
 
-signatures <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))
-signature <- signatures$signature
+# Simply a character vector of symbols
+signature <- c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked character vector of symbols
+ranked.signature <-  c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked named numerical vector of symbols with ranking weights
+weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 
 ```
 
+#### Geneset
+A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it is appropriately defined. In our tutorials, we will use genesets from [REACTOME](https://reactome.org/). There is also what is called relational genesets, whereby genesets are organized into a hiearchy, we will explore these in later tutorials. 
 ```{r}
 
-head(signature)
+genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
+                 "GSET2" = c("GENE4", "GENE5", "GENE6"),
+                 "GSET3" = c("GENE7", "GENE8", "GENE9"))
 
 ```
 
-### Example of a geneset
-Here we use a genesets example from [REACTOME](https://reactome.org/). A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it is appropriately defined.
+### Example Data
+In these tutorials, we will use example data. The example data includes an expression set object as well as pre-computed results from common workflows such as diffential expression and weighted gene co-expression analyses. 
+
 ```{r}
 
-gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
-gsets <- gsets$REACTOME
+data(hypdat)
 
 ```
 
+#### Defining Signatures and Genesets
+Using a differential expression dataframe created with limma, we will extract an signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import a genesets from [REACTOME](https://reactome.org/).
 ```{r}
 
-head(names(gsets))
-head(gsets[[1]])
+limma <- hypdat$limma
+
+signature <- limma %>% filter(t > 0 & fdr < 0.001) %>% use_series(symbol)
+
+ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
+
+gsets <- hypdat$gsets
 
 ```
 
-### Hyper enrichment
-All workflows begin with performing hyper enrichment with `hypeR`. Often we're just interested in a single signature, as described above. In this case, `hypeR` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+### Basic Usage
+All workflows begin with performing hyper enrichment with `hypeR()`. Often we're just interested in a single signature, as described above. In this case, `hypeR()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+
+#### Overrepresentation analysis
 ```{r}
 
-hyp_obj <- hypeR(signature, gsets, fdr=0.05)
+hyp_obj <- hypeR(signature, gsets, test="hypergeometric", bg=50000, fdr_cutoff=0.01, do_plots=TRUE)
 
 ```
 
@@ -56,41 +76,24 @@ hyp_obj <- hypeR(signature, gsets, fdr=0.05)
 
 print(hyp_obj)
 hyp_df <- hyp_obj$as.data.frame()
-print(hyp_df[5:10,1:4])
+print(head(hyp_df[,1:3]), row.names=FALSE)
+hyp_obj$plots[[1]]
 
 ```
 
-### Show an interactive table
+#### Enrichment analysis
 ```{r}
 
-hyp_show(hyp_obj, simple=FALSE, stylish=TRUE)
-
-```
-
-### Set background population size
-Because genomic experiments often vary in the number of genes probed, it's important to be able to adjust the background population size accordingly, to ensure accurate enrichment statistics. 
-```{r}
-
-hyp_obj <- hypeR(signature, gsets, bg=10000, fdr=0.05)
-
-```
-
-### Specify a background population of genes
-In cases where the background population is small it is advisable to first reduce genesets to their intersection with the background population of genes. By providing a vector of background genes instead of an integer, `hypeR` will do just that. Here is an example of an experiment that only uses sex-linked genes and therefore genesets are restricted to just those included in the background population.
-```{r}
-
-url = "https://www.genenames.org/cgi-bin/download/custom?col=gd_app_sym&chr=X&chr=Y&format=text"
-r <- httr::GET(url)
-text <- httr::content(r, "text", encoding="ISO-8859-1")
-text.split <- strsplit(text, "\n")[[1]]
-bg <- text.split[2:length(text.split)]
-head(bg)
+hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01, do_plots=TRUE)
 
 ```
 
 ```{r}
 
-hyp_obj <- hypeR(signature, gsets, bg=bg, fdr=0.05)
+print(hyp_obj)
+hyp_df <- hyp_obj$as.data.frame()
+print(head(hyp_df[,1:3]), row.names=FALSE)
+hyp_obj$plots[[1]]
 
 ```
 

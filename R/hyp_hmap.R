@@ -11,7 +11,6 @@
 #'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
-#' @importFrom plotly plotly_empty 
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction
 #' @keywords internal
 .hiearchy_map <- function(hyp_df,
@@ -22,8 +21,6 @@
                           val=c("fdr", "pval"),
                           top=NULL) {
 
-    hyp_df$gsets <- rownames(hyp_df)
-
     # Subset results
     hyp_df <- hyp_df %>%
               dplyr::filter(pval <= pval_cutoff) %>%
@@ -32,11 +29,11 @@
         
     # Handle empty dataframes
     if (nrow(hyp_df) == 0) {
-        return(plotly_empty())
+        return(ggempty())
     }
     
     # Subset relational genesets
-    rgsets.obj.subset <- rgsets_obj$subset(hyp_df$gsets)
+    rgsets.obj.subset <- rgsets_obj$subset(hyp_df$label)
     
     # Extract hiearchy information
     gsets <- rgsets.obj.subset$gsets
@@ -50,11 +47,11 @@
     # Node weights based on significance
     weight.scaler <- function(x) (x-max(x, na.rm=TRUE))/(min(x, na.rm=TRUE)-max(x, na.rm=TRUE))
     node.weights <- sapply(nodes$label, function(x) {
-                           if (x %in% hyp_df$gsets) {
+                           if (x %in% hyp_df$label) {
                                hyp_df %>%
-                               dplyr::filter(gsets == x) %>%
+                               dplyr::filter(label == x) %>%
                                dplyr::pull(val)
-                           } else{ NA }
+                           } else { NA }
                     })
 
     val.pretty <- ifelse(val == "fdr", "FDR", "P-Value")

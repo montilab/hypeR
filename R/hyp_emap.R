@@ -49,8 +49,6 @@ overlap_similarity <- function(a, b) {
                             val=c("fdr", "pval"),
                             top=NULL) {
 
-    hyp_df$gsets <- rownames(hyp_df)
-
     # Subset results
     hyp_df <- hyp_df %>%
               dplyr::filter(pval <= pval_cutoff) %>%
@@ -63,7 +61,7 @@ overlap_similarity <- function(a, b) {
     }
 
     # Geneset similarity matrix
-    hyp.gsets <- gsets[hyp_df$gsets]
+    hyp.gsets <- gsets[hyp_df$label]
     hyp.gsets.mat <- sapply(hyp.gsets, function(x) {
         sapply(hyp.gsets, function(y,x) {
             if (similarity_metric == "jaccard_similarity") jaccard_similarity(x, y)

@@ -107,8 +107,8 @@ hypeR <- function(signature,
     }
 
     if (test == "hypergeometric") {
-        data <- data.frame(matrix(ncol=5, nrow=0))
-        colnames(data) <- c("pval", "fdr", "gset.size", "genes.overlap", "hits")
+        data <- data.frame(matrix(ncol=6, nrow=0))
+        colnames(data) <- c("label", "pval", "fdr", "gset.size", "genes.overlap", "hits")
         plots <- ggempty()
         results <- .hyper_enrichment(signature, 
                                      gsets, 
@@ -117,8 +117,8 @@ hypeR <- function(signature,
     }
     
     if (test == "kstest") {
-        data <- data.frame(matrix(ncol=5, nrow=0))
-        colnames(data) <- c("score", "pval", "fdr", "gsets.size", "genes.found")
+        data <- data.frame(matrix(ncol=6, nrow=0))
+        colnames(data) <- c("label", "pval", "fdr", "gset.size", "genes.found", "score")
         plots <- ggempty()
         results <- .ks_enrichment(signature, 
                                   gsets, 
@@ -135,7 +135,7 @@ hypeR <- function(signature,
                 .[.$fdr <= fdr_cutoff,,drop=FALSE] %>%
                 .[order(.$pval),,drop=FALSE]
             
-        plots <- results$plots[rownames(data)]
+        plots <- results$plots[data$label]
     }
     
     # Wrap dataframe in hyp object

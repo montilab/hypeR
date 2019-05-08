@@ -29,11 +29,13 @@
                                             k=n.drawn,
                                             lower.tail=FALSE))
     
-    data <- data.frame(pval=signif(pvals, 2),
+    data <- data.frame(label=names(gsets),
+                       pval=signif(pvals, 2),
                        fdr=signif(stats::p.adjust(pvals, method="fdr"), 2),
                        gset.size=n.gsets,
                        genes.overlap=n.hits,
-                       hits=sapply(gsets, function(x, y) paste(intersect(x, y), collapse=','), signature.found))
+                       hits=sapply(gsets, function(x, y) paste(intersect(x, y), collapse=','), signature.found),
+                       stringsAsFactors=FALSE)
     
     if (do.plots) {
         plots <- lapply(seq_len(length(gsets)), function(i) {
@@ -44,7 +46,6 @@
                      title <- names(gsets)[[i]]
                      ggvenn(a, b, ga, gb, title)
                  })
-        
         names(plots) <- names(gsets)
     } else {
         plots <- lapply(gsets, function(x) {ggempty()})

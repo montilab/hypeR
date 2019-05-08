@@ -7,9 +7,7 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(
-    comment = "#>",
-    cache = FALSE)
+knitr::opts_chunk$set(comment="#>", cache=FALSE)
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
