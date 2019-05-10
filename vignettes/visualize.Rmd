@@ -33,18 +33,18 @@ hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01)
 ```
 
 ### Dots plot
-One can visualize the top enriched pathways using `hyp_dots()` which returns a horizontal dots plot. Each dot is a geneset, where the color represents the significance and the size signifies the geneset size.
+One can visualize the top enriched genesets using `hyp_dots()` which returns a horizontal dots plot. Each dot is a geneset, where the color represents the significance and the size signifies the geneset size.
 ```{r, fig.height=5}
 
-hyp_dots(hyp_obj)
+hyp_dots(hyp_obj, show_plots=FALSE, return_plots=TRUE)
 
 ```
 
 ### Enrichment map
-One can visualize the top enriched pathways using `hyp_emap()` which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
+One can visualize the top enriched genesets using `hyp_emap()` which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
 ```{r, fig.height=7}
 
-hyp_emap(hyp_obj, similarity_cutoff=0.8, return_plots=TRUE)
+hyp_emap(hyp_obj, similarity_cutoff=0.8, show_plots=FALSE, return_plots=TRUE)
 
 ```
 
@@ -91,9 +91,9 @@ hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", is_rgsets=TRUE, fdr_cu
 ```
 
 ### Hierarchy map
-One can visualize the top enriched pathways using `hyp_hmap()` which will return a hiearchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy.
+One can visualize the top enriched genesets using `hyp_hmap()` which will return a hiearchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy.
 ```{r, fig.height=7}
 
-hyp_hmap(hyp_obj, top=30, return_plots=TRUE)
+hyp_hmap(hyp_obj, top=30, show_plots=FALSE, return_plots=TRUE)
 
 ```

@@ -44,7 +44,7 @@ symbols <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
              "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp_obj <- hypeR(symbols, rgsets_obj, gsets_relational=TRUE, bg=7842, fdr=0.05)
+hyp_obj <- hypeR(symbols, rgsets_obj, is_rgsets=TRUE, bg=7842, fdr=0.05)
 
 # Visualize
 hyp_hmap(hyp_obj, top=60)

@@ -30,17 +30,17 @@ hyp_show <- function(hyp_obj, simple=FALSE, stylish=FALSE) {
     # Extract hyp dataframe
     df <- hyp_obj$data
 
-    cols <- if(simple) c(1,2) else seq_len(ncol(df))
+    cols <- if(simple) c(1,2,3) else seq_len(ncol(df))
 
     if (stylish) {
         datatable(data = df[,cols,drop=FALSE],
                   style = 'bootstrap',
                   class = 'table-bordered table-condensed',
                   escape = TRUE,
-                  rownames = TRUE)
+                  rownames = FALSE)
     } else {
         datatable(data = df[,cols,drop=FALSE],
                   escape = TRUE,
-                  rownames = TRUE)
+                  rownames = FALSE)
     }
 }

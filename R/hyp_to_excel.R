@@ -49,7 +49,7 @@ hyp_to_excel <- function(hyp_obj, file_path, cols=NULL) {
             cols <- seq_len(ncol(df))
         }
         x <- df[,cols,drop=FALSE]
-        openxlsx::writeData(wb, sheet=i, x=x, colNames=TRUE, rowNames=TRUE)
+        openxlsx::writeData(wb, sheet=i, x=x, colNames=TRUE, rowNames=FALSE)
     }
     openxlsx::saveWorkbook(wb, file=file_path, overwrite=TRUE)
 }

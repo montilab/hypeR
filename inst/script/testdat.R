@@ -14,22 +14,23 @@ get_project <- function() {
          "Experiment 2" = get_experiment(),
          "Experiment 3" = get_experiment())
 }
-get_ranked_signature <- function() {
-    list(ranked = sample(LETTERS),
-         weights = sort(rnorm(length(LETTERS)), decreasing=TRUE))
+get_weighted_signature <- function() {
+    signature <- sort(rnorm(length(LETTERS)), decreasing=TRUE)
+    names(signature) <- LETTERS
+    return(signature)
 }
-get_ranked_experiment <- function() {
-    list("Signature 1" = get_ranked_signature(),
-         "Signature 2" = get_ranked_signature(),
-         "Signature 3" = get_ranked_signature())
+get_weighted_experiment <- function() {
+    list("Signature 1" = get_weighted_signature(),
+         "Signature 2" = get_weighted_signature(),
+         "Signature 3" = get_weighted_signature())
 }
 
 set.seed(0)
 testdat <- list(signature = get_signature(),
                 experiment = get_experiment(),
                 project = get_project(),
-                ranked_signature = get_ranked_signature(),
-                ranked_experiment = get_ranked_experiment())
+                weighted_signature = get_weighted_signature(),
+                weighted_experiment = get_weighted_experiment())
 
 # Defining relational gsets
 leaf.id <- paste("G", 1:10, sep="")

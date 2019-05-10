@@ -35,7 +35,6 @@ overlap_similarity <- function(a, b) {
 #'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
-#' @importFrom plotly plotly_empty 
 #' @importFrom igraph graph.adjacency V
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction toVisNetworkData visIgraphLayout
 #' @keywords internal
@@ -57,7 +56,7 @@ overlap_similarity <- function(a, b) {
 
     # Handle empty dataframes
     if (nrow(hyp_df) == 0) {
-        return(plotly_empty())
+        return(ggempty())
     }
 
     # Geneset similarity matrix

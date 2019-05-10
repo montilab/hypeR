@@ -15,22 +15,22 @@ devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 
 ### Terminology
 #### Signature
-__hypeR__ employs multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea). Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR` expects.
+__hypeR__ employs multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea). Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR()` expects.
 ```{r}
 
-# Simply a character vector of symbols
+# Simply a character vector of symbols (hypergeometric)
 signature <- c("GENE1", "GENE2", "GENE3")
 
-# A pre-ranked character vector of symbols
+# A pre-ranked character vector of symbols (kstest)
 ranked.signature <-  c("GENE1", "GENE2", "GENE3")
 
-# A pre-ranked named numerical vector of symbols with ranking weights
+# A pre-ranked named numerical vector of symbols with ranking weights (gsea)
 weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 
 ```
 
 #### Geneset
-A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it is appropriately defined. In our tutorials, we will use genesets from [REACTOME](https://reactome.org/). There is also what is called relational genesets, whereby genesets are organized into a hiearchy, we will explore these in later tutorials. 
+A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined. In our tutorials, we will use genesets from [REACTOME](https://reactome.org/). There is also what is called relational genesets, whereby genesets are organized into a hiearchy; we will explore these in later tutorials. 
 ```{r}
 
 genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
@@ -49,7 +49,7 @@ data(hypdat)
 ```
 
 #### Defining Signatures and Genesets
-Using a differential expression dataframe created with limma, we will extract an signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import a genesets from [REACTOME](https://reactome.org/).
+Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import a genesets from [REACTOME](https://reactome.org/).
 ```{r}
 
 limma <- hypdat$limma
@@ -64,7 +64,6 @@ gsets <- hypdat$gsets
 
 ### Basic Usage
 All workflows begin with performing hyper enrichment with `hypeR()`. Often we're just interested in a single signature, as described above. In this case, `hypeR()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
-
 #### Overrepresentation analysis
 ```{r}
 
@@ -100,13 +99,13 @@ hyp_obj$plots[[1]]
 ### Save results to excel
 ```{r, eval=FALSE}
 
-hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
+hyp_to_excel(hyp_obj, file_path="hyper.xlsx")
 
 ```
 
 ### Save results to table
 ```{r, eval=FALSE}
 
-hyp_to_table(hyp_obj, file_path="pathways.txt")
+hyp_to_table(hyp_obj, file_path="hyper.txt")
 
 ```

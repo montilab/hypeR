@@ -227,14 +227,14 @@ hyp_to_rmd <- function(hyp_obj,
 
             tab_id <- sample(1:100000000000, 1)
             
-            dots_area <- ifelse(show_dots, format_str(tab_dots, string_args(hyp_dots_args)), "")
+            dots_area <- ifelse(show_dots,  format_str(tab_dots, string_args(hyp_dots_args)), "")
             emap_area <- ifelse(show_emaps, format_str(tab_emap, string_args(hyp_emap_args)), "")
             hmap_area <- ifelse(show_hmaps, format_str(tab_hmap, string_args(hyp_hmap_args)), "")
             table_area <- ifelse(show_tables, tab_table, "")
 
             rmd_tab %>%
             format_str(tab, tab_id, tabset, dots_area, emap_area, hmap_area, table_area) %>%
-            write(file = file_path, append=TRUE)
+            write(file=file_path, append=TRUE)
         }
     }
 

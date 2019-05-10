@@ -64,6 +64,6 @@ hyp_to_table <- function(hyp_obj, file_path, sep="\t", cols=NULL) {
                     quote = FALSE,
                     sep = sep,
                     col.names = TRUE,
-                    row.names = TRUE)
+                    row.names = FALSE)
     }
 }

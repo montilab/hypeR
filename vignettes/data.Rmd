@@ -12,8 +12,7 @@ devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
 ### Downloading genesets from msigdb
-For most user purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with hypeR.
-
+For most purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with __hypeR__.
 #### Available genesets
 ```{r}
 
@@ -22,7 +21,7 @@ msigdb_info()
 ```
 
 #### Downloading and loading genesets
-Use `msigdb_download_one` to download a single geneset into memory.
+Use `msigdb_download_one()` to download a single geneset into memory.
 ```{r}
 
 HALLMARK <- msigdb_download_one(species="Homo sapiens", category="H")
@@ -36,7 +35,7 @@ head(HALLMARK[[1]])
 
 ```
 
-Use `msigdb_download_all` to retrieve all genesets for a given species. By default, genesets are cached to a temporary directory, therefore a path object is returned. Use the path object with `msigdb_fetch` to load genesets into memory. Users can also specify a directory to download to for repeated use.
+Use `msigdb_download_all()` to retrieve all genesets for a given species. By default, genesets are cached in a temporary directory, therefore a path object is returned. Use the path object with `msigdb_fetch()` to load genesets into memory. Users can also specify a directory to download to for repeated use.
 ```{r}
 
 msigdb_path <- msigdb_download_all(species="Homo sapiens")
@@ -47,7 +46,7 @@ REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
 
 ```
 
-In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
+In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of vectors, therefore, one can use any custom genesets in their analysis, as long as it is appropriately defined.
 ```{r}
 
 gsets <- c(BIOCARTA, KEGG, REACTOME)
@@ -55,7 +54,7 @@ gsets <- c(BIOCARTA, KEGG, REACTOME)
 ```
 
 ### Defining custom genesets
-As mentioned previously, one can use custom genesets with hypeR. In this example, we download one of the many publicly available genesets hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/). Once downloaded, one performs hyper enrichment as normal.
+As mentioned previously, one can use custom genesets with __hypeR__. In this example, we download one of the many publicly available genesets hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/). Once downloaded, one performs enrichment as normal.
 ```{r, eval=FALSE}
 
 url = "http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Cancer_Cell_Line_Encyclopedia"

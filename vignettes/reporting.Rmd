@@ -14,7 +14,7 @@ devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ### Multiple experiments
 Sometimes, we are generating reports for multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with collaborators.
 
-In the following example, we are interested in exploring the signatures from a weighted gene co-expression analysis (WGCNA) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. The `hyp_to_rmd()` will help us process and this data in a concise and reproducible manner.
+In the following example, we're interested in exploring the signatures from a weighted gene co-expression analysis (WGCNA) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. The `hyp_to_rmd()` will help us process this data in a concise and reproducible manner that is readily shareable.
 
 ```{r}
 
@@ -32,7 +32,7 @@ rgsets <- hypdat$rgsets
 All workflows begin with performing hyper enrichment with `hypeR()`.
 ```{r, eval=FALSE}
 
-lmultihyp_obj <- hypeR(wgcna, rgsets, test="hypergeometric", is_rgsets=TRUE, bg=50000, fdr_cutoff=0.01, do_plots=FALSE)
+lmultihyp_obj <- lapply(wgcna, hypeR, rgsets, test="hypergeometric", is_rgsets=TRUE, bg=50000, fdr_cutoff=0.01, do_plots=FALSE)
 
 ```
 

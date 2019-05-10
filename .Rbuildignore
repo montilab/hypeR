@@ -1,4 +1,6 @@
 ^dev$
+^data$
+^data-raw$
 ^art$
 ^docs$
 ^pkgdown$

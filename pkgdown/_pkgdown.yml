@@ -22,7 +22,7 @@ reference:
   - '`hyp_to_table`'
   - '`hyp_to_rmd`'
   - '`hyp_show`'
-  - '`hyp_plot`'
+  - '`hyp_dots`'
   - '`hyp_emap`'
   - '`hyp_hmap`'
 - title: Data Methods
@@ -59,8 +59,6 @@ navbar:
       href: articles/data.html
     - text: Visualize Results
       href: articles/visualize.html
-    - text: Relational Genesets
-      href: articles/relational.html
     - text: Multiple Signatures
       href: articles/multihyp.html
     - text: Generating Reports
@@ -74,6 +72,5 @@ articles:
   - '`basics`'
   - '`data`'
   - '`visualize`'
-  - '`relational`'
   - '`multihyp`'
   - '`reporting`'
