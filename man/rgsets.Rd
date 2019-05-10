@@ -53,9 +53,9 @@ on geneset labels
 
 \examples{
 testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-rgsets_obj <- rgsets$new(gsets=testdat$gsets,
-                         nodes=testdat$nodes,
-                         edges=testdat$edges)
+rgsets <- rgsets$new(gsets=testdat$gsets,
+                     nodes=testdat$nodes,
+                     edges=testdat$edges)
 
 }
 \keyword{datasets}

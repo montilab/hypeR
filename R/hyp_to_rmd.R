@@ -98,9 +98,10 @@ hyp_hmap({1})
 
 tab_table <- "
 df <- hyp_obj$as.data.frame()
-df$abrv.name <- substr(df$label, 1, 30) 
-col_ix <- match(c('pval', 'fdr', 'abrv.name'), colnames(df))
+df$label.abrv <- substr(df$label, 1, 30) 
+col_ix <- match(c('pval', 'fdr', 'label.abrv'), colnames(df))
 df <- df[, c(col_ix, (1:ncol(df))[-col_ix])]
+df$label <- NULL
 rownames(df) <- NULL
 df
 "

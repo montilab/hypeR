@@ -1,0 +1,61 @@
+---
+title: "hypeR"
+author:
+- name: Anthony Federico
+  affiliation:
+  - &1 Boston University School of Medicine, Boston, MA
+  - &2 Bioinformatics Program, Boston University, Boston, MA
+- name: Stefano Monti
+  affiliation:
+  - *1
+  - *2
+date: '`r format(Sys.Date(), "%B %e, %Y")`'
+package: hypeR
+output:
+    BiocStyle::html_document
+vignette: >
+    %\VignetteIndexEntry{hypeR}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+    chunk_output_type: console
+---
+
+```{r include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(message=FALSE, fig.width=6.75)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+# Introduction
+Geneset enrichment is an important step in many biological data analysis workflows, particularly in bioinformatics and computational biology. At a basic level, one is testing if a group of genes is overrepresented in a series of pre-defined sets of genes, which typically signify some biological relevance. The R package hypeR enables users to easily perform this type of analysis via a hypergeometric test with a focus on easing downstream visualization, analysis, and reporting. Additionally, users can use custom genesets that are easily defined, extending the analysis of genes to other areas of interest such as proteins, microbes, metabolites etc. The hypeR package is designed to make routine geneset enrichment seamless for scientist working in R. 
+
+# Installation
+Download the package from Bioconductor.
+```{r get_package, eval=FALSE}
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("hypeR")
+
+```
+
+Or install the development version of the package from Bioconductor.
+```{r, eval=FALSE}
+
+BiocManager::install("montilab/hypeR")
+
+```
+
+If not using the current version of R, try installing from our dev branch.
+```{r, eval=FALSE}
+
+devtools::install_github("montilab/hypeR", ref="dev")
+
+```
+
+Load the package into an R session.
+```{r, eval=FALSE}
+
+library(hypeR)
+
+```

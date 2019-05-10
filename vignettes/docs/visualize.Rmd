@@ -49,6 +49,7 @@ hyp_emap(hyp_obj, similarity_cutoff=0.8, show_plots=FALSE, return_plots=TRUE)
 ```
 
 ### Hiearchy map
+
 #### Relational genesets
 When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`.
 ```{r}
@@ -83,10 +84,10 @@ edges[1994:1999,]
 
 ```
 
-All workflows begin with performing hyper enrichment with `hypeR()`. Note that when passing an `rgsets` object, ensure `is_rgsets=TRUE`. Otherwise, `hypeR()` will treat it as a list of unstructured gsets. 
+All workflows begin with performing hyper enrichment with `hypeR()`.
 ```{r}
 
-hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", is_rgsets=TRUE, fdr_cutoff=0.01)
+hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", fdr_cutoff=0.01)
 
 ```
 

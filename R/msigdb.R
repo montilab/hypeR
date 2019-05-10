@@ -59,7 +59,7 @@ msigdb_download_all <- function(species="Homo sapiens", output_dir=NULL) {
 
     cat(vs)
     cat("\n")
-    cat("Downloading Gene Sets to...\n")
+    cat("Downloading genesets to...\n")
     cat(output_dir)
     cat("\n")
 

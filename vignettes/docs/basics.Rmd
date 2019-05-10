@@ -14,6 +14,7 @@ devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
 ### Terminology
+
 #### Signature
 __hypeR__ employs multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea). Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR()` expects.
 ```{r}
@@ -41,7 +42,6 @@ genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
 
 ### Example Data
 In these tutorials, we will use example data. The example data includes an expression set object as well as pre-computed results from common workflows such as diffential expression and weighted gene co-expression analyses. 
-
 ```{r}
 
 data(hypdat)
@@ -49,7 +49,7 @@ data(hypdat)
 ```
 
 #### Defining Signatures and Genesets
-Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import a genesets from [REACTOME](https://reactome.org/).
+Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import genesets from [REACTOME](https://reactome.org/).
 ```{r}
 
 limma <- hypdat$limma
@@ -64,6 +64,7 @@ gsets <- hypdat$gsets
 
 ### Basic Usage
 All workflows begin with performing hyper enrichment with `hypeR()`. Often we're just interested in a single signature, as described above. In this case, `hypeR()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+
 #### Overrepresentation analysis
 ```{r}
 
@@ -96,14 +97,14 @@ hyp_obj$plots[[1]]
 
 ```
 
-### Save results to excel
+#### Save results to excel
 ```{r, eval=FALSE}
 
 hyp_to_excel(hyp_obj, file_path="hyper.xlsx")
 
 ```
 
-### Save results to table
+#### Save results to table
 ```{r, eval=FALSE}
 
 hyp_to_table(hyp_obj, file_path="hyper.txt")

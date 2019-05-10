@@ -13,17 +13,14 @@
 #' @return A hyp object
 #'
 #' @examples
-#' # Grab a list of curated gene sets
-#' gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))
-#' REACTOME <- gsets$REACTOME
+#' gsets <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))$gsets
 #'
-#' # Genes involed in tricarboxylic acid cycle
 #' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp_obj <- hypeR(signature, REACTOME, bg=2522, fdr_cutoff=0.05)
+#' hyp_obj <- hypeR(signature, gsets, bg=2522, fdr_cutoff=0.05)
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr filter arrange

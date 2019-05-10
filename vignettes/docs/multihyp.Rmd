@@ -54,9 +54,7 @@ hyp_to_table(multihyp_obj, file_path="hyper.txt")
 ```
 
 ### Visualizations
-
-When plotting a `multihyp` object, each signatures is plotted and returned separately. The same goes for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`. 
-
+When plotting a `multihyp` object, each signatures is plotted and returned separately. The same goes for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`.
 ```{r}
 
 p <- hyp_dots(multihyp_obj, show_plots=FALSE, return_plots=TRUE)

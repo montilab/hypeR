@@ -1,8 +1,7 @@
 # Devolpment scripts
-dev/
-docs/
-art/
-workflow/
+/dev/
+/art/
+/docs/
 pkgdown/favicon
 
 # General

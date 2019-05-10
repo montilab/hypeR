@@ -5,10 +5,7 @@ output: rmarkdown::github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r echo=FALSE, message=FALSE}
-knitr::opts_chunk$set(
-  message = FALSE,
-  comment = "#>"
-)
+knitr::opts_chunk$set(message=FALSE, comment="#>")
 devtools::load_all(".")
 ```
 
@@ -55,40 +52,37 @@ library(hypeR)
 
 ```
 
-#### Example of a signature
-Here we define our signature of interest as a group of genes randomly sampled from the *estrogen-dependent gene expression* gset. A signature is simply a vector of symbols.
+## Terminology
+### Signature
+__hypeR__ employs multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea). Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR()` expects.
 ```{r}
 
-signature <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))$signature
+# Simply a character vector of symbols (hypergeometric)
+signature <- c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked character vector of symbols (kstest)
+ranked.signature <-  c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked named numerical vector of symbols with ranking weights (gsea)
+weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 
 ```
 
+### Geneset
+A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined.
 ```{r}
 
-head(signature)
-
-```
-
-#### Example of a geneset
-Here we use a genesets example from [REACTOME](https://reactome.org/). A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analysis, as long as it is appropriately defined.
-```{r}
-
-gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))$REACTOME
-
-```
-
-```{r}
-
-head(names(gsets))
-head(gsets[[1]])
+genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
+                 "GSET2" = c("GENE4", "GENE5", "GENE6"),
+                 "GSET3" = c("GENE7", "GENE8", "GENE9"))
 
 ```
 
 #### Hyper enrichment
-All workflows begin with performing hyper enrichment with __*hypeR*__. Often we are just interested in a single signature, as described above. In this case, __*hypeR*__ will return a __*hyp*__ object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+All workflows begin with performing hyper enrichment with `hyper()`. Often we are just interested in a single signature, as described above. In this case, `hyper()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
 ```{r}
 
-hyp_obj <- hypeR(signature, gsets, fdr=0.05)
+hyp_obj <- hypeR(signature, genesets)
 
 ```
 
@@ -113,8 +107,8 @@ REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
 # Show interactive table
 hyp_show(hyp_obj)
 
-# Plot bar plot
-hyp_plot(hyp_obj)
+# Plot dots plot
+hyp_dots(hyp_obj)
 
 # Plot enrichment map
 hyp_emap(hyp_obj)
@@ -128,10 +122,10 @@ hyp_hmap(hyp_obj)
 ```{r, eval=FALSE}
 
 # Save to excel
-hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
+hyp_to_excel(hyp_obj, file_path="hyper.xlsx")
 
 # Save to table
-hyp_to_table(hyp_obj, file_path="pathways.txt")
+hyp_to_table(hyp_obj, file_path="hyper.txt")
 
 # Generate markdown report
 hyp_to_rmd(lmultihyp_obj,

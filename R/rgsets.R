@@ -62,9 +62,9 @@ find_members <- function(id, gsets, nodes, edges) {
 #'
 #' @examples
 #' testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-#' rgsets_obj <- rgsets$new(gsets=testdat$gsets,
-#'                          nodes=testdat$nodes,
-#'                          edges=testdat$edges)
+#' rgsets <- rgsets$new(gsets=testdat$gsets,
+#'                      nodes=testdat$nodes,
+#'                      edges=testdat$edges)
 #'
 #' @importFrom R6 R6Class
 #' @importFrom dplyr filter pull %>%

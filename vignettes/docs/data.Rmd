@@ -13,6 +13,7 @@ devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 
 ### Downloading genesets from msigdb
 For most purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with __hypeR__.
+
 #### Available genesets
 ```{r}
 
@@ -46,7 +47,7 @@ REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
 
 ```
 
-In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of vectors, therefore, one can use any custom genesets in their analysis, as long as it is appropriately defined.
+In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of vectors, therefore, one can use any custom genesets in their analysis, as long as it's appropriately defined.
 ```{r}
 
 gsets <- c(BIOCARTA, KEGG, REACTOME)

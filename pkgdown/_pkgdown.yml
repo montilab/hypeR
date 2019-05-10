@@ -43,34 +43,26 @@ reference:
   - '`rgsets`'
 
 navbar:
-  type: default
+  title: "animalcules"
   left:
-  - text: Home
-    href: index.html
-  - text: Reference
-    href: reference/index.html
-  - text: Tutorials
-    menu:
-    - text: Installation
-      href: articles/installation.html
-    - text: Basic Usage
-      href: articles/basics.html
-    - text: Downloading Data
-      href: articles/data.html
-    - text: Visualize Results
-      href: articles/visualize.html
-    - text: Multiple Signatures
-      href: articles/multihyp.html
-    - text: Generating Reports
-      href: articles/reporting.html
-
-articles:
-- title: Tutorials
-  desc: ~
-  contents:
-  - '`installation`'
-  - '`basics`'
-  - '`data`'
-  - '`visualize`'
-  - '`multihyp`'
-  - '`reporting`'
+    - text: "Home"
+      href: index.html
+    - text: "Docs"
+      menu:
+      - text: "Installation"
+        href: articles/docs/installation.html
+      - text: "Basic Usage"
+        href: articles/docs/basics.html
+      - text: "Downloading Data"
+        href: articles/docs/data.html
+      - text: "Visualize Results"
+        href: articles/docs/visualize.html
+      - text: "Multiple Signatures"
+        href: articles/docs/multihyp.html
+      - text: "Generating Reports"
+        href: articles/docs/reporting.html
+    - text: "Reference"
+      href: reference/index.html
+  right:
+    - icon: fa-github
+      href: https://github.com/montilab/hypeR

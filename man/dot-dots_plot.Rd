@@ -4,13 +4,11 @@
 \alias{.dots_plot}
 \title{Plot top enriched genesets}
 \usage{
-.dots_plot(hyp_df, title = "", top = 20, abrv = 50, sizes = TRUE,
-  val = c("fdr", "pval"))
+.dots_plot(hyp_df, top = 20, abrv = 50, sizes = TRUE,
+  val = c("fdr", "pval"), title = "")
 }
 \arguments{
 \item{hyp_df}{A dataframe from a hyp object}
-
-\item{title}{Plot title}
 
 \item{top}{Limit number of genesets shown}
 
@@ -19,6 +17,8 @@
 \item{sizes}{Size dots by geneset sizes}
 
 \item{val}{Choose significance value e.g. c("fdr", "pval")}
+
+\item{title}{Plot title}
 }
 \value{
 A ggplot object

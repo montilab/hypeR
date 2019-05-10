@@ -40,61 +40,47 @@ devtools::install_github("montilab/hypeR", ref="dev")
 library(hypeR)
 ```
 
-#### Example of a signature
+## Terminology
 
-Here we define our signature of interest as a group of genes randomly
-sampled from the *estrogen-dependent gene expression* gset. A signature
-is simply a vector of
-symbols.
+### Signature
 
-``` r
-signature <- readRDS(system.file("extdata/signatures.rds", package="hypeR"))$signature
-```
+**hypeR** employs multiple types of enrichment analyses
+(e.g. hypergeometric, kstest, gsea). Depending on the type, different
+kinds of signatures are expected. There are three types of signatures
+`hypeR()` expects.
 
 ``` r
-head(signature)
+# Simply a character vector of symbols (hypergeometric)
+signature <- c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked character vector of symbols (kstest)
+ranked.signature <-  c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked named numerical vector of symbols with ranking weights (gsea)
+weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 ```
 
-    #> [1] "GTF2F1"    "HIST1H2AJ" "KANK1"     "STAG1"     "FKBP4"     "SMC1A"
+### Geneset
 
-#### Example of a geneset
-
-Here we use a genesets example from [REACTOME](https://reactome.org/). A
-geneset is simply a list of vectors, therefore, one can use any custom
-geneset in their analysis, as long as it is appropriately
-defined.
+A geneset is simply a list of vectors, therefore, one can use any custom
+geneset in their analyses, as long as it’s appropriately defined.
 
 ``` r
-gsets <- readRDS(system.file("extdata/gsets.rds", package="hypeR"))$REACTOME
+genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
+                 "GSET2" = c("GENE4", "GENE5", "GENE6"),
+                 "GSET3" = c("GENE7", "GENE8", "GENE9"))
 ```
-
-``` r
-head(names(gsets))
-```
-
-    #> [1] "REACTOME_3_UTR_MEDIATED_TRANSLATIONAL_REGULATION"                        
-    #> [2] "REACTOME_A_TETRASACCHARIDE_LINKER_SEQUENCE_IS_REQUIRED_FOR_GAG_SYNTHESIS"
-    #> [3] "REACTOME_ABACAVIR_TRANSPORT_AND_METABOLISM"                              
-    #> [4] "REACTOME_ABC_FAMILY_PROTEINS_MEDIATED_TRANSPORT"                         
-    #> [5] "REACTOME_ABCA_TRANSPORTERS_IN_LIPID_HOMEOSTASIS"                         
-    #> [6] "REACTOME_ABORTIVE_ELONGATION_OF_HIV1_TRANSCRIPT_IN_THE_ABSENCE_OF_TAT"
-
-``` r
-head(gsets[[1]])
-```
-
-    #> [1] "EIF1AX" "EIF2S1" "EIF2S2" "EIF2S3" "EIF3A"  "EIF3B"
 
 #### Hyper enrichment
 
-All workflows begin with performing hyper enrichment with ***hypeR***.
+All workflows begin with performing hyper enrichment with `hyper()`.
 Often we are just interested in a single signature, as described above.
-In this case, ***hypeR*** will return a ***hyp*** object. This object
-contains relevant information to the enrichment results and is
-recognized by downstream methods.
+In this case, `hyper()` will return a `hyp` object. This object contains
+relevant information to the enrichment results and is recognized by
+downstream methods.
 
 ``` r
-hyp_obj <- hypeR(signature, gsets, fdr=0.05)
+hyp_obj <- hypeR(signature, genesets)
 ```
 
 #### Downstream methods
@@ -119,8 +105,8 @@ REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
 # Show interactive table
 hyp_show(hyp_obj)
 
-# Plot bar plot
-hyp_plot(hyp_obj)
+# Plot dots plot
+hyp_dots(hyp_obj)
 
 # Plot enrichment map
 hyp_emap(hyp_obj)
@@ -133,10 +119,10 @@ hyp_hmap(hyp_obj)
 
 ``` r
 # Save to excel
-hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
+hyp_to_excel(hyp_obj, file_path="hyper.xlsx")
 
 # Save to table
-hyp_to_table(hyp_obj, file_path="pathways.txt")
+hyp_to_table(hyp_obj, file_path="hyper.txt")
 
 # Generate markdown report
 hyp_to_rmd(lmultihyp_obj,
