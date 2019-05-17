@@ -8,7 +8,7 @@
 #' @param title Plot title
 #' @return A ggplot object
 #'
-#' @importFrom ggplot2 ggplot aes geom_point labs scale_color_continuous coord_flip geom_hline guides theme element_text element_blank
+#' @importFrom ggplot2 ggplot aes geom_point labs scale_color_continuous guide_colorbar coord_flip geom_hline guides theme element_text element_blank
 #' @keywords internal
 .dots_plot <- function(hyp_df,
                        top=20,
@@ -38,7 +38,7 @@
     ggplot(df, aes(x=label.abrv, y=-log10(color), color=color, size=log10(size))) +
     geom_point() +
     labs(title=title, y=ifelse(val == "pval", "-log(P-Value)", "-log(FDR)")) +  
-    scale_color_continuous(low="blue", high="red") +
+    scale_color_continuous(low="blue", high="red", guide=guide_colorbar(reverse=TRUE)) +
     coord_flip() +
     geom_hline(yintercept=-log10(0.05), linetype="dotted") +
     guides(size=FALSE) + 
