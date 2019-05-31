@@ -7,4 +7,5 @@
 #'   \item{gsets}{Genesets from reactome}
 #'   \item{rgsets}{Relational genesets from reactome}
 #' }
+#'
 "hypdat"

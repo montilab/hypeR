@@ -27,13 +27,6 @@ Or install the development version of the package from Bioconductor.
 BiocManager::install("montilab/hypeR")
 ```
 
-If not using the current version of R, try installing from our dev
-branch.
-
-``` r
-devtools::install_github("montilab/hypeR", ref="dev")
-```
-
 ## Usage
 
 ``` r

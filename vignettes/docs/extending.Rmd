@@ -1,0 +1,172 @@
+---
+title: "Extending hypeR"
+vignette: >
+  %\VignetteIndexEntry{Visualize Results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
+library(dplyr)
+library(magrittr)
+library(fgsea)
+devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+```
+
+### Load packages
+```{r, eval=FALSE}
+
+library(dplyr)
+library(magrittr)
+library(fgsea)
+library(hypeR)
+
+```
+
+### Signature
+```{r}
+data(hypdat)
+
+# Differential expression results
+df <- hypdat$limma
+
+print(df[1:5,], row.names=FALSE)
+
+# Rank genes by upregulation
+df.up <- df %>%
+         filter(t > 0 & fdr < 0.001) %>%
+         arrange(desc(t))
+
+print(df.up[1:5,], row.names=FALSE)
+
+# Extract a weighted signature for upregulation
+signature <- df$t
+
+names(signature) <- df$symbol
+head(signature)
+
+```
+
+### Relational genesets
+```{r}
+
+rgsets <- hypdat$rgsets
+
+```
+
+### Wrapping *fgsea* to return a `hyp` object
+```{r}
+
+fgsea_to_hyp <- function(signature,
+                         gsets, 
+                         nperm=10000, 
+                         direction=c("up", "dn"),
+                         pval_cutoff=1, 
+                         fdr_cutoff=1,
+                         ...) {
+    
+    # Default arguments
+    direction <- match.arg(direction)
+
+    # Save original arguments
+    args <- as.list(environment())
+    
+    # Check if gsets are relational
+    if (is(gsets, "rgsets")) gsets <- gsets$gsets
+
+    # Handling of multiple signatures
+    if (is(signature, "list")) {
+        lhyp <- lapply(signature, fgsea_to_hyp, args$gsets,
+                                                args$nperm,
+                                                args$direction,
+                                                args$pval_cutoff,
+                                                args$fdr_cutoff, 
+                                                ...)
+ 
+        # Wrap list of hyp objects in multihyp object
+        multihyp.obj <- multihyp$new(data=lhyp)
+        return(multihyp.obj)
+    }
+
+    data <- data.frame(matrix(ncol=6, nrow=0))
+    colnames(data) <- c("label", "pval", "fdr", "gset.size", "genes.found", "score")
+    plots <- ggempty()    
+
+    # Run fgsea
+    results <- fgsea(stats=signature, pathways=gsets, nperm=nperm, ...)
+    
+    # Reformat results
+    results <- data.frame(results)
+    colnames(results) <- c("label", "pval", "fdr", "score", "nes", "nme", "genes.found", "le")
+    results$pval <- signif(results$pval, 2)
+    results$fdr <- signif(results$fdr, 2)
+    results$gset.size <- sapply(results$label, function(x) length(gsets[[x]]))
+    results <- results[,c("label", "pval", "fdr", "gset.size", "genes.found", "score")]
+    
+    #If hits are found format dataframe
+    if (!is.null(results)) {
+        data <- results %>%
+                dplyr::filter(pval <= pval_cutoff) %>%
+                dplyr::filter(fdr <= fdr_cutoff) %>%
+                dplyr::arrange(pval)
+        
+        if (direction == "up") data %>% dplyr::filter(score > 0)
+        if (direction == "down") data %>% dplyr::filter(score < 0)
+        
+        # Empty plots
+        plots <- setNames(data$label, data$label) %>%
+                 lapply(function(x) ggempty())
+    }
+
+    # Wrap dataframe in hyp object
+    hyp_obj <- hyp$new(data=data, plots=plots, args=args)
+    return(hyp_obj)
+}
+
+hyp_obj <- fgsea_to_hyp(signature, rgsets)
+
+```
+
+### *hypeR* functionality
+```{r}
+
+print(hyp_obj)
+
+```
+
+```{r}
+
+hyp_dots(hyp_obj, top=20, show_plots=FALSE, return_plots=TRUE)
+
+```
+
+```{r}
+
+hyp_emap(hyp_obj, top=100, similarity_cutoff=0.7, show_plots=FALSE, return_plots=TRUE)
+
+```
+
+```{r}
+
+hyp_hmap(hyp_obj, top=50, val="fdr", show_plots=FALSE, return_plots=TRUE)
+
+```
+
+```{r, eval=FALSE}
+
+hyp_to_table(hyp_obj, file_path="fsgea.txt")
+
+```
+
+```{r, eval=FALSE}
+
+hyp_to_excel(hyp_obj, file_path="fsgea.xlsx")
+
+```
+
+```{r, eval=FALSE}
+
+hyp_to_rmd(hyp_obj, show_hmaps=TRUE)
+
+```

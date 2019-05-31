@@ -46,13 +46,6 @@ BiocManager::install("montilab/hypeR")
 
 ```
 
-If not using the current version of R, try installing from our dev branch.
-```{r, eval=FALSE}
-
-devtools::install_github("montilab/hypeR", ref="dev")
-
-```
-
 Load the package into an R session.
 ```{r, eval=FALSE}
 
