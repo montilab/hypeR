@@ -24,7 +24,7 @@ devtools::install_github("montilab/hypeR")
 Or install the development version of the package from Bioconductor.
 
 ``` r
-BiocManager::install("montilab/hypeR")
+BiocManager::install("montilab/hypeR", version='devel')
 ```
 
 ## Usage
