@@ -5,7 +5,8 @@
 \title{Plot top enriched genesets}
 \usage{
 .dots_plot(hyp_df, top = 20, abrv = 50, sizes = TRUE,
-  val = c("fdr", "pval"), title = "")
+  pval_cutoff = 1, fdr_cutoff = 1, val = c("fdr", "pval"),
+  title = "")
 }
 \arguments{
 \item{hyp_df}{A dataframe from a hyp object}
@@ -15,6 +16,10 @@
 \item{abrv}{Abbreviation length of genesetlabels}
 
 \item{sizes}{Size dots by geneset sizes}
+
+\item{pval_cutoff}{Filter results to be less than pval cutoff}
+
+\item{fdr_cutoff}{Filter results to be less than fdr cutoff}
 
 \item{val}{Choose significance value e.g. c("fdr", "pval")}
 

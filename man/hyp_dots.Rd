@@ -4,8 +4,9 @@
 \alias{hyp_dots}
 \title{Visualize hyp/multihyp objects as a dots plot}
 \usage{
-hyp_dots(hyp_obj, top = 20, abrv = 50, sizes = TRUE, val = c("fdr",
-  "pval"), title = "", multihyp_titles = TRUE, show_plots = TRUE,
+hyp_dots(hyp_obj, top = 20, abrv = 50, sizes = TRUE,
+  pval_cutoff = 1, fdr_cutoff = 1, val = c("fdr", "pval"),
+  title = "", multihyp_titles = TRUE, show_plots = TRUE,
   return_plots = FALSE)
 }
 \arguments{
@@ -16,6 +17,10 @@ hyp_dots(hyp_obj, top = 20, abrv = 50, sizes = TRUE, val = c("fdr",
 \item{abrv}{Abbreviation length of geneset labels}
 
 \item{sizes}{Size dots by geneset sizes}
+
+\item{pval_cutoff}{Filter results to be less than pval cutoff}
+
+\item{fdr_cutoff}{Filter results to be less than fdr cutoff}
 
 \item{val}{Choose significance value e.g. c("fdr", "pval")}
 
