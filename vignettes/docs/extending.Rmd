@@ -14,6 +14,10 @@ library(fgsea)
 devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
 ```
 
+hypeR is an R package focused on the downstream analysis of geneset enrichment workflows. Because there are many upstream tools for performing enrichment, users may opt for those while also planning to use the visualization, summarization, and reporting features offered by hypeR. This task is straightforward given the object oriented nature of hypeR.
+
+In this example, we will perform enrichment on a differential expression signature using **fgsea**, a popular R package for Fast Gene Set Enrichment Analysis, and coerce the results into a `hyp` object, compatible with all hypeR methods.
+
 ### Load packages
 ```{r, eval=FALSE}
 
@@ -167,6 +171,6 @@ hyp_to_excel(hyp_obj, file_path="fsgea.xlsx")
 
 ```{r, eval=FALSE}
 
-hyp_to_rmd(hyp_obj, show_hmaps=TRUE)
+hyp_to_rmd(hyp_obj, file_path="fgsea.Rmd")
 
 ```

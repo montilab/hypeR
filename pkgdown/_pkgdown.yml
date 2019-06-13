@@ -61,6 +61,10 @@ navbar:
         href: articles/docs/multihyp.html
       - text: "Generating Reports"
         href: articles/docs/reporting.html
+      - text: "Shiny Applications"
+        href: articles/docs/shiny.html
+      - text: "Extending hypeR"
+        href: articles/docs/extending.html
     - text: "Reference"
       href: reference/index.html
   right:

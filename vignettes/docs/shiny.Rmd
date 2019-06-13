@@ -1,0 +1,24 @@
+---
+title: "Using hypeR in Shiny Applications"
+vignette: >
+  %\VignetteIndexEntry{Visualize Results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
+```
+
+### Example Application
+
+All hypeR methods are compatible with R Shiny and can be incorporated into a variety of applications. For users looking to adopt hypeR in their own projects, we have created an example project using various hypeR methods in Shiny.
+
+#### Live Demo
+https://anfederico.shinyapps.io/hypeR-shiny
+
+#### Open Source
+https://github.com/montilab/hypeR-shiny
+
+#### Help Requests
+If you are looking to use hypeR in your own applications and need help or have questions on the implementation, please feel free to reach out to us!
