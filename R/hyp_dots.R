@@ -66,7 +66,7 @@
     ggplot(df, aes(x=label.abrv, y=significance, color=significance, size=log10(size))) +
     geom_point() +
     labs(title=title, y=ifelse(val == "pval", "-log(P-Value)", "-log(FDR)")) +  
-    scale_color_continuous(low="blue", high="red", guide=guide_colorbar(reverse=TRUE)) +
+    scale_color_continuous(low="#E53935", high="#114357", guide=guide_colorbar(reverse=TRUE)) +
     coord_flip() +
     scale_y_continuous(trans=.reverselog_trans(10)) +
     geom_hline(yintercept=-log10(0.05), linetype="dotted") +
