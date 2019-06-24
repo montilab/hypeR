@@ -1,3 +1,16 @@
+#' Custom reverse log transformation of continous ggplot axes
+#'
+#' @param base Logarithm base
+#' @importFrom scales trans_new log_breaks
+#' @keywords internal
+.reverselog_trans <- function(base=exp(1)) {
+    trans <- function(x) -log(x, base)
+    inv <- function(x) base^(-x)
+    scales::trans_new(paste0("reverselog-", format(base)), trans, inv, 
+              scales::log_breaks(base=base), 
+              domain = c(1e-100, Inf))
+}
+
 #' Plot top enriched genesets
 #'
 #' @param hyp_df A dataframe from a hyp object
@@ -12,7 +25,7 @@
 #'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
-#' @importFrom ggplot2 ggplot aes geom_point labs scale_color_continuous guide_colorbar coord_flip geom_hline guides theme element_text element_blank
+#' @importFrom ggplot2 ggplot aes geom_point labs scale_color_continuous scale_y_continuous guide_colorbar coord_flip geom_hline guides theme element_text element_blank
 #' @keywords internal
 .dots_plot <- function(hyp_df,
                        top=20,
@@ -36,23 +49,30 @@
     if (nrow(df) == 0) return(ggempty())
 
     # Plotting variables
-    df$color <- df[,val]
+    df$significance <- df[,val]
     df$size <- if(sizes) df$gset.size else 1
 
     # Order by significance value
     df <- df[order(-df[,val]),]
-    df$label.abrv <- substr(df$label, 1, abrv)
-    df$label.abrv <- factor(df$label.abrv, levels=df$label.abrv)
+    
+    # Abbreviate labels
+    label.abrv <- substr(df$label, 1, abrv)
+    if (any(duplicated(label.abrv))) {
+        stop("Non-unique labels after abbreviating")
+    } else {
+        df$label.abrv <- factor(label.abrv, levels=label.abrv)   
+    }
 
-    ggplot(df, aes(x=label.abrv, y=-log10(color), color=color, size=log10(size))) +
+    ggplot(df, aes(x=label.abrv, y=significance, color=significance, size=log10(size))) +
     geom_point() +
     labs(title=title, y=ifelse(val == "pval", "-log(P-Value)", "-log(FDR)")) +  
     scale_color_continuous(low="blue", high="red", guide=guide_colorbar(reverse=TRUE)) +
     coord_flip() +
+    scale_y_continuous(trans=.reverselog_trans(10)) +
     geom_hline(yintercept=-log10(0.05), linetype="dotted") +
     guides(size=FALSE) + 
     theme(plot.title=element_text(hjust=0.5),
-          axis.title.y = element_blank())
+          axis.title.y=element_blank())
 }
 
 #'  Visualize hyp/multihyp objects as a dots plot

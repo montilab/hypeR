@@ -21,6 +21,7 @@ Imports:
     dplyr,
     purrr,
     stats,
+    scales,
     rlang,
     openxlsx,
     msigdbr,
