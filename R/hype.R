@@ -69,7 +69,11 @@ hypeR <- function(signature,
         gsets <- lapply(gsets, function(x) intersect(x, bg))
         bg <- length(bg)
     }
-    
+
+    if (length(intersect(signature, unique(unlist(gsets)))) < 1) {
+        warning("No overlap between signature and gset members")
+    }
+
     if (verbose) {
         cat("Signature size: ", length(signature), "\n")
         cat("Number of genesets: ", length(gsets), "\n")
