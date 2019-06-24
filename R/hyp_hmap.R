@@ -73,7 +73,7 @@
     visNodes(borderWidth=3, borderWidthSelected=0) %>%
     visEdges(arrows='to', selectionWidth=0) %>%
     visInteraction(multiselect=TRUE, tooltipDelay=300) %>%
-    visOptions(highlightNearest=TRUE, collapse=list(enabled=TRUE, clusterOptions=list(color.border="black")))
+    visOptions(highlightNearest=TRUE, collapse=list(enabled=TRUE, clusterOptions=list(color="rgba(199,0,57,1.0)")))
 }
 
 #' Visualize hyp/multihyp objects as a hiearchy map
