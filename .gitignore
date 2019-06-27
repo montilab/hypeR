@@ -1,4 +1,5 @@
 # Devolpment scripts
+/data-raw/*.txt
 /dev/
 /art/
 /docs/
