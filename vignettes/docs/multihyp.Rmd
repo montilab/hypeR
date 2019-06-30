@@ -8,16 +8,18 @@ vignette: >
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
-devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+devtools::load_all(".")
 ```
 
 ### Multiple signatures
 Other times we're looking at multiple signatures that may have been defined in a single experiment. In this case, we can feed `hypeR()` a named list of signatures and a `multihyp` object will be returned. This object is essentially just multiple `hyp` objects. However it is recognized and handled differently by downstream methods.
 ```{r}
 
-data(hypdat)
+hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
+
 wgcna <- hypdat$wgcna
-gsets <- hypdat$gsets
+rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
+gsets <- rgsets$gsets
 
 ```
 

@@ -11,7 +11,7 @@ knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FA
 library(dplyr)
 library(magrittr)
 library(fgsea)
-devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+devtools::load_all(".")
 ```
 
 hypeR is an R package focused on the downstream analysis of geneset enrichment workflows. Because there are many upstream tools for performing enrichment, users may opt for those while also planning to use the visualization, summarization, and reporting features offered by hypeR. This task is straightforward given the object oriented nature of hypeR.
@@ -30,7 +30,7 @@ library(hypeR)
 
 ### Signature
 ```{r}
-data(hypdat)
+hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
 
 # Differential expression results
 df <- hypdat$limma
@@ -55,7 +55,7 @@ head(signature)
 ### Relational genesets
 ```{r}
 
-rgsets <- hypdat$rgsets
+rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
 
 ```
 

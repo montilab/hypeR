@@ -91,7 +91,7 @@
 #' @return A ggplot object
 #'
 #' @examples
-#' gsets <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))$gsets
+#' gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
 #'
 #' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",

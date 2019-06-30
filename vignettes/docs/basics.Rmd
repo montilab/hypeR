@@ -10,7 +10,7 @@ vignette: >
 knitr::opts_chunk$set(comment="#>", cache=FALSE)
 library(dplyr)
 library(magrittr)
-devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+devtools::load_all(".")
 ```
 
 ### Terminology
@@ -44,21 +44,19 @@ genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
 In these tutorials, we will use example data. The example data includes an expression set object as well as pre-computed results from common workflows such as diffential expression and weighted gene co-expression analyses. 
 ```{r}
 
-data(hypdat)
+hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
 
 ```
 
 #### Defining Signatures and Genesets
-Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import genesets from [REACTOME](https://reactome.org/).
+Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import genesets from [KEGG](https://www.kegg.jp).
 ```{r}
 
 limma <- hypdat$limma
-
 signature <- limma %>% filter(t > 0 & fdr < 0.001) %>% use_series(symbol)
-
 ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
 
-gsets <- hypdat$gsets
+gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
 
 ```
 

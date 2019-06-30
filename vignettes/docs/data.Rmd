@@ -8,7 +8,7 @@ vignette: >
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(comment="#>", cache=FALSE)
-devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+devtools::load_all(".")
 ```
 
 ### Downloading genesets from msigdb
@@ -76,13 +76,20 @@ If msigdb genesets are not sufficient, we have also provided another set of func
 #### Downloading and loading genesets
 ```{r, eval=FALSE}
 
-gsets <- hyperdb_fetch("Cancer_Cell_Line_Encyclopedia")
+gsets <- hyperdb_fetch(type="gsets", "Cancer_Cell_Line_Encyclopedia")
 
 ```
 
 #### Available genesets
 ```{r}
 
-hyperdb_info(quiet=TRUE)[1:15]
+hyperdb_info(type="gsets", quiet=TRUE)[1:15]
+
+```
+
+#### Available relational genesets
+```{r}
+
+hyperdb_info(type="rgsets", quiet=TRUE)
 
 ```

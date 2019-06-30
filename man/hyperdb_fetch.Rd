@@ -4,10 +4,12 @@
 \alias{hyperdb_fetch}
 \title{Fetch gsets from hypeR-db}
 \usage{
-hyperdb_fetch(gset)
+hyperdb_fetch(type = c("gsets", "rgsets"), gset)
 }
 \arguments{
-\item{gset}{A name corresponding to an available gene set}
+\item{type}{Select the type of geneset desired e.g. c("gsets", "rgsets")}
+
+\item{gset}{A name corresponding to an available geneset}
 }
 \value{
 A list of gene sets
@@ -16,6 +18,7 @@ A list of gene sets
 Fetch gsets from hypeR-db
 }
 \examples{
-gsets <- hyperdb_fetch("Cancer_Cell_Line_Encyclopedia")
+gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
+rgsets <- hyperdb_fetch(type="rgsets", "KEGG")
 
 }

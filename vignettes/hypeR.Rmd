@@ -23,32 +23,302 @@ editor_options:
 
 ```{r include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(message=FALSE, fig.width=6.75)
-devtools::load_all("/Users/anthonyfederico/GitHub/hypeR")
+devtools::load_all(".")
+library(dplyr)
+library(magrittr)
 ```
 
 # Introduction
-Geneset enrichment is an important step in many biological data analysis workflows, particularly in bioinformatics and computational biology. At a basic level, one is testing if a group of genes is overrepresented in a series of pre-defined sets of genes, which typically signify some biological relevance. The R package hypeR enables users to easily perform this type of analysis via a hypergeometric test with a focus on easing downstream visualization, analysis, and reporting. Additionally, users can use custom genesets that are easily defined, extending the analysis of genes to other areas of interest such as proteins, microbes, metabolites etc. The hypeR package is designed to make routine geneset enrichment seamless for scientist working in R. 
+Geneset enrichment is an important step in biological data analysis workflows, particularly in bioinformatics and computational biology. At a basic level, one is performing a hypergeometric or Kol-mogorov–Smirnov test to determine if a group of genes is over-represented or enriched, respectively, in pre-defined sets of genes, which suggests some biological relevance. The R package hypeR brings a fresh take to geneset enrichment, focusing on the analysis, visualization, and reporting of enriched genesets. While similar tools exists - such as Enrichr (Kuleshov et al., 2016), fgsea (Sergushichev, 2016), and clusterProfiler (Wang et al., 2012), among others - hypeR excels in the downstream analysis of gene-set enrichment workflows – in addition to sometimes overlooked upstream analysis methods such as allowing for a flexible back-ground population size or reducing genesets to a background distribution of genes. Finding relevant biological meaning from a large number of often obscurely labeled genesets may be challenging for researchers. hypeR overcomes this barrier by incorporating hierarchical ontologies - also referred to as relational genesets - into its workflows, allowing researchers to visualize and summarize their data at varying levels of biological resolution. All analysis methods are compatible with hypeR’s markdown features, enabling concise and reproducible reports easily shareable with collaborators. Additionally, users can import custom genesets that are easily defined, extending the analysis of genes to other areas of interest such as proteins, microbes, metabolites, etc. The hypeR package goes beyond performing basic enrichment, by providing a suite of methods designed to make routine geneset enrichment seamless for scientists working in R.
 
 # Installation
 Download the package from Bioconductor.
 ```{r get_package, eval=FALSE}
-
 if (!requireNamespace("BiocManager", quietly = TRUE))
 install.packages("BiocManager")
 BiocManager::install("hypeR")
+```
 
+Install the development version of the package from Github.
+```{r, eval=FALSE}
+devtools::install_github("montilab/hypeR")
 ```
 
 Or install the development version of the package from Bioconductor.
 ```{r, eval=FALSE}
+BiocManager::install("montilab/hypeR", version='devel')
+```
 
-BiocManager::install("montilab/hypeR")
+# Basics
+
+## Terminology
+
+### Signature
+__hypeR__ employs multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea). Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR()` expects.
+```{r}
+
+# Simply a character vector of symbols (hypergeometric)
+signature <- c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked character vector of symbols (kstest)
+ranked.signature <-  c("GENE1", "GENE2", "GENE3")
+
+# A pre-ranked named numerical vector of symbols with ranking weights (gsea)
+weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 
 ```
 
-Load the package into an R session.
+### Geneset
+A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined. In our tutorials, we will use genesets from [REACTOME](https://reactome.org/). There is also what is called relational genesets, whereby genesets are organized into a hiearchy; we will explore these in later tutorials. 
+```{r}
+
+genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
+                 "GSET2" = c("GENE4", "GENE5", "GENE6"),
+                 "GSET3" = c("GENE7", "GENE8", "GENE9"))
+
+```
+
+## Example Data
+In these tutorials, we will use example data. The example data includes an expression set object as well as pre-computed results from common workflows such as diffential expression and weighted gene co-expression analyses. 
+```{r}
+
+hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
+
+```
+
+### Defining Signatures and Genesets
+Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import genesets from [KEGG](https://www.kegg.jp).
+```{r}
+
+limma <- hypdat$limma
+signature <- limma %>% filter(t > 0 & fdr < 0.001) %>% use_series(symbol)
+ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
+
+gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
+
+```
+
+## Basic Usage
+All workflows begin with performing hyper enrichment with `hypeR()`. Often we're just interested in a single signature, as described above. In this case, `hypeR()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+
+### Overrepresentation analysis
+```{r}
+
+hyp_obj <- hypeR(signature, gsets, test="hypergeometric", bg=50000, fdr_cutoff=0.01, do_plots=TRUE)
+
+```
+
+```{r}
+
+print(hyp_obj)
+hyp_df <- hyp_obj$as.data.frame()
+print(head(hyp_df[,1:3]), row.names=FALSE)
+hyp_obj$plots[[1]]
+
+```
+
+### Enrichment analysis
+```{r}
+
+hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01, do_plots=TRUE)
+
+```
+
+```{r}
+
+print(hyp_obj)
+hyp_df <- hyp_obj$as.data.frame()
+print(head(hyp_df[,1:3]), row.names=FALSE)
+hyp_obj$plots[[1]]
+
+```
+
+### Save results to excel
 ```{r, eval=FALSE}
 
-library(hypeR)
+hyp_to_excel(hyp_obj, file_path="hyper.xlsx")
 
 ```
+
+### Save results to table
+```{r, eval=FALSE}
+
+hyp_to_table(hyp_obj, file_path="hyper.txt")
+
+```
+
+# Downloading Data
+
+## Downloading genesets from msigdb
+For most purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with __hypeR__.
+
+### Available genesets
+```{r}
+
+msigdb_info()
+
+```
+
+### Downloading and loading genesets
+Use `msigdb_download_one()` to download a single geneset into memory.
+```{r}
+
+HALLMARK <- msigdb_download_one(species="Homo sapiens", category="H")
+
+```
+
+```{r}
+
+head(names(HALLMARK))
+head(HALLMARK[[1]])
+
+```
+
+Use `msigdb_download_all()` to retrieve all genesets for a given species. By default, genesets are cached in a temporary directory, therefore a path object is returned. Use the path object with `msigdb_fetch()` to load genesets into memory. Users can also specify a directory to download to for repeated use.
+```{r}
+
+msigdb_path <- msigdb_download_all(species="Homo sapiens")
+
+BIOCARTA <- msigdb_fetch(msigdb_path, "C2.CP.BIOCARTA")
+KEGG     <- msigdb_fetch(msigdb_path, "C2.CP.KEGG")
+REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
+
+```
+
+In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of vectors, therefore, one can use any custom genesets in their analysis, as long as it's appropriately defined.
+```{r}
+
+gsets <- c(BIOCARTA, KEGG, REACTOME)
+
+```
+
+## Defining custom genesets
+As mentioned previously, one can use custom genesets with __hypeR__. In this example, we download one of the many publicly available genesets hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/). Once downloaded, one performs enrichment as normal.
+```{r, eval=FALSE}
+
+url = "http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Cancer_Cell_Line_Encyclopedia"
+r <- httr::GET(url)
+text <- httr::content(r, "text", encoding="ISO-8859-1")
+text.split <- strsplit(text, "\n")[[1]]
+gsets <- sapply(text.split, function(x) {
+    genes <- strsplit(x, "\t")[[1]]
+    return(genes[3:length(genes)])
+})
+names(gsets) <- unlist(lapply(text.split, function(x) strsplit(x, "\t")[[1]][1]))
+
+```
+
+## Downloading genesets from hyperdb
+If msigdb genesets are not sufficient, we have also provided another set of functions for downloading and loading other open source genesets. Essentially, we wrap the method used in the example defining custom genesets. This is facilitated by interfacing with the publicly available [libraries](https://amp.pharm.mssm.edu/Enrichr/#stats) hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/).
+
+#### Downloading and loading genesets
+```{r, eval=FALSE}
+
+gsets <- hyperdb_fetch(type="gsets", "Cancer_Cell_Line_Encyclopedia")
+
+```
+
+#### Available genesets
+```{r}
+
+hyperdb_info(type="gsets", quiet=TRUE)[1:15]
+
+```
+
+#### Available relational genesets
+```{r}
+
+hyperdb_info(type="rgsets", quiet=TRUE)
+
+```
+
+# Visualize Results
+
+## Example Data
+```{r}
+
+limma <- hypdat$limma
+ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
+
+rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
+gsets <- rgsets$gsets
+
+```
+
+## Hyper enrichment
+All workflows begin with performing hyper enrichment with `hypeR()`.
+```{r}
+
+hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01)
+
+```
+
+## Dots plot
+One can visualize the top enriched genesets using `hyp_dots()` which returns a horizontal dots plot. Each dot is a geneset, where the color represents the significance and the size signifies the geneset size.
+```{r, fig.height=5}
+
+hyp_dots(hyp_obj, show_plots=FALSE, return_plots=TRUE)
+
+```
+
+## Enrichment map
+One can visualize the top enriched genesets using `hyp_emap()` which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
+```{r, fig.height=7}
+
+hyp_emap(hyp_obj, similarity_cutoff=0.8, show_plots=FALSE, return_plots=TRUE)
+
+```
+
+## Hiearchy map
+
+### Relational genesets
+When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`.
+```{r}
+
+rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
+
+```
+
+Relational genesets have three data atrributes including gsets, nodes, and edges. The `gsets` attribute includes the geneset information for the leaf nodes of the hiearchy, the `nodes` attribute describes all nodes in the hiearchical, including internal nodes, and the `edges` attribute describes the edges in the hiearchy.
+
+#### $gsets
+```{r}
+
+gsets <- rgsets$gsets
+names(gsets)[800:805]
+
+```
+
+#### $nodes
+```{r}
+
+nodes <- rgsets$nodes
+nodes[1123:1128,]
+
+```
+
+#### $edges
+```{r}
+
+edges <- rgsets$edges
+edges[1994:1999,]
+
+```
+
+All workflows begin with performing hyper enrichment with `hypeR()`.
+```{r}
+
+hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", fdr_cutoff=0.01)
+
+```
+
+## Hierarchy map
+One can visualize the top enriched genesets using `hyp_hmap()` which will return a hiearchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy.
+```{r, fig.height=7}
+
+hyp_hmap(hyp_obj, top=30, show_plots=FALSE, return_plots=TRUE)
+
+```
+
+# More Examples
+For more examples, tutorials, and extensive documentation, visit the official documentation page at https://montilab.github.io/hypeR-docs.

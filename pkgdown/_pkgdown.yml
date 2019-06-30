@@ -57,6 +57,8 @@ navbar:
         href: articles/docs/data.html
       - text: "Visualize Results"
         href: articles/docs/visualize.html
+      - text: "Constructing Relational Genesets"
+        href: articles/docs/rgsets.html
       - text: "Multiple Signatures"
         href: articles/docs/multihyp.html
       - text: "Generating Reports"

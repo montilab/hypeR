@@ -4,9 +4,11 @@
 \alias{hyperdb_info}
 \title{Print hypeR-db gsets}
 \usage{
-hyperdb_info(quiet = FALSE)
+hyperdb_info(type = c("gsets", "rgsets"), quiet = FALSE)
 }
 \arguments{
+\item{type}{Select the type of geneset desired e.g. c("gsets", "rgsets")}
+
 \item{quiet}{Use true to suppress printing of available genesets}
 }
 \value{
@@ -16,6 +18,7 @@ A character vector of available genesets
 Print hypeR-db gsets
 }
 \examples{
-hyperdb_info()
+available <- hyperdb_info(type="gsets", quiet=TRUE)
+available <- hyperdb_info(type="rgsets", quiet=TRUE)
 
 }
