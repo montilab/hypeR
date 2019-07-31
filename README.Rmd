@@ -15,26 +15,48 @@ devtools::load_all(".")
 [![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
 [![](https://img.shields.io/badge/lifecycle-maturing-4ba598.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![](https://bioconductor.org/shields/build/devel/bioc/hypeR.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/hypeR/)
-[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master) 
+[![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master)
 
 ## Documentation
 
-Please visit https://montilab.github.io/hypeR-docs/
+Please visit <https://montilab.github.io/hypeR-docs/>
+
+## Requirements
+
+__hypeR__ currently requires the latest version of R (>= 3.6.0) to be installed directly from Github or Bioconductor. To install with R (>= 3.5.0) see below. Use with R (< 3.5.0) is not recommended.
 
 ## Installation
 
 Install the development version of the package from Github.
-```{r, eval=FALSE}
 
+``` r
 devtools::install_github("montilab/hypeR")
-
 ```
 
 Or install the development version of the package from Bioconductor.
-```{r, eval=FALSE}
 
-BiocManager::install("montilab/hypeR", version="devel")
+``` r
+BiocManager::install("montilab/hypeR", version='devel')
+```
 
+ Or install with  Conda.
+```bash
+conda create --name hyper
+source activate hyper
+conda install -c r r-devtools
+R
+library(devtools)
+devtools::install_github("montilab/hypeR")
+```
+
+Install with previous versions of R.
+```bash
+git clone https://github.com/montilab/hypeR
+nano hypeR/DESCRIPTION
+# Change Line 8
+# Depends: R (>= 3.6.0) -> Depends: R (>= 3.5.0)
+R
+install.packages("path/to/hypeR", repos=NULL, type="source")
 ```
 
 ## Usage
@@ -132,3 +154,12 @@ hyp_to_rmd(lmultihyp_obj,
            show_tables=T)
 
 ```
+
+## Related Repositories
+
+- [hypeR-db](https://github.com/montilab/hypeR-db)
+*A repository for commonly used open source genesets used by hypeR*
+- [hypeR-shiny](https://github.com/montilab/hypeR-shiny)
+*An example shiny application using hypeR*
+- [hypeR-docs](https://github.com/montilab/hypeR-docs)
+*Landing site for hosting documentation for hypeR*

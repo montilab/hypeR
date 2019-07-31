@@ -1,5 +1,4 @@
 
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # hypeR
@@ -16,7 +15,9 @@ Please visit <https://montilab.github.io/hypeR-docs/>
 
 ## Requirements
 
-hypeR currently requires the latest version of R (>= 3.6.0) to be installed directly from Github or Bioconductor. To install with R (>= 3.5.0) see below. Use with R (< 3.5.0) is not recommended.
+**hypeR** currently requires the latest version of R (\>= 3.6.0) to be
+installed directly from Github or Bioconductor. To install with R (\>=
+3.5.0) see below. Use with R (\< 3.5.0) is not recommended.
 
 ## Installation
 
@@ -32,8 +33,9 @@ Or install the development version of the package from Bioconductor.
 BiocManager::install("montilab/hypeR", version='devel')
 ```
 
- Or install with  Conda.
-```bash
+Or install with Conda.
+
+``` bash
 conda create --name hyper
 source activate hyper
 conda install -c r r-devtools
@@ -43,7 +45,8 @@ devtools::install_github("montilab/hypeR")
 ```
 
 Install with previous versions of R.
-```bash
+
+``` bash
 git clone https://github.com/montilab/hypeR
 nano hypeR/DESCRIPTION
 # Change Line 8
@@ -63,7 +66,7 @@ library(hypeR)
 ### Signature
 
 **hypeR** employs multiple types of enrichment analyses
-(e.g. hypergeometric, kstest, gsea). Depending on the type, different
+(e.g. hypergeometric, kstest, gsea). Depending on the type, different
 kinds of signatures are expected. There are three types of signatures
 `hypeR()` expects.
 
@@ -153,3 +156,12 @@ hyp_to_rmd(lmultihyp_obj,
            show_hmaps=T,
            show_tables=T)
 ```
+
+## Related Repositories
+
+  - [hypeR-db](https://github.com/montilab/hypeR-db) *A repository for
+    commonly used open source genesets used by hypeR*
+  - [hypeR-shiny](https://github.com/montilab/hypeR-shiny) *An example
+    shiny application using hypeR*
+  - [hypeR-docs](https://github.com/montilab/hypeR-docs) *Landing site
+    for hosting documentation for hypeR*
