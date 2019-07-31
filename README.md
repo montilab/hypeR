@@ -165,3 +165,5 @@ hyp_to_rmd(lmultihyp_obj,
     shiny application using hypeR*
   - [hypeR-docs](https://github.com/montilab/hypeR-docs) *Landing site
     for hosting documentation for hypeR*
+  - [hypeR-workshop](https://github.com/montilab/hypeR-workshop)
+    *Materials for a hypeR tutorial workshop*
