@@ -151,7 +151,7 @@ hyp_to_rmd(lmultihyp_obj,
            title="Hyper Enrichment (hypeR)",
            subtitle="YAP, TNF, and TAZ Knockout Experiments",
            author="Anthony Federico, Stefano Monti",
-           show_plots=T,
+           show_dots=T,
            show_emaps=T,
            show_hmaps=T,
            show_tables=T)
