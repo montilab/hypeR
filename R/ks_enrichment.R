@@ -104,6 +104,9 @@
     if (!is(gsets, "list")) stop("Error: Expected gsets to be a list of gene sets\n")
     if (!is.null(weights)) stopifnot(length(signature) == length(weights))
     
+    signature <- unique(signature)
+    gsets <- lapply(gsets, unique)
+
     results <- lapply(seq_len(length(gsets)), function(i) {
                     
                     # Calculate ranks

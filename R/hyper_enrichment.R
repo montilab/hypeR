@@ -16,6 +16,9 @@
     if (!is(signature, "vector")) stop("Error: Expected signature to be a vector of symbols\n")
     if (!is(gsets, "list")) stop("Error: Expected gsets to be a list of gene sets\n")
     
+    signature <- unique(signature)
+    gsets <- lapply(gsets, unique)
+    
     signature.found <- signature[signature %in% unique(unlist(gsets))]
 
     n.hits <- sapply(gsets, function(x, y) length(intersect(x, y)), signature.found)
