@@ -70,10 +70,6 @@ hypeR <- function(signature,
         bg <- length(bg)
     }
 
-    if (length(intersect(signature, unique(unlist(gsets)))) < 1) {
-        warning("No overlap between signature and gset members")
-    }
-
     if (verbose) {
         cat("Signature size: ", length(signature), "\n")
         cat("Number of genesets: ", length(gsets), "\n")
@@ -88,6 +84,9 @@ hypeR <- function(signature,
 
     # Overrepresentation test
     if (test == "hypergeometric") {
+        if (length(intersect(signature, unique(unlist(gsets)))) < 1) {
+            warning("No overlap between signature and gset members")
+        }
         colnames(data) <- c("label", "pval", "fdr", "gset.size", "genes.overlap", "hits")
         results <- .hyper_enrichment(signature, gsets, bg, do_plots)
     }
@@ -101,8 +100,11 @@ hypeR <- function(signature,
         } else {
           weights <- NULL
         }
+        if (length(intersect(signature, unique(unlist(gsets)))) < 1) {
+            warning("No overlap between signature and gset members")
+        }
         colnames(data) <- c("label", "pval", "fdr", "gset.size", "genes.found", "score")
-        results <- .ks_enrichment(signature, gsets, weights, weights_pwr,absolute, do_plots)
+        results <- .ks_enrichment(signature, gsets, weights, weights_pwr, absolute, do_plots)
     }
 
     # If hits are found format dataframe
