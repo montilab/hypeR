@@ -7,7 +7,7 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
 devtools::load_all(".")
 ```
 
@@ -26,13 +26,12 @@ gsets <- rgsets$gsets
 ```{r}
 
 signatures <- wgcna[[1]] 
-head(names(signatures))
-head(signatures[[1]])
+str(signatures)
 
 ```
 
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with `hypeR()`.
+All workflows begin with performing enrichment with `hypeR()`.
 ```{r}
 
 multihyp_obj <- hypeR(signatures, gsets, test="hypergeometric", bg=50000, fdr_cutoff=0.01, do_plots=FALSE)

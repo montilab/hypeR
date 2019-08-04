@@ -7,12 +7,12 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(comment="#>", cache=FALSE)
+knitr::opts_chunk$set(comment="", cache=FALSE, fig.align="center")
 devtools::load_all(".")
 ```
 
 ### Downloading genesets from msigdb
-For most purposes, the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with __hypeR__.
+For most purposes, the genesets hosted by [The Molecular Signatures Database](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with __hypeR__.
 
 #### Available genesets
 ```{r}

@@ -5,7 +5,7 @@ Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu",
              role=c("aut","cre")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
              role=c("aut")))
-Description: Geneset enrichment analysis based on hyper-geometric test.
+Description: An R Package for Geneset Enrichment Workflows.
 Depends: R (>= 3.6.0)
 License: GPL-3 + file LICENSE
 URL: https://github.com/montilab/hypeR

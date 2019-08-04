@@ -7,31 +7,34 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(comment="#>", cache=FALSE)
-library(dplyr)
+knitr::opts_chunk$set(comment="", cache=FALSE, fig.align="center")
+library(tidyverse)
 library(magrittr)
+library(dplyr)
 devtools::load_all(".")
 ```
 
 ### Terminology
 
+All analyses with __hypeR__ must include one or more signatures and a list of genesets.
+
 #### Signature
-__hypeR__ employs multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea). Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR()` expects.
+There are multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea) one can perform. Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR()` expects.
 ```{r}
 
 # Simply a character vector of symbols (hypergeometric)
 signature <- c("GENE1", "GENE2", "GENE3")
 
-# A pre-ranked character vector of symbols (kstest)
+# A ranked character vector of symbols (kstest)
 ranked.signature <-  c("GENE1", "GENE2", "GENE3")
 
-# A pre-ranked named numerical vector of symbols with ranking weights (gsea)
+# A ranked named numerical vector of symbols with ranking weights (gsea)
 weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 
 ```
 
 #### Geneset
-A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined. In our tutorials, we will use genesets from [REACTOME](https://reactome.org/). There is also what is called relational genesets, whereby genesets are organized into a hiearchy; we will explore these in later tutorials. 
+A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined. There is also what is called relational genesets, whereby genesets are organized into a hiearchy. See [Relational Genesets](https://montilab.github.io/hypeR-docs/articles/docs/visualize.html) for more information.
 ```{r}
 
 genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
@@ -40,7 +43,7 @@ genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
 
 ```
 
-### Example Data
+### Example data
 In these tutorials, we will use example data. The example data includes an expression set object as well as pre-computed results from common workflows such as diffential expression and weighted gene co-expression analyses. 
 ```{r}
 
@@ -48,63 +51,124 @@ hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds
 
 ```
 
-#### Defining Signatures and Genesets
-Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest. We'll also import genesets from [KEGG](https://www.kegg.jp).
+Using a differential expression dataframe created with limma, we will extract a signature of upregulated genes for use with a hypergeometric test and rank genes descending by their differential expression level for use with a kstest.
+
 ```{r}
 
 limma <- hypdat$limma
-signature <- limma %>% filter(t > 0 & fdr < 0.001) %>% use_series(symbol)
-ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
+head(limma[,c("logFC", "t", "pval", "fdr")])
+
+```
+
+We'll also import the latest genesets from [Kyoto Encyclopedia of Genes and Genomes](https://www.kegg.jp) using another set of functions provided by __hypeR__ for downloading and loading hundreds of open source genesets. See [Downloading Data](https://montilab.github.io/hypeR-docs/articles/docs/data.html) for more information.
+
+```{r}
 
 gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
 
 ```
 
-### Basic Usage
-All workflows begin with performing hyper enrichment with `hypeR()`. Often we're just interested in a single signature, as described above. In this case, `hypeR()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
+### Usage
+All workflows begin with performing enrichment with `hypeR()`. Often we're just interested in a single signature, as described above. In this case, `hypeR()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
 
-#### Overrepresentation analysis
+#### Signature
+The most basic signature is an unranked vector of genes. This could be a differential expression signature, module of co-expressed genes, etc. As an example, we use the differential expression dataframe to filter genes that are upregulated (t > 0) and are sufficiently significant (fdr < 0.001), then extract the gene symbol column as a vector.
+
 ```{r}
 
-hyp_obj <- hypeR(signature, gsets, test="hypergeometric", bg=50000, fdr_cutoff=0.01, do_plots=TRUE)
+signature <- limma %>% filter(t > 0 & fdr < 0.001) %>% use_series(symbol)
 
 ```
 
+```{r}
+
+length(signature)
+head(signature)
+
+```
+
+```{r}
+
+hyp_obj <- hypeR(signature, gsets, test="hypergeometric", bg=50000, fdr_cutoff=0.01, do_plots=TRUE)
+hyp_obj$plots[[1]]
+
+```
+
+#### Ranked Signature
+Rather than setting a specific cutoff to define a differential expression signature, one could rank genes by their expression and provide the entire ranked vector as signature. From the differential expression dataframe, we order genes descending so upregulated genes are near the top, then extract the gene symbol column as a vector.
+
+```{r}
+
+ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
+
+```
+
+```{r}
+
+length(ranked.signature)
+head(ranked.signature)
+
+```
+
+```{r}
+
+hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.05, do_plots=TRUE)
+hyp_obj$plots[[1]]
+
+```
+
+#### Weighted Signature
+In addition to providing a ranked signature, one could also add weights by including the t-statistic of the differential expression. From the differential expression dataframe, we order genes descending so upregulated genes are near the top, then extract and deframe the gene symbol and t-statistic columns as a named vector of weights.
+
+```{r}
+
+weighted.signature <- limma %>% arrange(desc(t)) %>% select(symbol, t) %>% deframe()
+
+```
+
+```{r}
+
+length(weighted.signature)
+head(weighted.signature)
+
+```
+
+```{r}
+
+hyp_obj <- hypeR(weighted.signature, gsets, test="kstest", fdr_cutoff=0.05, do_plots=TRUE)
+hyp_obj$plots[[1]]
+
+```
+
+#### The `hyp` object
+A `hyp` object contains all information relevant to the enrichment analysis, including a dataframe of results, enrichment plots for each geneset tested, as well as the arguments used to perform the analysis. All downstream functions used for analysis, visualization, and reporting recognize `hyp` objects and utilize their data. Adopting an object oriented framework brings modularity to hypeR, enabling flexible workflows.
 ```{r}
 
 print(hyp_obj)
 hyp_df <- hyp_obj$as.data.frame()
 print(head(hyp_df[,1:3]), row.names=FALSE)
-hyp_obj$plots[[1]]
+names(hyp_obj$plots)[1:5]
 
 ```
 
-#### Enrichment analysis
-```{r}
-
-hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01, do_plots=TRUE)
-
-```
-
-```{r}
-
-print(hyp_obj)
-hyp_df <- hyp_obj$as.data.frame()
-print(head(hyp_df[,1:3]), row.names=FALSE)
-hyp_obj$plots[[1]]
-
-```
-
-#### Save results to excel
+#### The `hyp` methods
 ```{r, eval=FALSE}
 
-hyp_to_excel(hyp_obj, file_path="hyper.xlsx")
-
+# Show interactive table
+hyp_show(hyp_obj)
+# Plot dots plot
+hyp_dots(hyp_obj)
+# Plot enrichment map
+hyp_emap(hyp_obj)
+# Plot hiearchy map
+hyp_hmap(hyp_obj)
+# Save to excel
+hyp_to_excel(hyp_obj)
+# Save to table
+hyp_to_table(hyp_obj)
+# Generate markdown report
+hyp_to_rmd(hyp_obj)
+           
 ```
 
-#### Save results to table
-```{r, eval=FALSE}
-
-hyp_to_table(hyp_obj, file_path="hyper.txt")
-
-```
+Continue to [Visualize Results](https://montilab.github.io/hypeR-docs/articles/docs/visualize.html) to see these methods in action.

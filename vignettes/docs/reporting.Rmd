@@ -7,29 +7,32 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
 devtools::load_all(".")
 ```
 
 ### Multiple experiments
 Sometimes, we are generating reports for multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with collaborators.
 
-In the following example, we're interested in exploring the signatures from a weighted gene co-expression analysis (WGCNA) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. The `hyp_to_rmd()` will help us process this data in a concise and reproducible manner that is readily shareable.
+In the following example, we're interested in exploring the signatures from a [Weighted Gene Co-expression Analysis](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. The `hyp_to_rmd()` will help us process this data in a concise and reproducible manner that is readily shareable.
 ```{r}
 
 hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
 
 wgcna <- hypdat$wgcna
-names(wgcna)
-names(wgcna[["NON-CARC"]])
-names(wgcna[["CARCINOGEN"]])
-
 rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
 
 ```
 
+```{r}
+
+# A nested list of signatures
+str(wgcna)
+
+```
+
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with `hypeR()`.
+Because we have a nested list of signatures, we use `hyper()` with the `lapply` function. This results in a list of `multihyp` objects, which can be directly passed to `hyp_to_rmd()`.
 ```{r, eval=FALSE}
 
 lmultihyp_obj <- lapply(wgcna, hypeR, rgsets, test="hypergeometric", bg=50000, fdr_cutoff=0.01, do_plots=FALSE)
@@ -45,8 +48,8 @@ hyp_to_rmd(lmultihyp_obj,
            title="Hyper Enrichment (hypeR)",
            subtitle="Weighted Gene Co-expression Analysis",
            author="Anthony Federico, Stefano Monti",
-           show_dots=F,
-           show_emaps=F,
+           show_dots=T,
+           show_emaps=T,
            show_hmaps=T,
            show_tables=T)
 

@@ -7,13 +7,15 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
 library(dplyr)
 library(magrittr)
 devtools::load_all(".")
 ```
 
-### Example Data
+### Example data
+The example data includes a pre-computed diffential expression dataframe from limma. From the differential expression dataframe, we order genes descending so upregulated genes are near the top, then extract the gene symbol column as a vector. We also use relational genesets from [REACTOME](https://reactome.org/), a free, open-source, curated and peer-reviewed hierarchical pathway database, which is explained below.
+
 ```{r}
 
 hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
@@ -27,7 +29,7 @@ gsets <- rgsets$gsets
 ```
 
 ### Hyper enrichment
-All workflows begin with performing hyper enrichment with `hypeR()`.
+All workflows begin with performing enrichment with `hypeR()`.
 ```{r}
 
 hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01)
@@ -51,9 +53,10 @@ hyp_emap(hyp_obj, similarity_cutoff=0.8, show_plots=FALSE, return_plots=TRUE)
 ```
 
 ### Hiearchy map
+When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes.
 
 #### Relational genesets
-When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`.
+To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`.
 ```{r}
 
 rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
@@ -66,7 +69,7 @@ Relational genesets have three data atrributes including gsets, nodes, and edges
 ```{r}
 
 gsets <- rgsets$gsets
-names(gsets)[800:805]
+head(names(gsets))
 
 ```
 
@@ -74,7 +77,7 @@ names(gsets)[800:805]
 ```{r}
 
 nodes <- rgsets$nodes
-nodes[1123:1128,]
+head(nodes[, c("label"), drop=FALSE])
 
 ```
 
@@ -82,11 +85,11 @@ nodes[1123:1128,]
 ```{r}
 
 edges <- rgsets$edges
-edges[1994:1999,]
+head(edges)
 
 ```
 
-All workflows begin with performing hyper enrichment with `hypeR()`.
+All workflows begin with performing enrichment with `hypeR()`.
 ```{r}
 
 hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", fdr_cutoff=0.01)

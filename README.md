@@ -30,7 +30,7 @@ devtools::install_github("montilab/hypeR")
 Or install the development version of the package from Bioconductor.
 
 ``` r
-BiocManager::install("montilab/hypeR", version='devel')
+BiocManager::install("montilab/hypeR", version="devel")
 ```
 
 Or install with Conda.
@@ -44,7 +44,7 @@ library(devtools)
 devtools::install_github("montilab/hypeR")
 ```
 
-Install with previous versions of R.
+Or install with previous versions of R.
 
 ``` bash
 git clone https://github.com/montilab/hypeR
@@ -74,10 +74,10 @@ kinds of signatures are expected. There are three types of signatures
 # Simply a character vector of symbols (hypergeometric)
 signature <- c("GENE1", "GENE2", "GENE3")
 
-# A pre-ranked character vector of symbols (kstest)
+# A ranked character vector of symbols (kstest)
 ranked.signature <-  c("GENE1", "GENE2", "GENE3")
 
-# A pre-ranked named numerical vector of symbols with ranking weights (gsea)
+# A ranked named numerical vector of symbols with ranking weights (gsea)
 weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 ```
 

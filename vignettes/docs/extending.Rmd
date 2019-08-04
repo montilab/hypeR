@@ -7,14 +7,14 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(comment="#>", fig.align="center", fig.width=8.75, cache=FALSE)
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
 library(dplyr)
 library(magrittr)
 library(fgsea)
 devtools::load_all(".")
 ```
 
-hypeR is an R package focused on the downstream analysis of geneset enrichment workflows. Because there are many upstream tools for performing enrichment, users may opt for those while also planning to use the visualization, summarization, and reporting features offered by hypeR. This task is straightforward given the object oriented nature of hypeR.
+__hypeR__ is an R package focused on the downstream analysis of geneset enrichment workflows. Because there are many upstream tools for performing enrichment, users may opt for those while also planning to use the visualization, summarization, and reporting features offered by __hypeR__ This task is straightforward given the object oriented nature of __hypeR__
 
 In this example, we will perform enrichment on a differential expression signature using **fgsea**, a popular R package for Fast Gene Set Enrichment Analysis, and coerce the results into a `hyp` object, compatible with all hypeR methods.
 
@@ -29,22 +29,21 @@ library(hypeR)
 ```
 
 ### Signature
+Start with a differential expression dataframe.
 ```{r}
 hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
 
-# Differential expression results
 df <- hypdat$limma
 
 print(df[1:5,], row.names=FALSE)
+```
 
-# Rank genes by upregulation
-df.up <- df %>%
-         filter(t > 0 & fdr < 0.001) %>%
-         arrange(desc(t))
+Rank genes by upregulation and extract a weighted signature.
+```{r}
+df.up <- df %>% filter(t > 0 & fdr < 0.001) %>% arrange(desc(t))
 
 print(df.up[1:5,], row.names=FALSE)
 
-# Extract a weighted signature for upregulation
 signature <- df$t
 
 names(signature) <- df$symbol
@@ -60,6 +59,7 @@ rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
 ```
 
 ### Wrapping *fgsea* to return a `hyp` object
+To wrap third-party packages, we create modified version of the `hypeR()` function that calls external packages when performing the enrichment analysis, and then coerces the results into a `hyp` or `multihyp` object. We will wrap additional packages based on user demand.
 ```{r}
 
 fgsea_to_hyp <- function(signature,
@@ -127,12 +127,14 @@ fgsea_to_hyp <- function(signature,
     hyp_obj <- hyp$new(data=data, plots=plots, args=args)
     return(hyp_obj)
 }
+```
 
+```{r}
 hyp_obj <- fgsea_to_hyp(signature, rgsets)
-
 ```
 
 ### *hypeR* functionality
+The resulting `hyp` or `multihyp` objects are compatible with all __hypeR__ functionality.
 ```{r}
 
 print(hyp_obj)
