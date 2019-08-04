@@ -69,7 +69,7 @@
     scale_color_continuous(low="#E53935", high="#114357", guide=guide_colorbar(reverse=TRUE)) +
     coord_flip() +
     scale_y_continuous(trans=.reverselog_trans(10)) +
-    geom_hline(yintercept=-log10(0.05), linetype="dotted") +
+    geom_hline(yintercept=0.05, linetype="dotted") +
     guides(size=FALSE) + 
     theme(plot.title=element_text(hjust=0.5),
           axis.title.y=element_blank())
