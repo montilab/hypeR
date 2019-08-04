@@ -126,6 +126,7 @@ df
 #' @param custom_post_content Insert custom content after tabset section
 #' @return None
 #'
+#' @import kableExtra
 #' @importFrom rmarkdown render
 #' @importFrom magrittr %>%
 #' @export

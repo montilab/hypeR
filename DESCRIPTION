@@ -25,6 +25,7 @@ Imports:
     rlang,
     openxlsx,
     msigdbr,
+    kableExtra,
     rmarkdown,
     gh,
     igraph,
