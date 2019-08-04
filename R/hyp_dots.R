@@ -65,7 +65,7 @@
 
     ggplot(df, aes(x=label.abrv, y=significance, color=significance, size=log10(size))) +
     geom_point() +
-    labs(title=title, y=ifelse(val == "pval", "-log(P-Value)", "-log(FDR)")) +  
+    labs(title=title, y=ifelse(val == "pval", "P-Value", "FDR")) +  
     scale_color_continuous(low="#E53935", high="#114357", guide=guide_colorbar(reverse=TRUE)) +
     coord_flip() +
     scale_y_continuous(trans=.reverselog_trans(10)) +
