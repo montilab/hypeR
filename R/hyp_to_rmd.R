@@ -216,6 +216,9 @@ hyp_to_rmd <- function(hyp_obj,
     }
     # ----------------------
 
+    # Limit is 10,000 tabs
+    ids <- pvector$new(seq(10000))
+
     for (tabset in names(tabsets)) {
 
         # Tabset header and init code
@@ -227,7 +230,7 @@ hyp_to_rmd <- function(hyp_obj,
         tabs <- tabsets[[tabset]]
         for (tab in names(tabs)) {
 
-            tab_id <- sample(1:100000000000, 1)
+            tab_id <- ids$pop()
             
             dots_area <- ifelse(show_dots,  format_str(tab_dots, string_args(hyp_dots_args)), "")
             emap_area <- ifelse(show_emaps, format_str(tab_emap, string_args(hyp_emap_args)), "")
