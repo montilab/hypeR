@@ -7,6 +7,7 @@
 [![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
 [![](https://img.shields.io/badge/lifecycle-maturing-4ba598.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![](https://bioconductor.org/shields/build/devel/bioc/hypeR.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/hypeR/)
+[![](https://bioconductor.org/shields/years-in-bioc/hypeR.svg)](https://bioconductor.org/packages/devel/bioc/html/hypeR.html#since)
 [![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master)
 
 ## Documentation
