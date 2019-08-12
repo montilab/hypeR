@@ -54,3 +54,5 @@ hyp_to_rmd(lmultihyp_obj,
            show_tables=T)
 
 ```
+
+An example of these types of reports can be viewed at https://montilab.github.io/hypeR-reporting.

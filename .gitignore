@@ -1,4 +1,5 @@
 # Devolpment scripts
+/vignettes/examples/data
 /inst/data-raw/*.txt
 /dev/
 /art/

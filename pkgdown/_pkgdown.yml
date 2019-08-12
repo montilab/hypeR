@@ -11,7 +11,7 @@ authors:
   Anthony Federico:
     href: https://github.com/anfederico
   Stefano Monti:
-    href: https://github.com/montilab
+    href: https://github.com/tetomonti
 
 reference:
 - title: Workflow Methods
@@ -67,6 +67,10 @@ navbar:
         href: articles/docs/shiny.html
       - text: "Extending hypeR"
         href: articles/docs/extending.html
+    - text: "Examples"
+      menu:
+      - text: "Co-Expression Modules"
+        href: articles/examples/workflow.html
     - text: "Reference"
       href: reference/index.html
   right:
