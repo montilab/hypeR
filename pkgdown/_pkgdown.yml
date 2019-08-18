@@ -43,7 +43,7 @@ reference:
   - '`rgsets`'
 
 navbar:
-  title: "animalcules"
+  title: "hypeR"
   left:
     - text: "Home"
       href: index.html
