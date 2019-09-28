@@ -233,12 +233,12 @@ hyp_to_rmd <- function(hyp_obj,
             tab_id <- ids$pop()
             
             dots_area <- ifelse(show_dots,  format_str(tab_dots, string_args(hyp_dots_args)), "")
+            table_area <- ifelse(show_tables, tab_table, "")
             emap_area <- ifelse(show_emaps, format_str(tab_emap, string_args(hyp_emap_args)), "")
             hmap_area <- ifelse(show_hmaps, format_str(tab_hmap, string_args(hyp_hmap_args)), "")
-            table_area <- ifelse(show_tables, tab_table, "")
 
             rmd_tab %>%
-            format_str(tab, tab_id, tabset, dots_area, emap_area, hmap_area, table_area) %>%
+            format_str(tab, tab_id, tabset, dots_area, table_area, emap_area, hmap_area) %>%
             write(file=file_path, append=TRUE)
         }
     }
