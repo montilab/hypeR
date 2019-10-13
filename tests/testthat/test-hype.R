@@ -62,6 +62,41 @@ hypeR_tests <- function(test, signature, experiment, gsets, rgsets) {
     hyp_tests()
 }
 
+test_that("Hypergeometric is working", {
+    fisher <- function(s, g, bg) {
+        mat <- matrix(0, nrow=2, ncol=2)
+        mat[1,1] <- length(intersect(s, g))
+        mat[1,2] <- length(setdiff(s, g))
+        mat[2,1] <- length(setdiff(g, s))
+        mat[2,2] <- bg-sum(mat[1,1], mat[1,2], mat[2,1])
+        pval <- fisher.test(mat, alternative="greater")$p.value
+        signif(pval, 2)
+    }
+    
+    # The alphabet
+    bg <- LETTERS
+    
+    # A signature
+    s <- c("N", "Y", "D", "G", "A", "B", "K", "Z")
+    
+    # Genesets
+    gs <- list(G1 = c("N", "Y", "D", "G", "A", "B", "K", "Z", "M", "Q", "U"),
+               G2 = c("F", "A", "S", "X", "H", "Z", "L", "U", "V", "G", "K", "Y", "D", "M", "R"),
+               G3 = c("W", "M", "O", "P", "Q", "R"))
+    
+    # Hypergeometric
+    hyp <- hypeR(s, gs, bg=length(bg))
+    expect_equal(filter(hyp$data, label == "G1") %>% pull(pval), fisher(s, gs$G1, length(bg)))
+    expect_equal(filter(hyp$data, label == "G2") %>% pull(pval), fisher(s, gs$G2, length(bg)))
+    expect_equal(filter(hyp$data, label == "G3") %>% pull(pval), fisher(s, gs$G3, length(bg)))
+    
+    # Hypergeometric - Restrict Genesets to Background
+    hyp <- hypeR(s, gs, bg=bg[1:18])
+    expect_equal(filter(hyp$data, label == "G1") %>% pull(pval), fisher(s, intersect(gs$G1, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp$data, label == "G2") %>% pull(pval), fisher(s, intersect(gs$G2, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp$data, label == "G3") %>% pull(pval), fisher(s, intersect(gs$G3, bg[1:18]), length(bg[1:18])))
+})
+
 test_that("hypeR() is working", {
     # Testing data
     testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
