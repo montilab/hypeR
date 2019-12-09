@@ -14,7 +14,7 @@ Relational genesets
 \section{Arguments}{
 
 \describe{
-  \item{gsets}{A list of genesets where list names refers to geneset
+  \item{genesets}{A list of genesets where list names refers to geneset
   labels and values are geneset members represented as a vector}
   \item{nodes}{A data frame of labeled nodes e.g.
     \cr
@@ -33,6 +33,8 @@ Relational genesets
       G1 \tab G3 \tab\cr
     }
   }
+  \item{name}{A character vector describing source of genesets}
+  \item{version}{A character vector describing versioning}
 }
 }
 
@@ -53,7 +55,7 @@ on geneset labels
 
 \examples{
 testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-rgsets <- rgsets$new(gsets=testdat$gsets,
+rgsets <- rgsets$new(genesets=testdat$genesets,
                      nodes=testdat$nodes,
                      edges=testdat$edges)
 

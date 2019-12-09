@@ -30,9 +30,9 @@ multihyp <- R6Class("multihyp", list(
     self$data <- data
   },
   print = function(...) {
+    cat("(multihyp) \n")
     for (i in names(self$data)) {
-        cat("multihyp object: \n")
-        cat(i,  "\n")
+        cat("\n", i, "\n")
         print(self$data[[i]])
     }
     invisible(self)

@@ -9,87 +9,225 @@ vignette: >
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(comment="", cache=FALSE, fig.align="center")
 devtools::load_all(".")
+library(reactable)
+library(dplyr)
+library(qusage)
+library(igraph)
+library(magrittr)
 ```
 
-### Downloading genesets from msigdb
-For most purposes, the genesets hosted by [The Molecular Signatures Database](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species. Therefore, we have added convenient functions for retrieving msigdb data compatible with __hypeR__.
+# Object oriented genesets
 
-#### Available genesets
+Genesets are simply a named list of character vectors which can be directly passed to `hyper()`. Alternatively, one can pass a `gsets` object, which can retain the name and version of the genesets one uses. This versioning will be included when exporting results or generating reports, which will ensure your results are reproducible.
+
+```{r}
+
+genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
+                 "GSET2" = c("GENE4", "GENE6"),
+                 "GSET3" = c("GENE7", "GENE8", "GENE9"))
+
+```
+
+Creating a `gsets` object is easy...
+
+```{r}
+
+genesets <- gsets$new(genesets, name="Example Genesets", version="v1.0")
+print(genesets)
+
+```
+
+```{r eval=FALSE}
+
+hypeR(signature, genesets)
+
+```
+
+# Downloading genesets
+
+To aid in workflow efficiency, __hypeR__ enables users to download genesets, wrapped as `gsets` objects, from multiple data sources.
+
+## Downloading genesets from msigdb
+
+For most purposes, the genesets hosted by [The Molecular Signatures Database](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are more than adequate to perform geneset enrichment analysis. There are various types of genesets available across many species.
+
+### Available genesets
+
 ```{r}
 
 msigdb_info()
 
 ```
 
-#### Downloading and loading genesets
-Use `msigdb_download_one()` to download a single geneset into memory.
-```{r}
+### Downloading genesets
 
-HALLMARK <- msigdb_download_one(species="Homo sapiens", category="H")
-
-```
+Here we download the Hallmarks genesets.
 
 ```{r}
 
-head(names(HALLMARK))
-head(HALLMARK[[1]])
+HALLMARK <- msigdb_gsets(species="Homo sapiens", category="H")
+print(HALLMARK)
 
 ```
 
-Use `msigdb_download_all()` to retrieve all genesets for a given species. By default, genesets are cached in a temporary directory, therefore a path object is returned. Use the path object with `msigdb_fetch()` to load genesets into memory. Users can also specify a directory to download to for repeated use.
+This can be passed directly to `hypeR()`
+
+```{r eval=FALSE}
+
+hypeR(signature, genesets=HALLMARK)
+
+```
+
+Other commonly used genesets include Biocarta, Kegg, and Reactome. All of these objects can be passed directly to `hypeR()`.
+
 ```{r}
 
-msigdb_path <- msigdb_download_all(species="Homo sapiens")
-
-BIOCARTA <- msigdb_fetch(msigdb_path, "C2.CP.BIOCARTA")
-KEGG     <- msigdb_fetch(msigdb_path, "C2.CP.KEGG")
-REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
+BIOCARTA <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:BIOCARTA")
+KEGG     <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:KEGG")
+REACTOME <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:REACTOME")
 
 ```
 
-In this example, we are interested in all three of the following genesets, therefore we concatenate them. A geneset is simply a named list of vectors, therefore, one can use any custom genesets in their analysis, as long as it's appropriately defined.
+## Downloading genesets from enrichr
+
+If msigdb genesets are not sufficient, we have also provided another set of functions for downloading and loading other open source genesets. This is facilitated by interfacing with the publicly available [libraries](https://amp.pharm.mssm.edu/Enrichr/#stats) hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/).
+
+### Available genesets
+
 ```{r}
 
-gsets <- c(BIOCARTA, KEGG, REACTOME)
+available <- enrichr_available()
+reactable(available)
 
 ```
 
-### Defining custom genesets
-As mentioned previously, one can use custom genesets with __hypeR__. In this example, we download one of the many publicly available genesets hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/). Once downloaded, one performs enrichment as normal.
-```{r, eval=FALSE}
+### Downloading genesets
 
-url = "http://amp.pharm.mssm.edu/Enrichr/geneSetLibrary?mode=text&libraryName=Cancer_Cell_Line_Encyclopedia"
-r <- httr::GET(url)
-text <- httr::content(r, "text", encoding="ISO-8859-1")
-text.split <- strsplit(text, "\n")[[1]]
-gsets <- sapply(text.split, function(x) {
-    genes <- strsplit(x, "\t")[[1]]
-    return(genes[3:length(genes)])
-})
-names(gsets) <- unlist(lapply(text.split, function(x) strsplit(x, "\t")[[1]][1]))
-
-```
-
-### Downloading genesets from hyperdb
-If msigdb genesets are not sufficient, we have also provided another set of functions for downloading and loading other open source genesets. Essentially, we wrap the method used in the example defining custom genesets. This is facilitated by interfacing with the publicly available [libraries](https://amp.pharm.mssm.edu/Enrichr/#stats) hosted by [Enrichr](https://amp.pharm.mssm.edu/Enrichr/).
-
-#### Downloading and loading genesets
-```{r, eval=FALSE}
-
-gsets <- hyperdb_fetch(type="gsets", "Cancer_Cell_Line_Encyclopedia")
-
-```
-
-#### Available genesets
 ```{r}
 
-hyperdb_info(type="gsets", quiet=TRUE)[1:15]
+ATLAS <- enrichr_gsets("Human_Gene_Atlas")
+print(ATLAS)
 
 ```
 
-#### Available relational genesets
+Note these libraries do not have a systematic versioning scheme, however the data downloaded will be recorded.
+
+# Relational Genesets
+
+When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`.
+
+### Available genesets
+
+We currently curate some relational genesets for use with __hypeR_ and plan to add more continuously.
+
 ```{r}
 
-hyperdb_info(type="rgsets", quiet=TRUE)
+hyperdb_info()
 
+```
+
+### Downloading relational genesets
+
+```{r}
+
+REACTOME <- hyperdb_rgsets("REACTOME", "70.0")
+
+```
+
+This can be passed directly to `hypeR()`
+
+```{r eval=FALSE}
+
+hypeR(signature, genesets=REACTOME)
+
+```
+
+The only method which takes advantage of `rgsets` is `hyp_hmap()`, however all other functions will behave normally.
+
+### Creating relational genesets
+
+#### Data sources
+Raw data for gsets, nodes, and edges can be directly downloaded.
+```{r}
+
+# All data downloaded from https://reactome.org/download-data
+genesets.url <- "https://reactome.org/download/current/ReactomePathways.gmt.zip"
+nodes.url <- "https://reactome.org/download/current/ReactomePathways.txt"
+edges.url <- "https://reactome.org/download/current/ReactomePathwaysRelation.txt"
+
+```
+
+#### Loading data
+```{r message=FALSE}
+
+# Genesets
+genesets.tmp <- tempfile(fileext=".gmt.zip")
+download.file(genesets.url, destfile = genesets.tmp, mode = "wb")
+genesets.raw <- genesets.tmp %>%
+                unzip() %>%
+                read.gmt() %>%
+                lapply(function(x) {
+                    toupper(x[x != "Reactome Pathway"])
+                })
+# Nodes
+nodes.raw <- nodes.url %>%
+             read.delim(sep="\t", 
+                        header=FALSE, 
+                        fill=TRUE, 
+                        col.names=c("id", "label", "species"), 
+                        stringsAsFactors=FALSE)
+# Edges
+edges.raw <- edges.url %>%
+             read.delim(sep="\t", 
+                        header=FALSE, 
+                        fill=TRUE, 
+                        col.names=c("from", "to"),
+                        stringsAsFactors=FALSE)
+```
+
+#### Organizing a hierarchy
+```{r}
+# Species-specific nodes
+nodes <- nodes.raw %>%
+         filter( label %in% names(genesets.raw) ) %>%
+         filter( species == "Homo sapiens" ) %>%
+         filter(! duplicated(id) ) %>%
+         set_rownames( .$id ) %>%
+         { .[, "label", drop=FALSE] }
+
+# Species-specific edges
+edges <- edges.raw %>%
+         filter( from %in% rownames(nodes) ) %>%
+         filter( to %in% rownames(nodes) )
+
+# Leaf genesets
+genesets <- nodes %>%
+            rownames() %>%
+            .[! . %in% edges$from] %>%
+            sapply( function(x) nodes[x, "label"] ) %>%
+            genesets.raw[.]
+```
+
+##### nodes
+A single-column data frame of labels where the rownames are unique identifiers. Leaf node labels should have an associated geneset, while internal nodes do not have to. The only genesets tested, will be those in the list of genesets.
+```{r}
+head(nodes)
+```
+
+##### edges
+A dataframe with two columns of identifiers, indicating directed edges between nodes in the hierarchy.
+```{r}
+head(edges)
+```
+
+##### gsets
+A list of character vectors, named by the geneset labels. Typically, genesets will be at the leaves of the hierarchy, while not required.
+```{r}
+head(names(genesets))
+```
+
+#### Using the `rgsets` object
+```{r}
+genesets <- rgsets$new(genesets, nodes, edges, name="REACTOME", version="v70.0")
+print(genesets)
 ```

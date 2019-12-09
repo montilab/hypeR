@@ -1,16 +1,3 @@
-#' Custom reverse log transformation of continous ggplot axes
-#'
-#' @param base Logarithm base
-#' @importFrom scales trans_new log_breaks
-#' @keywords internal
-.reverselog_trans <- function(base=exp(1)) {
-    trans <- function(x) -log(x, base)
-    inv <- function(x) base^(-x)
-    scales::trans_new(paste0("reverselog-", format(base)), trans, inv, 
-              scales::log_breaks(base=base), 
-              domain = c(1e-100, Inf))
-}
-
 #' Plot top enriched genesets
 #'
 #' @param hyp_df A dataframe from a hyp object
@@ -26,6 +13,7 @@
 #' @importFrom purrr when
 #' @importFrom dplyr filter
 #' @importFrom ggplot2 ggplot aes geom_point labs scale_color_continuous scale_y_continuous guide_colorbar coord_flip geom_hline guides theme element_text element_blank
+#' 
 #' @keywords internal
 .dots_plot <- function(hyp_df,
                        top=20,
@@ -38,7 +26,7 @@
     
     # Default arguments
     val <- match.arg(val)
-    
+
     # Subset results
     df <- hyp_df %>%
           dplyr::filter(pval <= pval_cutoff) %>%
@@ -50,7 +38,7 @@
 
     # Plotting variables
     df$significance <- df[,val]
-    df$size <- if(sizes) df$gset.size else 1
+    df$size <- if(sizes) df$geneset else 1
 
     # Order by significance value
     df <- df[order(-df[,val]),]
@@ -81,41 +69,34 @@
 #' @param top Limit number of genesets shown
 #' @param abrv Abbreviation length of geneset labels
 #' @param sizes Size dots by geneset sizes
-#' @param pval_cutoff Filter results to be less than pval cutoff
-#' @param fdr_cutoff Filter results to be less than fdr cutoff
+#' @param pval Filter results to be less than pval cutoff
+#' @param fdr Filter results to be less than fdr cutoff
 #' @param val Choose significance value e.g. c("fdr", "pval")
 #' @param title Plot title
-#' @param multihyp_titles Use false to disable plot titles for multihyp objects
-#' @param show_plots An option to show plots
-#' @param return_plots An option to return plots
 #' @return A ggplot object
 #'
 #' @examples
-#' gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
 #'
 #' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp_obj <- hypeR(signature, gsets, bg=2522, fdr_cutoff=0.05)
+#' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
 #' # Visualize
 #' hyp_dots(hyp_obj, top=3, val="fdr")
 #'
-#' @importFrom stats setNames
 #' @export
 hyp_dots <- function(hyp_obj,
                      top=20,
                      abrv=50,
                      sizes=TRUE,
-                     pval_cutoff=1, 
-                     fdr_cutoff=1,
+                     pval=1, 
+                     fdr=1,
                      val=c("fdr", "pval"), 
-                     title="",
-                     multihyp_titles=TRUE, 
-                     show_plots=TRUE, 
-                     return_plots=FALSE) {
+                     title="") {
 
     stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
@@ -125,29 +106,21 @@ hyp_dots <- function(hyp_obj,
     # Handling of multiple signatures
     if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
-        n <- names(multihyp_obj$data)
-        res <- lapply(stats::setNames(n, n), function(x) {
-                   hyp_obj <- multihyp_obj$data[[x]]
-                   hyp_dots(hyp_obj,
-                            top,
-                            abrv,
-                            sizes,
-                            pval_cutoff,
-                            fdr_cutoff,
-                            val,
-                            ifelse(multihyp_titles, x, ""),
-                            multihyp_titles,
-                            show_plots,
-                            return_plots)
-               })
-    } else  {
-        hyp_df <- hyp_obj$data
-        res <- .dots_plot(hyp_df, top, abrv, sizes, pval_cutoff, fdr_cutoff, val, title)
-        if (show_plots) {
-            show(res)
-        }
-    }
-    if (return_plots) {
-        return(res)
+        
+        mapply(function(hyp_obj, title) {
+
+            hyp_dots(hyp_obj,
+                     top=top,
+                     abrv=abrv,
+                     sizes=sizes,
+                     pval=pval,
+                     fdr=fdr,
+                     val=val,
+                     title=title)
+
+        }, multihyp_obj$data, names(multihyp_obj$data), USE.NAMES=TRUE, SIMPLIFY=FALSE)
+    } 
+    else {
+        .dots_plot(hyp_obj$data, top, abrv, sizes, pval, fdr, val, title)
     }
 }

@@ -1,36 +1,14 @@
-#' Calculate jaccard similarity of two sets
-#'
-#' @param a A vector
-#' @param b A vector
-#' @return A numerical value
-#'
-#' @keywords internal
-jaccard_similarity <- function(a, b) {
-    length( intersect(a, b) ) / length( union(a, b) )
-}
-
-#' Calculate overlap similarity of two sets
-#'
-#' @param a A vector
-#' @param b A vector
-#' @return A numerical value
-#'
-#' @keywords internal
-overlap_similarity <- function(a, b) {
-    length( intersect(a, b) ) / min( length(a), length(b) )
-}
-
 #' Plot enrichment map
 #'
 #' @param hyp_df A dataframe from a hyp object
-#' @param gsets A list of genesets
-#' @param title Plot title
+#' @param genesets A list of genesets
 #' @param similarity_metric Metric to calculate geneset similarity
 #' @param similarity_cutoff Geneset similarity cutoff
 #' @param pval_cutoff Filter results to be less than pval cutoff
 #' @param fdr_cutoff Filter results to be less than fdr cutoff
 #' @param val Choose significance value shown above nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
+#' @param title Plot title
 #' @return A visNetwork object
 #'
 #' @importFrom purrr when
@@ -39,14 +17,14 @@ overlap_similarity <- function(a, b) {
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction toVisNetworkData visIgraphLayout
 #' @keywords internal
 .enrichment_map <- function(hyp_df,
-                            gsets, 
-                            title, 
+                            genesets, 
                             similarity_metric=c("jaccard_similarity", "overlap_similarity"),
                             similarity_cutoff=0.2,
                             pval_cutoff=1, 
                             fdr_cutoff=1,
                             val=c("fdr", "pval"),
-                            top=NULL) {
+                            top=NULL,
+                            title="") {
 
     # Subset results
     hyp_df <- hyp_df %>%
@@ -55,21 +33,19 @@ overlap_similarity <- function(a, b) {
               purrr::when(!is.null(top) ~ head(., top), ~ .)
 
     # Handle empty dataframes
-    if (nrow(hyp_df) == 0) {
-        return(ggempty())
-    }
+    if (nrow(hyp_df) == 0) return(ggempty())
 
     # Geneset similarity matrix
-    hyp.gsets <- gsets[hyp_df$label]
-    hyp.gsets.mat <- sapply(hyp.gsets, function(x) {
-        sapply(hyp.gsets, function(y,x) {
-            if (similarity_metric == "jaccard_similarity") jaccard_similarity(x, y)
-            else if (similarity_metric == "overlap_similarity") overlap_similarity(x, y)     
-            else stop(paste(similarity_metric, "is an invalid metric"))
+    hyp.genesets <- genesets[hyp_df$label]
+    hyp.genesets.mat <- sapply(hyp.genesets, function(x) {
+        sapply(hyp.genesets, function(y,x) {
+            if (similarity_metric == "jaccard_similarity") .jaccard_similarity(x, y)
+            else if (similarity_metric == "overlap_similarity") .overlap_similarity(x, y)     
+            else stop(.format_str("{1} is an invalid metric", similarity_metric))
         }, x)
     })
     
-    m <- as.matrix(hyp.gsets.mat)
+    m <- as.matrix(hyp.genesets.mat)
 
     # Sparsity settings
     m[m < similarity_cutoff] <- 0
@@ -88,13 +64,13 @@ overlap_similarity <- function(a, b) {
 
     # Add node scaled sizes based on genset size
     size.scaler <- function(x) (x-min(x))/(max(x)-min(x))*30 
-    node.sizes <- sapply(igraph::V(inet), function(x) hyp_df[x, "gset.size"])
+    node.sizes <- sapply(igraph::V(inet), function(x) hyp_df[x, "geneset"])
     nodes$size <-  size.scaler(node.sizes)+20
     
     val.pretty <- ifelse(val == "fdr", "FDR", "P-Value")
     nodes$title <- sapply(igraph::V(inet), function(x) {
                             paste(val.pretty, hyp_df[x, val], sep=": ")
-                        })
+                   })
     
     # Add node scaled weights based on significance
     weight.scaler <- function(x) (x-max(x))/(min(x)-max(x))
@@ -120,44 +96,37 @@ overlap_similarity <- function(a, b) {
 #' Visualize hyp/multihyp objects as an enrichment map
 #'
 #' @param hyp_obj A hyp or multihyp object
-#' @param title Plot title
 #' @param similarity_metric Metric to calculate geneset similarity
 #' @param similarity_cutoff Geneset similarity cutoff
-#' @param pval_cutoff Filter results to be less than pval cutoff
-#' @param fdr_cutoff Filter results to be less than fdr cutoff
+#' @param pval Filter results to be less than pval cutoff
+#' @param fdr Filter results to be less than fdr cutoff
 #' @param val Choose significance value shown above nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
-#' @param multihyp_titles Use false to disable plot titles for multihyp objects
-#' @param show_plots An option to show plots
-#' @param return_plots An option to return plots
+#' @param title Plot title
 #' @return A visNetwork object or list of visNetwork objects
 #'
 #' @examples
-#' gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
 #'
 #' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp_obj <- hypeR(signature, gsets, bg=2522, fdr_cutoff=0.05)
+#' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
 #' # Visualize
 #' hyp_emap(hyp_obj, top=30, val="fdr")
 #'
-#' @importFrom stats setNames
 #' @export
 hyp_emap <- function(hyp_obj, 
-                     title="",
                      similarity_metric=c("jaccard_similarity", "overlap_similarity"),
                      similarity_cutoff=0.2,
-                     pval_cutoff=1, 
-                     fdr_cutoff=1,
+                     pval=1, 
+                     fdr=1,
                      val=c("fdr", "pval"),
                      top=NULL,
-                     multihyp_titles=TRUE,
-                     show_plots=TRUE, 
-                     return_plots=FALSE) {
+                     title="") {
 
     stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
@@ -168,43 +137,23 @@ hyp_emap <- function(hyp_obj,
     # Handling of multiple signatures
     if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
-        n <- names(multihyp_obj$data)
-        res <- lapply(stats::setNames(n, n), function(x) {
-                   hyp_obj <- multihyp_obj$data[[x]]
-                   hyp_emap(hyp_obj,
-                            ifelse(multihyp_titles, x, ""),
-                            similarity_metric, 
-                            similarity_cutoff,
-                            pval_cutoff,
-                            fdr_cutoff,
-                            val,
-                            top,
-                            multihyp_titles,
-                            show_plots,
-                            return_plots)           
-               })
-    } else {
-        hy_df <- hyp_obj$data
-        # Check if gsets are relational
-        if (is(hyp_obj$args$gsets, "rgsets")) {
-            gsets <- hyp_obj$args$gsets$gsets
-        } else {
-            gsets <- hyp_obj$args$gsets
-        }
-        res <- .enrichment_map(hy_df,
-                               gsets, 
-                               title,
-                               similarity_metric,
-                               similarity_cutoff,
-                               pval_cutoff, 
-                               fdr_cutoff,
-                               val,
-                               top)
-        if (show_plots) {
-            show(res)
-        }
-    }
-    if (return_plots) {
-        return(res)
+
+        mapply(function(hyp_obj, title) {
+
+            hyp_emap(hyp_obj,
+                     similarity_metric=similarity_metric, 
+                     similarity_cutoff=similarity_cutoff,
+                     pval=pval,
+                     fdr=fdr,
+                     val=val,
+                     top=top,
+                     title=title) 
+
+        }, multihyp_obj$data, names(multihyp_obj$data), USE.NAMES=TRUE, SIMPLIFY=FALSE)
+    } 
+    else {
+        hyp_df <- hyp_obj$data
+        genesets <- hyp_obj$args$genesets$genesets
+        .enrichment_map(hyp_df, genesets, similarity_metric, similarity_cutoff, pval, fdr, val, top, title)
     }
 }

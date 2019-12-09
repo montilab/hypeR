@@ -22,17 +22,15 @@ hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds
 
 limma <- hypdat$limma
 ranked.signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
-
-rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
-gsets <- rgsets$gsets
+head(ranked.signature)
 
 ```
 
-### Hyper enrichment
-All workflows begin with performing enrichment with `hypeR()`.
+### Running hypeR
 ```{r}
 
-hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01)
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:REACTOME")
+hyp_obj <- hypeR(ranked.signature, genesets, test="kstest", fdr=0.01)
 
 ```
 
@@ -40,7 +38,7 @@ hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.01)
 One can visualize the top enriched genesets using `hyp_dots()` which returns a horizontal dots plot. Each dot is a geneset, where the color represents the significance and the size signifies the geneset size.
 ```{r, fig.height=5}
 
-hyp_dots(hyp_obj, show_plots=FALSE, return_plots=TRUE)
+hyp_dots(hyp_obj)
 
 ```
 
@@ -48,7 +46,7 @@ hyp_dots(hyp_obj, show_plots=FALSE, return_plots=TRUE)
 One can visualize the top enriched genesets using `hyp_emap()` which will return an enrichment map. Each node represents a geneset, where the shade of red indicates the normalized significance of enrichment. Hover over the node to view the raw value. Edges represent geneset similarity, calculated by either jaccard or overlap similarity metrics.
 ```{r, fig.height=7}
 
-hyp_emap(hyp_obj, similarity_cutoff=0.8, show_plots=FALSE, return_plots=TRUE)
+hyp_emap(hyp_obj, similarity_cutoff=0.70)
 
 ```
 
@@ -59,40 +57,23 @@ When dealing with hundreds of genesets, it's often useful to understand the rela
 To do this, we rely on curated relationships defined between them. For example, [REACTOME](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`.
 ```{r}
 
-rgsets <- hyperdb_fetch(type="rgsets", "REACTOME")
+genesets <- hyperdb_rgsets("REACTOME", version="70.0")
 
 ```
 
 Relational genesets have three data atrributes including gsets, nodes, and edges. The `gsets` attribute includes the geneset information for the leaf nodes of the hiearchy, the `nodes` attribute describes all nodes in the hiearchical, including internal nodes, and the `edges` attribute describes the edges in the hiearchy.
 
-##### $gsets
 ```{r}
 
-gsets <- rgsets$gsets
-head(names(gsets))
+print(genesets)
 
 ```
 
-##### $nodes
+Passing relational genesets works natively with `hypeR()`
+
 ```{r}
 
-nodes <- rgsets$nodes
-head(nodes[, c("label"), drop=FALSE])
-
-```
-
-##### $edges
-```{r}
-
-edges <- rgsets$edges
-head(edges)
-
-```
-
-All workflows begin with performing enrichment with `hypeR()`.
-```{r}
-
-hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", fdr_cutoff=0.01)
+hyp_obj <- hypeR(ranked.signature, genesets, test="kstest", fdr=0.01)
 
 ```
 
@@ -100,6 +81,6 @@ hyp_obj <- hypeR(ranked.signature, rgsets, test="kstest", fdr_cutoff=0.01)
 One can visualize the top enriched genesets using `hyp_hmap()` which will return a hiearchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy.
 ```{r, fig.height=7}
 
-hyp_hmap(hyp_obj, top=30, show_plots=FALSE, return_plots=TRUE)
+hyp_hmap(hyp_obj, top=30)
 
 ```

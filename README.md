@@ -75,10 +75,10 @@ kinds of signatures are expected. There are three types of signatures
 signature <- c("GENE1", "GENE2", "GENE3")
 
 # A ranked character vector of symbols (kstest)
-ranked.signature <-  c("GENE1", "GENE2", "GENE3")
+ranked.signature <-  c("GENE2", "GENE1", "GENE3")
 
 # A ranked named numerical vector of symbols with ranking weights (gsea)
-weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
+weighted.signature <-  c("GENE2"=1.22, "GENE1"=0.94, "GENE3"=0.77)
 ```
 
 ### Geneset
@@ -112,12 +112,9 @@ for detailed functionality. Below is a brief list of some methods.
 ##### Downloading genesets
 
 ``` r
-# Download genesets from msigdb
-msigdb_path <- msigdb_download_all(species="Homo sapiens")
-
-BIOCARTA <- msigdb_fetch(msigdb_path, "C2.CP.BIOCARTA")
-KEGG     <- msigdb_fetch(msigdb_path, "C2.CP.KEGG")
-REACTOME <- msigdb_fetch(msigdb_path, "C2.CP.REACTOME")
+BIOCARTA <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:BIOCARTA")
+KEGG     <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:KEGG")
+REACTOME <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:REACTOME")
 ```
 
 ##### Visualize results
@@ -140,21 +137,17 @@ hyp_hmap(hyp_obj)
 
 ``` r
 # Save to excel
-hyp_to_excel(hyp_obj, file_path="hyper.xlsx")
+hyp_to_excel(hyp_obj, file_path="hypeR.xlsx")
 
 # Save to table
-hyp_to_table(hyp_obj, file_path="hyper.txt")
+hyp_to_table(hyp_obj, file_path="hypeR.txt")
 
 # Generate markdown report
-hyp_to_rmd(lmultihyp_obj,
-           file_path="hyper-enrichment.rmd",
+hyp_to_rmd(hyp_obj,
+           file_path="hypeR.rmd",
            title="Hyper Enrichment (hypeR)",
            subtitle="YAP, TNF, and TAZ Knockout Experiments",
-           author="Anthony Federico, Stefano Monti",
-           show_dots=T,
-           show_emaps=T,
-           show_hmaps=T,
-           show_tables=T)
+           author="Anthony Federico, Stefano Monti")
 ```
 
 ## Related Repositories
@@ -173,6 +166,3 @@ hyp_to_rmd(lmultihyp_obj,
 Anthony Federico, Stefano Monti (2019) hypeR: An R Package for Geneset
 Enrichment Workflows. *Bioinformatics*.
 <https://doi.org/10.1093/bioinformatics/btz700>
-
-Anthony Federico, Stefano Monti (2019) hypeR: An R Package for Geneset
-Enrichment Workflows. *bioRxiv*. <https://doi.org/10.1101/656637>

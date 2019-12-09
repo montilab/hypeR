@@ -4,28 +4,21 @@
 \alias{hyp_hmap}
 \title{Visualize hyp/multihyp objects as a hiearchy map}
 \usage{
-hyp_hmap(hyp_obj, title = "", pval_cutoff = 1, fdr_cutoff = 1,
-  val = c("fdr", "pval"), top = NULL, multihyp_titles = TRUE,
-  show_plots = TRUE, return_plots = FALSE)
+hyp_hmap(hyp_obj, pval = 1, fdr = 1, val = c("fdr", "pval"),
+  top = NULL, title = "")
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
 
-\item{title}{Plot title}
+\item{pval}{Filter results to be less than pval cutoff}
 
-\item{pval_cutoff}{Filter results to be less than pval cutoff}
-
-\item{fdr_cutoff}{Filter results to be less than fdr cutoff}
+\item{fdr}{Filter results to be less than fdr cutoff}
 
 \item{val}{Choose significance value displayed when hovering nodes e.g. c("fdr", "pval")}
 
 \item{top}{Limit number of pathways shown}
 
-\item{multihyp_titles}{Use false to disable plot titles for multihyp objects}
-
-\item{show_plots}{Use true to show plots}
-
-\item{return_plots}{Use true to return plots}
+\item{title}{Plot title}
 }
 \value{
 A visNetwork object or list of visNetwork objects
@@ -34,14 +27,14 @@ A visNetwork object or list of visNetwork objects
 Visualize hyp/multihyp objects as a hiearchy map
 }
 \examples{
-rgsets <- hyperdb_fetch(type="rgsets", "KEGG")
+genesets <- hyperdb_rgsets("REACTOME", "70.0")
 
 signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp_obj <- hypeR(signature, rgsets, bg=2522, fdr_cutoff=0.05)
+hyp_obj <- hypeR(signature, genesets, background=2522)
 
 # Visualize
 hyp_hmap(hyp_obj, top=60)

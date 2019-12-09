@@ -25,16 +25,19 @@ There are multiple types of enrichment analyses (e.g. hypergeometric, kstest, gs
 # Simply a character vector of symbols (hypergeometric)
 signature <- c("GENE1", "GENE2", "GENE3")
 
-# A ranked character vector of symbols (kstest)
+# A pre-ranked character vector of symbols (kstest)
 ranked.signature <-  c("GENE1", "GENE2", "GENE3")
 
-# A ranked named numerical vector of symbols with ranking weights (gsea)
+# A pre-ranked named numerical vector of symbols with ranking weights (gsea)
 weighted.signature <-  c("GENE1"=1.22, "GENE2"=0.94, "GENE3"=0.77)
 
 ```
 
 #### Geneset
 A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined. There is also what is called relational genesets, whereby genesets are organized into a hiearchy. See [Relational Genesets](https://montilab.github.io/hypeR-docs/articles/docs/visualize.html) for more information.
+
+
+
 ```{r}
 
 genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
@@ -64,7 +67,7 @@ We'll also import the latest genesets from [Kyoto Encyclopedia of Genes and Geno
 
 ```{r}
 
-gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
 
 ```
 
@@ -89,7 +92,7 @@ head(signature)
 
 ```{r}
 
-hyp_obj <- hypeR(signature, gsets, test="hypergeometric", bg=50000, fdr_cutoff=0.01, do_plots=TRUE)
+hyp_obj <- hypeR(signature, genesets, test="hypergeometric", background=50000, fdr=0.01, plotting=TRUE)
 hyp_obj$plots[[1]]
 
 ```
@@ -112,7 +115,7 @@ head(ranked.signature)
 
 ```{r}
 
-hyp_obj <- hypeR(ranked.signature, gsets, test="kstest", fdr_cutoff=0.05, do_plots=TRUE)
+hyp_obj <- hypeR(ranked.signature, genesets, test="kstest", fdr=0.05, plotting=TRUE)
 hyp_obj$plots[[1]]
 
 ```
@@ -135,7 +138,7 @@ head(weighted.signature)
 
 ```{r}
 
-hyp_obj <- hypeR(weighted.signature, gsets, test="kstest", fdr_cutoff=0.05, do_plots=TRUE)
+hyp_obj <- hypeR(weighted.signature, genesets, test="kstest", fdr=0.05, plotting=TRUE)
 hyp_obj$plots[[1]]
 
 ```

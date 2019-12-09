@@ -1,22 +1,22 @@
 #' Find geneset members
 #'
 #' @param id A vector of ids
-#' @param gsets A list of genesets (see \code{rgsets})
+#' @param genesets A list of genesets (see \code{rgsets})
 #' @param nodes A data frame of labeled nodes (see \code{rgsets})
 #' @param edges A data frame of directed edges (see \code{rgsets})
 #' @return A vector of ids
 #'
 #' @importFrom dplyr filter pull %>%
 #' @keywords internal
-find_members <- function(id, gsets, nodes, edges) {
+find_members <- function(id, genesets, nodes, edges) {
     label <- nodes[id, "label"]
-    if (label %in% names(gsets)) {
-        gsets[[label]]
+    if (label %in% names(genesets)) {
+        genesets[[label]]
     } else {
         edges %>%
         dplyr::filter(from == id) %>%
         dplyr::pull(to) %>%
-        lapply(find_members, gsets, nodes, edges) %>%
+        lapply(find_members, genesets, nodes, edges) %>%
         unlist() %>%
         unique()
     }
@@ -28,7 +28,7 @@ find_members <- function(id, gsets, nodes, edges) {
 #'
 #' @section Arguments:
 #' \describe{
-#'   \item{gsets}{A list of genesets where list names refers to geneset
+#'   \item{genesets}{A list of genesets where list names refers to geneset
 #'   labels and values are geneset members represented as a vector}
 #'   \item{nodes}{A data frame of labeled nodes e.g.
 #'     \cr
@@ -47,6 +47,8 @@ find_members <- function(id, gsets, nodes, edges) {
 #'       G1 \tab G3 \tab\cr
 #'     }
 #'   }
+#'   \item{name}{A character vector describing source of genesets}
+#'   \item{version}{A character vector describing versioning}
 #' }
 #'
 #' @section Methods:
@@ -62,7 +64,7 @@ find_members <- function(id, gsets, nodes, edges) {
 #'
 #' @examples
 #' testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-#' rgsets <- rgsets$new(gsets=testdat$gsets,
+#' rgsets <- rgsets$new(genesets=testdat$genesets,
 #'                      nodes=testdat$nodes,
 #'                      edges=testdat$edges)
 #'
@@ -70,24 +72,39 @@ find_members <- function(id, gsets, nodes, edges) {
 #' @importFrom dplyr filter pull %>%
 #' @export
 rgsets <- R6Class("rgsets", list(
-    gsets = NULL,
+    genesets = NULL,
     nodes = NULL,
     edges = NULL,
-    initialize = function(gsets, nodes, edges) {
-        self$gsets <- gsets
+    name = NULL,
+    version = NULL,
+    initialize = function(genesets, nodes, edges, name="", version="", quiet=FALSE) {
+        if (name == "" & !quiet) warning("Describing genesets with a name will aid reproducibility")
+        if (version == "" & !quiet) warning("Including a version number will aid reproducibility")
+        self$genesets <- genesets
         self$nodes <- nodes
         self$edges <- edges
         self$nodes$id <- rownames(self$nodes)
-        self$nodes$length <- sapply(self$nodes$id, function(x) {length(find_members(x, gsets, nodes, edges))})
+        self$nodes$length <- sapply(self$nodes$id, function(x) {length(find_members(x, genesets, nodes, edges))})
+        self$name <- name
+        self$version <- version
     },
     print = function(...) {
-        cat("gsets\n\n")
-        base::print(head(names(self$gsets)))
-        cat("\nnodes\n")
+        if (self$name != "") cat(.format_str("{1} ", self$name))
+        if (self$version != "") cat(.format_str("{1}", self$version))
+        if (self$name != "" | self$version != "") cat("\n\n")
+        cat("Genesets\n\n")
+        for (i in head(names(self$genesets))) {
+            cat(.format_str("{1} ({2})\n", i, length(self$genesets[[i]])))
+        }
+        cat("\nNodes\n\n")
         base::print(head(self$nodes))
-        cat("\nedges\n")
+        cat("\nEdges\n\n")
         base::print(head(self$edges)) 
         invisible(self)
+    },
+    reduce = function(background) {
+        genesets <- lapply(self$genesets, function(x) intersect(x, background))
+        return(rgsets$new(genesets, self$nodes, self$edges, self$name, self$version, quiet=TRUE))
     },
     subset = function(labels) {
 
@@ -117,9 +134,9 @@ rgsets <- R6Class("rgsets", list(
             }
         }
         ids <- unique(ids.subset$values)
-        gsets <- self$gsets[names(self$gsets) %in% labels]
+        genesets <- self$genesets[names(self$genesets) %in% labels]
         nodes <- self$nodes[ids,,drop=F]
         edges <- self$edges[self$edges$from %in% ids & self$edges$to %in% ids,,drop=F]
-        return(rgsets$new(gsets, nodes, edges))
+        return(rgsets$new(genesets, nodes, edges, self$name, self$version, quiet=TRUE))
     }
 ))

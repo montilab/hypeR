@@ -4,16 +4,19 @@
 \alias{hyp_to_table}
 \title{Export hyp/multihyp object to table}
 \usage{
-hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL)
+hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL,
+  version = TRUE)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
 
-\item{file_path}{Output file path}
+\item{file_path}{A file path for hyp objects and directory for multihyp objects}
 
 \item{sep}{The field separator string}
 
 \item{cols}{Dataframe columns to include}
+
+\item{version}{Add header with versioning information}
 }
 \value{
 None
@@ -22,14 +25,14 @@ None
 Export hyp/multihyp object to table
 }
 \examples{
-gsets <- hyperdb_fetch(type="gsets", "KEGG_2019_Human")
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
 
 signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
 # Perform hyper enrichment
-hyp_obj <- hypeR(signature, gsets, bg=2522, fdr_cutoff=0.05)
+hyp_obj <- hypeR(signature, genesets, background=2522)
 
 # Export
 hyp_to_table(hyp_obj, file_path="pathways.txt")

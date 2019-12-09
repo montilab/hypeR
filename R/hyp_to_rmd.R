@@ -1,84 +1,37 @@
-#' Format a string using placeholders
-#'
-#' @param string A an unformatted string with placeholders
-#' @param ... Variables to format placeholders with
-#' @return A formatted string
-#' 
-#' @examples
-#' \dontrun{
-#' format_str("Format with {1} and {2}", "x", "y")
-#' }
-#'
-#' @keywords internal
-format_str <- function(string, ...) {
-    args <- list(...)
-    for (i in 1:length(args)) {
-        pattern <- paste("\\{", i, "}", sep="")
-        replacement <- args[[i]]
-        string <- gsub(pattern, replacement, string)
-    }
-    return(string)
-}
-
-#' Convert an arguments list to string format
-#'
-#' @param args A list of keyword arguments
-#' @return A string of keyword arguments
-#'
-#' @examples
-#' \dontrun{
-#' string_args(list(x=15, y="fdr", z=TRUE))
-#' }
-#'
-#' @keywords internal
-string_args <- function(args) {
-    paste(paste(names(args), 
-                sapply(unname(args), function(x) {
-                    if (is.character(x)) {shQuote(x)}
-                    else if (is.null(x)) {"NULL"}
-                    else {x}
-                }), 
-                sep='='), 
-                collapse=",")
-}
-
 rmd_config <- "---
 title: '{1}'
 subtitle: '{2}'
 author: '{3}'
-date: 'Last Modified: `r Sys.Date()`'
 output:
   html_document:
     theme: united
     toc: true
     toc_float: true
-    toc_depth: 1
     code_folding: hide
+    toc_depth: 1
     df_print: paged
 ---
+
+**Generated with hypeR**: v`r packageVersion('hypeR')`  
+**Date Generated**: `r Sys.Date()`
+
+***
 "
 
 rmd_knitr <- "
 ```{r setup, echo=FALSE, message=FALSE}
-knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 library(kableExtra)
 ```
-
 "
+
 rmd_tabset <- "
 # {1}
 ##  {.tabset .tabset-fade}
 "
 
-rmd_tab <- "
-### {1} 
-```{r {2}, fig.width=8.25, fig.align='center'}
-hyp_obj <- tabsets[['{3}']][['{1}']] 
-{4}
-{5}
-{6}
-{7}
-```
+rmd_versioning <- "
+**Using the following genesets**: `r tabsets[['{3}']][['{1}']]$args$genesets$name` `r tabsets[['{3}']][['{1}']]$args$genesets$version`
 "
 
 tab_dots <- "
@@ -109,11 +62,12 @@ df
 #' Export hyp object to rmarkdown
 #'
 #' @param hyp_obj A hyp object, multihyp object, or list of multihyp objects
-#' @param file_path Output file path
+#' @param file_path A file path
 #' @param title Title of markdown report
 #' @param subtitle Subtitle of markdown report
 #' @param author Authors of markdown report
 #' @param header Header name of tabset section
+#' @param version Add versioning information
 #' @param show_dots Option to show dots plots in tabs
 #' @param show_emaps Option to show enrichment maps in tabs
 #' @param show_hmaps Option to show hiearchy maps in tabs
@@ -132,10 +86,11 @@ df
 #' @export
 hyp_to_rmd <- function(hyp_obj,
                        file_path,
-                       title="hypeR Enrichment Report",
+                       title="Workflow Report",
                        subtitle="",
                        author="",
-                       header="Enrichment",
+                       header="Results",
+                       version=TRUE,
                        show_dots=TRUE,
                        show_emaps=TRUE,
                        show_hmaps=FALSE,
@@ -151,30 +106,16 @@ hyp_to_rmd <- function(hyp_obj,
                        custom_rmd_config=NULL,
                        custom_pre_content=NULL,
                        custom_post_content=NULL) {
-
-    # Enfore plots retuns
-    if (show_dots) {
-        hyp_dots_args[["return_plots"]] = TRUE
-        hyp_dots_args[["show_plots"]] = FALSE
-    }
-    if (show_emaps) {
-        hyp_emap_args[["return_plots"]] = TRUE
-        hyp_emap_args[["show_plots"]] = FALSE
-    }    
-    if (show_hmaps) {
-        hyp_hmap_args[["return_plots"]] = TRUE
-        hyp_hmap_args[["show_plots"]] = FALSE
-    }
     
     # Markdown configuration
     if (!is.null(custom_rmd_config)) {
         rmd_config <- custom_rmd_config
     } else {
-        rmd_config <- format_str(rmd_config, title, subtitle, author)
+        rmd_config <- .format_str(rmd_config, title, subtitle, author)
     }
 
-    write(rmd_config, file = file_path, append = FALSE)
-    write(rmd_knitr, file = file_path, append = TRUE)
+    write(rmd_config, file=file_path, append=FALSE)
+    write(rmd_knitr, file=file_path, append=TRUE)
 
     # Content before hyper enrichment tabs
     if (!is.null(custom_pre_content)) {
@@ -223,7 +164,7 @@ hyp_to_rmd <- function(hyp_obj,
 
         # Tabset header and init code
         rmd_tabset %>%
-        format_str(tabset) %>%
+        .format_str(tabset) %>%
         write(file=file_path, append=TRUE)
 
         # Tab content
@@ -232,14 +173,28 @@ hyp_to_rmd <- function(hyp_obj,
 
             tab_id <- ids$pop()
             
-            dots_area <- ifelse(show_dots,  format_str(tab_dots, string_args(hyp_dots_args)), "")
-            table_area <- ifelse(show_tables, tab_table, "")
-            emap_area <- ifelse(show_emaps, format_str(tab_emap, string_args(hyp_emap_args)), "")
-            hmap_area <- ifelse(show_hmaps, format_str(tab_hmap, string_args(hyp_hmap_args)), "")
+            rmd_tab <- "### {1}"
+            if (version) rmd_tab <- paste(rmd_tab, rmd_versioning)
+            rmd_tab <- paste(rmd_tab, "```{r {2}, fig.width=8.25, fig.align='center'}", sep="")
+            rmd_tab <- paste(rmd_tab, "hyp_obj <- tabsets[['{3}']][['{1}']]", sep="\n")
+            rmd_tab <- .format_str(rmd_tab, tab, tab_id, tabset)
 
-            rmd_tab %>%
-            format_str(tab, tab_id, tabset, dots_area, table_area, emap_area, hmap_area) %>%
-            write(file=file_path, append=TRUE)
+            if (show_dots) {
+                rmd_tab <- paste(rmd_tab, .format_str(tab_dots, .string_args(hyp_dots_args)), sep="\n")
+            }
+            if (show_tables) {
+                rmd_tab <- paste(rmd_tab, tab_table, sep="\n")
+            }
+            if (show_emaps) {
+                rmd_tab <- paste(rmd_tab, .format_str(tab_emap, .string_args(hyp_emap_args)), sep="\n")
+            }
+            if (show_hmaps) {
+                rmd_tab <- paste(rmd_tab, .format_str(tab_hmap, .string_args(hyp_hmap_args)), sep="\n")
+            }
+
+            rmd_tab <- paste(rmd_tab, "```\n", sep="\n")
+
+            write(rmd_tab, file=file_path, append=TRUE)
         }
     }
 

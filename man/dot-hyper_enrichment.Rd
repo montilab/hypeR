@@ -4,17 +4,17 @@
 \alias{.hyper_enrichment}
 \title{Overrepresentation test via hyper-geometric distribution}
 \usage{
-.hyper_enrichment(signature, gsets, bg = length(unique(unlist(gsets))),
-  do.plots = TRUE)
+.hyper_enrichment(signature, genesets,
+  background = length(unique(unlist(genesets))), plotting = TRUE)
 }
 \arguments{
 \item{signature}{A vector of symbols}
 
-\item{gsets}{A list of genesets}
+\item{genesets}{A list of genesets}
 
-\item{bg}{Size of background population genes}
+\item{background}{Size of background population genes}
 
-\item{do.plots}{Use true to generate plots}
+\item{plotting}{Use true to generate plots}
 }
 \value{
 A list of data and plots

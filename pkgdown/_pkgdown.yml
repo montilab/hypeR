@@ -18,28 +18,33 @@ reference:
   desc: ~
   contents:
   - '`hypeR`'
-  - '`hyp_to_excel`'
-  - '`hyp_to_table`'
-  - '`hyp_to_rmd`'
   - '`hyp_show`'
   - '`hyp_dots`'
   - '`hyp_emap`'
   - '`hyp_hmap`'
+  - '`hyp_to_excel`'
+  - '`hyp_to_table`'
+  - '`hyp_to_rmd`'
 - title: Data Methods
   desc: ~
   contents:
-  - '`hyperdb_info`'
-  - '`hyperdb_fetch`'
+  - '`msigdb_version`'
+  - '`msigdb_species`'
+  - '`msigdb_available`'
   - '`msigdb_info`'
-  - '`msigdb_fetch`'
-  - '`msigdb_download_one`'
-  - '`msigdb_download_all`'
+  - '`msigdb_download`'
+  - '`msigdb_gsets`'
+  - '`enrichr_available`'
+  - '`enrichr_download`'
+  - '`enrichr_gsets`'
+  - '`hyperdb_info`'
+  - '`hyperdb_rgsets`'
 - title: Classes
   desc: ~
   contents:
   - '`hyp`'
   - '`multihyp`'
-  - '`pvector`'
+  - '`gsets`'
   - '`rgsets`'
 
 navbar:
@@ -53,24 +58,16 @@ navbar:
         href: articles/docs/installation.html
       - text: "Basic Usage"
         href: articles/docs/basics.html
-      - text: "Downloading Data"
-        href: articles/docs/data.html
       - text: "Visualize Results"
         href: articles/docs/visualize.html
-      - text: "Constructing Relational Genesets"
-        href: articles/docs/rgsets.html
+      - text: "Downloading Genesets"
+        href: articles/docs/data.html
       - text: "Multiple Signatures"
         href: articles/docs/multihyp.html
       - text: "Generating Reports"
         href: articles/docs/reporting.html
       - text: "Shiny Applications"
         href: articles/docs/shiny.html
-      - text: "Extending hypeR"
-        href: articles/docs/extending.html
-    - text: "Examples"
-      menu:
-      - text: "Co-Expression Modules"
-        href: articles/examples/workflow.html
     - text: "Reference"
       href: reference/index.html
   right:

@@ -5,7 +5,7 @@
 #' @param weights Weights for weighted score (Subramanian et al.)
 #' @param weights.pwr Exponent for weights (Subramanian et al.)
 #' @param absolute Takes max-min score rather than the max deviation from null
-#' @param do.plot Use true to generate plot
+#' @param plotting Use true to generate plot
 #' @param plot.title Plot title
 #' @return A list of data and plots
 #'
@@ -16,7 +16,7 @@
                     weights=NULL,
                     weights.pwr=1,
                     absolute=FALSE, 
-                    do.plot=FALSE, 
+                    plotting=FALSE, 
                     plot.title="") {
 
     n.y <- length(y)
@@ -76,7 +76,7 @@
     results <- suppressWarnings(ks.test(1:n.x, y, alternative="less"))
     
     # Enrichment plot
-    p <- if (do.plot) ggeplot(n.x, y, x.axis, y.axis, plot.title) else ggempty()
+    p <- if (plotting) ggeplot(n.x, y, x.axis, y.axis, plot.title) else ggempty()
 
     return(list(score=as.numeric(results$statistic), 
                 pval=results$p.value, 
@@ -86,56 +86,55 @@
 #' Enrichment test via one-sided Kolmogorov–Smirnov test
 #' 
 #' @param signature A vector of ranked symbols
-#' @param gsets A list of genesets
+#' @param genesets A list of genesets
 #' @param weights Weights for weighted score (Subramanian et al.)
 #' @param weights.pwr Exponent for weights (Subramanian et al.)
 #' @param absolute Takes max-min score rather than the max deviation from null
-#' @param do.plot Use true to generate plot
+#' @param plotting Use true to generate plot
 #' @return A list of data and plots
 #' 
 #' @keywords internal
 .ks_enrichment <- function(signature,
-                           gsets,
+                           genesets,
                            weights=NULL,
                            weights.pwr=1,
                            absolute=FALSE,
-                           do.plots=TRUE) {
+                           plotting=TRUE) {
   
-    if (!is(gsets, "list")) stop("Error: Expected gsets to be a list of gene sets\n")
+    if (!is(genesets, "list")) stop("Error: Expected genesets to be a list of gene sets\n")
     if (!is.null(weights)) stopifnot(length(signature) == length(weights))
     
     signature <- unique(signature)
-    gsets <- lapply(gsets, unique)
+    genesets <- lapply(genesets, unique)
 
-    results <- lapply(seq_len(length(gsets)), function(i) {
-                    
-                    # Calculate ranks
-                    gset <- gsets[[i]]
-                    ranks <- match(gset, signature)
+    results <- mapply(function(geneset, title) {
+
+                    ranks <- match(geneset, signature)
                     ranks <- ranks[!is.na(ranks)]
                     
                     # Run ks-test
-                    results <- .kstest(length(signature), 
-                                       ranks,
+                    results <- .kstest(n.x=length(signature), 
+                                       y=ranks,
                                        weights=weights,
                                        weights.pwr=weights.pwr,
                                        absolute=absolute, 
-                                       do.plot=do.plots,
-                                       plot.title=names(gsets)[[i]])
+                                       plotting=plotting,
+                                       plot.title=title)
                     
-                    results[['gset.size']] <- length(gset)
-                    results[['genes.found']] <- length(ranks)
+                    results[['geneset']] <- length(geneset)
+                    results[['overlap']] <- length(ranks)
                     return(results)
-                })
-    
-    names(results) <- names(gsets)
+
+    }, genesets, names(genesets), USE.NAMES=TRUE, SIMPLIFY=FALSE)
+
     results <- do.call(rbind, results)
-    data <- data.frame(apply(results[,c("score", "pval", "gset.size", "genes.found")], 2, unlist), stringsAsFactors=FALSE)
+    data <- data.frame(apply(results[,c("score", "pval", "geneset", "overlap")], 2, unlist), stringsAsFactors=FALSE)
     data$score <- signif(data$score, 2)
     data$pval <- signif(data$pval, 2)
     data$fdr <- signif(p.adjust(data$pval, method="fdr"), 2)
-    data$label <- names(gsets)
-    data <- data[,c("label", "pval", "fdr", "gset.size", "genes.found", "score")]
+    data$label <- names(genesets)
+    data$signature <- length(signature)
+    data <- data[,c("label", "pval", "fdr", "signature", "geneset", "overlap", "score")]
     plots <- results[,"plot"]
     
     return(list(data=data, plots=plots))

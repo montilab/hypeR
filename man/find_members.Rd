@@ -4,12 +4,12 @@
 \alias{find_members}
 \title{Find geneset members}
 \usage{
-find_members(id, gsets, nodes, edges)
+find_members(id, genesets, nodes, edges)
 }
 \arguments{
 \item{id}{A vector of ids}
 
-\item{gsets}{A list of genesets (see \code{rgsets})}
+\item{genesets}{A list of genesets (see \code{rgsets})}
 
 \item{nodes}{A data frame of labeled nodes (see \code{rgsets})}
 

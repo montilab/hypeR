@@ -8,6 +8,7 @@
 #' @return A ggplot object
 #' 
 #' @importFrom ggplot2 qplot aes geom_rug geom_hline geom_vline annotate theme element_text element_blank element_line element_rect
+#' 
 #' @export
 ggeplot <- function(n, positions, x_axis, y_axis, title="") {
     score <- which.max(abs(y_axis))

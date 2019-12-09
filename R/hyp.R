@@ -37,10 +37,11 @@ hyp <- R6Class("hyp", list(
     self$args  <- args
   },
   print = function(...) {
-    cat("hyp object: \n")
-    cat("  data: ", nrow(self$data), " x ", ncol(self$data), "\n", sep="")
-    cat("  plots: ", length(self$plots), "\n", sep="")
-    cat("  args: ", paste(names(self$args), collapse="\n        "), sep="")
+    cat("(hyp) \n\n")
+    cat("  data: \n")
+    base::print(head(self$data), row.names=FALSE)
+    cat(.format_str("\n  plots: {1} Figures\n\n", length(self$plots)))
+    cat(.format_str("  args: {1}", paste(names(self$args), collapse="\n        ")))
     invisible(self)
   },
   as.data.frame = function(...) {

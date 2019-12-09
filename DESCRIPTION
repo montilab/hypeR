@@ -1,6 +1,6 @@
 Package: hypeR
 Title: Hyper Enrichment
-Version: 1.1.10
+Version: 1.2.00
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
              role=c("aut","cre")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
@@ -15,26 +15,27 @@ LazyData: true
 Imports:
     ggplot2,
     ggforce,
-    DT,
     R6,
     magrittr,
     dplyr,
     purrr,
     stats,
+    stringr,
     scales,
     rlang,
+    httr,
     openxlsx,
+    reactable,
     msigdbr,
     kableExtra,
     rmarkdown,
     gh,
     igraph,
     visNetwork
-Suggests: 
+Suggests:
     devtools,
     testthat,
-    knitr,
-    httr
+    knitr
 biocViews: GeneSetEnrichment, Annotation, Pathways
 VignetteBuilder: knitr
 BugReports: https://github.com/montilab/hypeR/issues

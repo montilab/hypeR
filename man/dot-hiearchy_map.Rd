@@ -4,15 +4,13 @@
 \alias{.hiearchy_map}
 \title{Plot hiearchy map}
 \usage{
-.hiearchy_map(hyp_df, rgsets_obj, title = "", pval_cutoff = 1,
-  fdr_cutoff = 1, val = c("fdr", "pval"), top = NULL)
+.hiearchy_map(hyp_df, rgsets_obj, pval_cutoff = 1, fdr_cutoff = 1,
+  val = c("fdr", "pval"), top = NULL, title = "")
 }
 \arguments{
 \item{hyp_df}{A dataframe from a hyp object}
 
 \item{rgsets_obj}{A relatonal geneset from a hyp object}
-
-\item{title}{Plot title}
 
 \item{pval_cutoff}{Filter results to be less than pval cutoff}
 
@@ -21,6 +19,8 @@
 \item{val}{Choose significance value displayed when hovering nodes e.g. c("fdr", "pval")}
 
 \item{top}{Limit number of pathways shown}
+
+\item{title}{Plot title}
 }
 \value{
 A visNetwork object

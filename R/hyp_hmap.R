@@ -2,11 +2,11 @@
 #'
 #' @param hyp_df A dataframe from a hyp object
 #' @param rgsets_obj A relatonal geneset from a hyp object
-#' @param title Plot title
 #' @param pval_cutoff Filter results to be less than pval cutoff
 #' @param fdr_cutoff Filter results to be less than fdr cutoff
 #' @param val Choose significance value displayed when hovering nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
+#' @param title Plot title
 #' @return A visNetwork object
 #'
 #' @importFrom purrr when
@@ -15,11 +15,11 @@
 #' @keywords internal
 .hiearchy_map <- function(hyp_df,
                           rgsets_obj,
-                          title="", 
                           pval_cutoff=1, 
                           fdr_cutoff=1,
                           val=c("fdr", "pval"),
-                          top=NULL) {
+                          top=NULL,
+                          title="") {
 
     # Subset results
     hyp_df <- hyp_df %>%
@@ -28,15 +28,12 @@
               purrr::when(!is.null(top) ~ head(., top), ~ .)
         
     # Handle empty dataframes
-    if (nrow(hyp_df) == 0) {
-        return(ggempty())
-    }
+    if (nrow(hyp_df) == 0) return(ggempty())
     
     # Subset relational genesets
     rgsets.obj.subset <- rgsets_obj$subset(hyp_df$label)
     
     # Extract hiearchy information
-    gsets <- rgsets.obj.subset$gsets
     nodes <- rgsets.obj.subset$nodes
     edges <- rgsets.obj.subset$edges
 
@@ -79,41 +76,34 @@
 #' Visualize hyp/multihyp objects as a hiearchy map
 #'
 #' @param hyp_obj A hyp or multihyp object
-#' @param title Plot title
-#' @param pval_cutoff Filter results to be less than pval cutoff
-#' @param fdr_cutoff Filter results to be less than fdr cutoff
+#' @param pval Filter results to be less than pval cutoff
+#' @param fdr Filter results to be less than fdr cutoff
 #' @param val Choose significance value displayed when hovering nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
-#' @param multihyp_titles Use false to disable plot titles for multihyp objects
-#' @param show_plots Use true to show plots
-#' @param return_plots Use true to return plots
+#' @param title Plot title
 #' @return A visNetwork object or list of visNetwork objects
 #'
 #' @examples
-#' rgsets <- hyperdb_fetch(type="rgsets", "KEGG")
+#' genesets <- hyperdb_rgsets("REACTOME", "70.0")
 #'
 #' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
 #' # Perform hyper enrichment
-#' hyp_obj <- hypeR(signature, rgsets, bg=2522, fdr_cutoff=0.05)
+#' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
 #' # Visualize
 #' hyp_hmap(hyp_obj, top=60)
 #'
-#' @importFrom stats setNames
 #' @importFrom rlang duplicate
 #' @export
 hyp_hmap <- function(hyp_obj,
-                     title="",
-                     pval_cutoff=1, 
-                     fdr_cutoff=1,
+                     pval=1, 
+                     fdr=1,
                      val=c("fdr", "pval"),
                      top=NULL,
-                     multihyp_titles=TRUE,
-                     show_plots=TRUE,
-                     return_plots=FALSE) {
+                     title="") {
     
     # Checks and warnings
     stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
@@ -121,39 +111,25 @@ hyp_hmap <- function(hyp_obj,
     # Default arguments
     val <- match.arg(val)
 
-    # Handling multihyp objects
+    # Handling of multiple signatures
     if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
-        n <- names(multihyp_obj$data)
-        res <- lapply(stats::setNames(n, n), function(x) {
-                   hyp_obj <- multihyp_obj$data[[x]]
-                   hyp_hmap(hyp_obj,
-                            ifelse(multihyp_titles, x, ""),
-                            pval_cutoff, 
-                            fdr_cutoff,
-                            val,
-                            top,
-                            multihyp_titles,
-                            show_plots,
-                            return_plots)           
-               })
-    # Handling hyp objects
-    } else {
+
+        mapply(function(hyp_obj, title) {
+
+            hyp_hmap(hyp_obj,
+                     pval=pval,
+                     fdr=fdr,
+                     val=val,
+                     top=top,
+                     title=title) 
+
+        }, multihyp_obj$data, names(multihyp_obj$data), USE.NAMES=TRUE, SIMPLIFY=FALSE)
+    } 
+    else {
         hyp_df <- hyp_obj$data
-        rgsets_obj <- rlang::duplicate(hyp_obj$args$gsets)
+        rgsets_obj <- rlang::duplicate(hyp_obj$args$genesets)
         stopifnot(is(rgsets_obj, "rgsets"))
-        res <- .hiearchy_map(hyp_df,
-                             rgsets_obj,
-                             title,
-                             pval_cutoff, 
-                             fdr_cutoff,
-                             val,
-                             top)
-        if (show_plots) {
-            show(res)
-        }
-    }
-    if (return_plots) {
-        return(res)
+        .hiearchy_map(hyp_df, rgsets_obj, pval, fdr, val, top, title)
     }
 }

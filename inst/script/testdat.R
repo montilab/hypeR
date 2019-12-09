@@ -39,12 +39,12 @@ internal.id <- paste("G", 11:15, sep="")
 internal.label <- paste("Internal Geneset", 11:15, sep=" ")
 
 set.seed(1)
-gsets <- as.list(leaf.label) %>%
-         set_names(leaf.label) %>%
-         lapply(function(x) {
-             size <- sample(c(10:15), 1)
-             return(sample(LETTERS, size, replace=FALSE))
-         })
+genesets <- as.list(leaf.label) %>%
+            set_names(leaf.label) %>%
+            lapply(function(x) {
+                size <- sample(c(10:15), 1)
+                return(sample(LETTERS, size, replace=FALSE))
+            })
 
 nodes <- data.frame(list("label"=c(leaf.label, internal.label)), stringsAsFactors=FALSE) %>%
          set_rownames(c(leaf.id, internal.id))
@@ -65,8 +65,6 @@ edges <- "G13,G10
                    strip.white=TRUE,
                    stringsAsFactors=FALSE)
 
-testdat$gsets <- gsets
-testdat$nodes <- nodes
-testdat$edges <- edges
-testdat$rgsets <- rgsets$new(gsets, nodes, edges)
+testdat$gsets <- gsets$new(genesets, name="test", version="1.0")
+testdat$rgsets <- rgsets$new(genesets, nodes, edges, name="test", version="1.0")
 saveRDS(testdat, file.path(system.file("extdata", package="hypeR"), "testdat.rds"))

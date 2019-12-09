@@ -11,6 +11,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom ggplot2 ggplot aes coord_fixed theme_void theme labs element_text
 #' @importFrom ggforce geom_circle
+#' 
 #' @export
 ggvenn <- function(a, b, ga, gb, title="") {
    

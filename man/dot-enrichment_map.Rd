@@ -4,17 +4,15 @@
 \alias{.enrichment_map}
 \title{Plot enrichment map}
 \usage{
-.enrichment_map(hyp_df, gsets, title,
+.enrichment_map(hyp_df, genesets,
   similarity_metric = c("jaccard_similarity", "overlap_similarity"),
   similarity_cutoff = 0.2, pval_cutoff = 1, fdr_cutoff = 1,
-  val = c("fdr", "pval"), top = NULL)
+  val = c("fdr", "pval"), top = NULL, title = "")
 }
 \arguments{
 \item{hyp_df}{A dataframe from a hyp object}
 
-\item{gsets}{A list of genesets}
-
-\item{title}{Plot title}
+\item{genesets}{A list of genesets}
 
 \item{similarity_metric}{Metric to calculate geneset similarity}
 
@@ -27,6 +25,8 @@
 \item{val}{Choose significance value shown above nodes e.g. c("fdr", "pval")}
 
 \item{top}{Limit number of pathways shown}
+
+\item{title}{Plot title}
 }
 \value{
 A visNetwork object
