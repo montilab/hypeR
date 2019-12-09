@@ -84,6 +84,7 @@
 #'
 #' @param base Logarithm base
 #' @importFrom scales trans_new log_breaks
+#' 
 #' @keywords internal
 .reverselog_trans <- function(base=exp(1)) {
     trans <- function(x) -log(x, base)
@@ -91,4 +92,29 @@
     scales::trans_new(paste0("reverselog-", format(base)), trans, inv, 
               scales::log_breaks(base=base), 
               domain=c(1e-100, Inf))
+}
+
+#' Find geneset members
+#'
+#' @param id A vector of ids
+#' @param genesets A list of genesets (see \code{rgsets})
+#' @param nodes A data frame of labeled nodes (see \code{rgsets})
+#' @param edges A data frame of directed edges (see \code{rgsets})
+#' @return A vector of ids
+#'
+#' @importFrom dplyr filter pull %>%
+#' 
+#' @keywords internal
+.find_members <- function(id, genesets, nodes, edges) {
+    label <- nodes[id, "label"]
+    if (label %in% names(genesets)) {
+        genesets[[label]]
+    } else {
+        edges %>%
+        dplyr::filter(from == id) %>%
+        dplyr::pull(to) %>%
+        lapply(.find_members, genesets, nodes, edges) %>%
+        unlist() %>%
+        unique()
+    }
 }

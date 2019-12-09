@@ -1,15 +1,15 @@
-#' Perform hyper enrichment
+#' Calculate enrichment of one or more signatures
 #' 
 #' @param signature A vector of symbols
 #' @param genesets A gsets/rgsets object or a named list of genesets
 #' @param test Choose an enrichment type e.g. c("hypergeometric", "kstest")
 #' @param background Size or character vector of background population genes
-#' @param power Exponent for weights (Subramanian et al.)
-#' @param absolute Takes max-min score rather than the max deviation from null
+#' @param power Exponent for weights (kstest only)
+#' @param absolute Takes max-min score rather than the max deviation from null (kstest only)
 #' @param pval Filter results to be less than pval cutoff
 #' @param fdr Filter results to be less than fdr cutoff
 #' @param plotting Use true to generate plots for each geneset test (may slow performance)
-#' @param quiet Use false to suppress logs
+#' @param quiet Use true to suppress logs and warnings
 #' @return A hyp object
 #'
 #' @examples
@@ -19,11 +19,11 @@
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
-#' # Perform hyper enrichment
 #' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr filter arrange
+#' 
 #' @export
 hypeR <- function(signature,
                   genesets,

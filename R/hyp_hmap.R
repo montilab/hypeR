@@ -81,7 +81,7 @@
 #' @param val Choose significance value displayed when hovering nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
 #' @param title Plot title
-#' @return A visNetwork object or list of visNetwork objects
+#' @return A visNetwork object
 #'
 #' @examples
 #' genesets <- hyperdb_rgsets("REACTOME", "70.0")
@@ -90,10 +90,8 @@
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
-#' # Perform hyper enrichment
 #' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
-#' # Visualize
 #' hyp_hmap(hyp_obj, top=60)
 #'
 #' @importFrom rlang duplicate

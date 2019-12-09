@@ -1,8 +1,8 @@
-#' Convert hyp object to an interactive datatable
+#' Convert a hyp object to a reactable table
 #'
 #' @param hyp_obj A hyp object
-#' @param simple Use true to only include essential dataframe columns
-#' @return A datatable object
+#' @param simple Use true to only include essential columns
+#' @return A reactable table
 #'
 #' @examples
 #' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
@@ -11,10 +11,8 @@
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
-#' # Perform hyper enrichment
 #' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
-#' # Export
 #' hyp_show(hyp_obj)
 #'
 #' @importFrom reactable reactable

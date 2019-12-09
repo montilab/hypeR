@@ -2,7 +2,7 @@
 % Please edit documentation in R/hype.R
 \name{hypeR}
 \alias{hypeR}
-\title{Perform hyper enrichment}
+\title{Calculate enrichment of one or more signatures}
 \usage{
 hypeR(signature, genesets, test = c("hypergeometric", "kstest"),
   background = 23467, power = 1, absolute = FALSE, pval = 1,
@@ -17,9 +17,9 @@ hypeR(signature, genesets, test = c("hypergeometric", "kstest"),
 
 \item{background}{Size or character vector of background population genes}
 
-\item{power}{Exponent for weights (Subramanian et al.)}
+\item{power}{Exponent for weights (kstest only)}
 
-\item{absolute}{Takes max-min score rather than the max deviation from null}
+\item{absolute}{Takes max-min score rather than the max deviation from null (kstest only)}
 
 \item{pval}{Filter results to be less than pval cutoff}
 
@@ -27,13 +27,13 @@ hypeR(signature, genesets, test = c("hypergeometric", "kstest"),
 
 \item{plotting}{Use true to generate plots for each geneset test (may slow performance)}
 
-\item{quiet}{Use false to suppress logs}
+\item{quiet}{Use true to suppress logs and warnings}
 }
 \value{
 A hyp object
 }
 \description{
-Perform hyper enrichment
+Calculate enrichment of one or more signatures
 }
 \examples{
 genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
@@ -42,7 +42,6 @@ signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
-# Perform hyper enrichment
 hyp_obj <- hypeR(signature, genesets, background=2522)
 
 }

@@ -20,6 +20,9 @@ A multihyp object
 
 \section{Methods}{
 
+
+\code{print(multihyp)} shows some information about the object data
+
 \code{multihyp$as.list()} returns a list of \code{hyp} objects as dataframes.
 }
 

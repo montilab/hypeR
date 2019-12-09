@@ -15,9 +15,6 @@ hyp_to_excel(hyp_obj, file_path, cols = NULL, version = TRUE)
 
 \item{version}{Add sheet with versioning information}
 }
-\value{
-None
-}
 \description{
 Export hyp/multihyp object to excel
 }
@@ -28,10 +25,8 @@ signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
-# Perform hyper enrichment
 hyp_obj <- hypeR(signature, genesets, background=2522)
 
-# Export
 hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
 
 }

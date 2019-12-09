@@ -39,7 +39,7 @@ reference:
   - '`enrichr_gsets`'
   - '`hyperdb_info`'
   - '`hyperdb_rgsets`'
-- title: Classes
+- title: Objects
   desc: ~
   contents:
   - '`hyp`'

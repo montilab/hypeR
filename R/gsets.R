@@ -12,8 +12,12 @@
 #' @section Methods:
 #' 
 #' \code{print(gsets)} prints geneset information.
-#' 
+#'
 #' \code{gsets$reduce(background)} reduces genesets to a background distribution of symbols.
+#' 
+#' @section See Also:
+#' 
+#' \code{rgsets}
 #' 
 #' @examples
 #' genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
@@ -24,6 +28,7 @@
 #' print(gsets_obj)
 #'
 #' @importFrom R6 R6Class
+#' 
 #' @export
 gsets <- R6Class("gsets", list(
     genesets = NULL,

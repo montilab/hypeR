@@ -4,7 +4,7 @@
 \alias{msigdb_gsets}
 \title{Download data from msigdb in the form of a gsets object}
 \usage{
-msigdb_gsets(species = "Homo sapiens", category, subcategory = "")
+msigdb_gsets(species, category, subcategory = "")
 }
 \arguments{
 \item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}

@@ -21,7 +21,7 @@ hyp_hmap(hyp_obj, pval = 1, fdr = 1, val = c("fdr", "pval"),
 \item{title}{Plot title}
 }
 \value{
-A visNetwork object or list of visNetwork objects
+A visNetwork object
 }
 \description{
 Visualize hyp/multihyp objects as a hiearchy map
@@ -33,10 +33,8 @@ signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
-# Perform hyper enrichment
 hyp_obj <- hypeR(signature, genesets, background=2522)
 
-# Visualize
 hyp_hmap(hyp_obj, top=60)
 
 }

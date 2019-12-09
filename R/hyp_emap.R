@@ -103,7 +103,7 @@
 #' @param val Choose significance value shown above nodes e.g. c("fdr", "pval")
 #' @param top Limit number of pathways shown
 #' @param title Plot title
-#' @return A visNetwork object or list of visNetwork objects
+#' @return A visNetwork object
 #'
 #' @examples
 #' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
@@ -112,10 +112,8 @@
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
-#' # Perform hyper enrichment
 #' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
-#' # Visualize
 #' hyp_emap(hyp_obj, top=30, val="fdr")
 #'
 #' @export

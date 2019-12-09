@@ -28,6 +28,12 @@ A genesets object
 \code{gsets$reduce(background)} reduces genesets to a background distribution of symbols.
 }
 
+\section{See Also}{
+
+
+\code{rgsets}
+}
+
 \examples{
 genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
                  "GSET2" = c("GENE4", "GENE5", "GENE6"),

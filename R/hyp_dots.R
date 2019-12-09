@@ -63,7 +63,7 @@
           axis.title.y=element_blank())
 }
 
-#'  Visualize hyp/multihyp objects as a dots plot
+#' Visualize hyp/multihyp objects as a dots plot
 #'
 #' @param hyp_obj A hyp or multihyp object
 #' @param top Limit number of genesets shown
@@ -71,7 +71,7 @@
 #' @param sizes Size dots by geneset sizes
 #' @param pval Filter results to be less than pval cutoff
 #' @param fdr Filter results to be less than fdr cutoff
-#' @param val Choose significance value e.g. c("fdr", "pval")
+#' @param val Choose significance value for plot e.g. c("fdr", "pval")
 #' @param title Plot title
 #' @return A ggplot object
 #'
@@ -82,11 +82,9 @@
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
-#' # Perform hyper enrichment
 #' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
-#' # Visualize
-#' hyp_dots(hyp_obj, top=3, val="fdr")
+#' hyp_dots(hyp_obj, val="fdr")
 #'
 #' @export
 hyp_dots <- function(hyp_obj,

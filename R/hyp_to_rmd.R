@@ -78,11 +78,12 @@ df
 #' @param custom_rmd_config Replace configuration section of markdown report
 #' @param custom_pre_content Insert custom content before tabset section
 #' @param custom_post_content Insert custom content after tabset section
-#' @return None
+#' @return NULL
 #'
 #' @import kableExtra
 #' @importFrom rmarkdown render
 #' @importFrom magrittr %>%
+#' 
 #' @export
 hyp_to_rmd <- function(hyp_obj,
                        file_path,

@@ -20,7 +20,7 @@ hyp_dots(hyp_obj, top = 20, abrv = 50, sizes = TRUE, pval = 1,
 
 \item{fdr}{Filter results to be less than fdr cutoff}
 
-\item{val}{Choose significance value e.g. c("fdr", "pval")}
+\item{val}{Choose significance value for plot e.g. c("fdr", "pval")}
 
 \item{title}{Plot title}
 }
@@ -37,10 +37,8 @@ signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
-# Perform hyper enrichment
 hyp_obj <- hypeR(signature, genesets, background=2522)
 
-# Visualize
-hyp_dots(hyp_obj, top=3, val="fdr")
+hyp_dots(hyp_obj, val="fdr")
 
 }

@@ -1,28 +1,4 @@
-#' Find geneset members
-#'
-#' @param id A vector of ids
-#' @param genesets A list of genesets (see \code{rgsets})
-#' @param nodes A data frame of labeled nodes (see \code{rgsets})
-#' @param edges A data frame of directed edges (see \code{rgsets})
-#' @return A vector of ids
-#'
-#' @importFrom dplyr filter pull %>%
-#' @keywords internal
-find_members <- function(id, genesets, nodes, edges) {
-    label <- nodes[id, "label"]
-    if (label %in% names(genesets)) {
-        genesets[[label]]
-    } else {
-        edges %>%
-        dplyr::filter(from == id) %>%
-        dplyr::pull(to) %>%
-        lapply(find_members, genesets, nodes, edges) %>%
-        unlist() %>%
-        unique()
-    }
-}
-
-#' Relational genesets
+#' A relational genesets object
 #'
 #' @name rgsets
 #'
@@ -60,16 +36,16 @@ find_members <- function(id, genesets, nodes, edges) {
 #' 
 #' @section See Also:
 #' 
+#' \code{gsets}
 #' \code{pvector}
 #'
 #' @examples
 #' testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-#' rgsets <- rgsets$new(genesets=testdat$genesets,
-#'                      nodes=testdat$nodes,
-#'                      edges=testdat$edges)
+#' rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testdat$edges, name="Example", version="v1.0")
 #'
 #' @importFrom R6 R6Class
 #' @importFrom dplyr filter pull %>%
+#' 
 #' @export
 rgsets <- R6Class("rgsets", list(
     genesets = NULL,
@@ -84,7 +60,7 @@ rgsets <- R6Class("rgsets", list(
         self$nodes <- nodes
         self$edges <- edges
         self$nodes$id <- rownames(self$nodes)
-        self$nodes$length <- sapply(self$nodes$id, function(x) {length(find_members(x, genesets, nodes, edges))})
+        self$nodes$length <- sapply(self$nodes$id, function(x) {length(.find_members(x, genesets, nodes, edges))})
         self$name <- name
         self$version <- version
     },

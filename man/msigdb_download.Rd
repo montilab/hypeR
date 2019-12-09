@@ -4,7 +4,7 @@
 \alias{msigdb_download}
 \title{Download data from msigdb in the form of a named list}
 \usage{
-msigdb_download(species = "Homo sapiens", category, subcategory = "")
+msigdb_download(species, category, subcategory = "")
 }
 \arguments{
 \item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}

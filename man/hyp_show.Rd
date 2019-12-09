@@ -2,20 +2,20 @@
 % Please edit documentation in R/hyp_show.R
 \name{hyp_show}
 \alias{hyp_show}
-\title{Convert hyp object to an interactive datatable}
+\title{Convert a hyp object to a reactable table}
 \usage{
 hyp_show(hyp_obj, simple = FALSE)
 }
 \arguments{
 \item{hyp_obj}{A hyp object}
 
-\item{simple}{Use true to only include essential dataframe columns}
+\item{simple}{Use true to only include essential columns}
 }
 \value{
-A datatable object
+A reactable table
 }
 \description{
-Convert hyp object to an interactive datatable
+Convert a hyp object to a reactable table
 }
 \examples{
 genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
@@ -24,10 +24,8 @@ signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 
-# Perform hyper enrichment
 hyp_obj <- hypeR(signature, genesets, background=2522)
 
-# Export
 hyp_show(hyp_obj)
 
 }

@@ -11,32 +11,47 @@ knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALS
 devtools::load_all(".")
 ```
 
-Often computational biologists must process, interpret, and share large amounts of biological data. A common example is interpreting gene co-expression modules across one or more phenotype, resulting in potentially hundreds of signatures to annotate. Here we have signatures of gene co-expression modules developed from carcinogenic and non-carcinogenic pertubation experiments. In this case, we can feed `hypeR()` a named list of signatures and a `multihyp` object will be returned. This object is essentially just multiple `hyp` objects. However it is recognized and handled differently by downstream methods.
+Often computational biologists must process, interpret, and share large amounts of biological data. A common example is interpreting gene co-expression modules across one or more phenotype, resulting in potentially hundreds of signatures to annotate. Here we have signatures of gene co-expression modules, generated with WGCNA, for two distinct phenotypes. In this case, we can feed `hypeR()` a named list of signatures and a `multihyp` object will be returned. This object is essentially just multiple `hyp` objects. However it is recognized and handled differently by downstream methods.
 
 ```{r}
 
 hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
-wgcna <- hypdat$wgcna
 
 ```
 
+We start by annotating signatures for the first phenotype..
+
 ```{r}
 
+wgcna <- hypdat$wgcna
 signatures <- wgcna[[1]]
 str(signatures)
 
 ```
 
-```{r}
+The signatures will be processed together...
+
+```{r, message=FALSE}
 
 genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
-multihyp_obj <- hypeR(signatures, genesets, test="hypergeometric", background=50000, fdr=0.01, plotting=FALSE)
+
+multihyp_obj <- hypeR(signatures, genesets, test="hypergeometric", background=50000, fdr=0.01)
+
+```
+
+### A `multihyp` Object
+
+```{r}
+
+print(multihyp_obj)
 
 ```
 
 A `multihyp` object can be passed to any downstream method, with some altered behavior.
 
-When saving a `multihyp` object to excel, each signature is exported to its own tab.
+#### Altered Methods
+
+With `hyp_to_excel` each signature is exported to its own sheet...
 
 ```{r, eval=FALSE}
 
@@ -44,7 +59,7 @@ hyp_to_excel(multihyp_obj, file_path="hypeR.xlsx")
 
 ```
 
-When saving a `multihyp` object to a table, each signature is exported as its own table in a single directory.
+With `hyp_to_table` each signature is exported as its own table in a single directory...
 
 ```{r, eval=FALSE}
 
@@ -52,17 +67,19 @@ hyp_to_table(multihyp_obj, file_path="hypeR")
 
 ```
 
-When plotting a `multihyp` object, each signatures is plotted and returned separately. The same goes for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`.
+With `hyp_to_rmd` each signature is displayed under its own tab...
+
+```{r, eval=FALSE}
+
+hyp_to_rmd(lmultihyp_obj, file_path="hypeR.rmd",
+
+```
+
+With `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()` each signatures is plotted and returned separately...
 
 ```{r}
 
 p <- hyp_dots(multihyp_obj)
-
-```
-
-```{r}
-
-names(p)[1:3]
 
 ```
 

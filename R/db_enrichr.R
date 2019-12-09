@@ -57,7 +57,6 @@ enrichr_download <- function(genesets) {
     lapply(genesets, function(x) {
         genes <- x[3:length(x)]
         genes <- genes[genes != ""]
-        genes <- toupper(genes)
         unique(genes)
     })
 }

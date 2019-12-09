@@ -49,9 +49,6 @@ hyp_to_rmd(hyp_obj, file_path, title = "Workflow Report",
 
 \item{custom_post_content}{Insert custom content after tabset section}
 }
-\value{
-None
-}
 \description{
 Export hyp object to rmarkdown
 }

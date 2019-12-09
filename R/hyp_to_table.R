@@ -5,7 +5,7 @@
 #' @param sep The field separator string
 #' @param cols Dataframe columns to include
 #' @param version Add header with versioning information
-#' @return None
+#' @return NULL
 #'
 #' @examples
 #' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
@@ -14,10 +14,8 @@
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
 #'                "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
 #'
-#' # Perform hyper enrichment
 #' hyp_obj <- hypeR(signature, genesets, background=2522)
 #'
-#' # Export
 #' hyp_to_table(hyp_obj, file_path="pathways.txt")
 #'
 #' @importFrom magrittr %>% extract

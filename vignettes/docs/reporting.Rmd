@@ -11,40 +11,47 @@ knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALS
 devtools::load_all(".")
 ```
 
-### Multiple experiments
-Sometimes, we are generating reports for multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze ourselves or share with collaborators.
-
-In the following example, we're interested in exploring the signatures from a [Weighted Gene Co-expression Analysis](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. The `hyp_to_rmd()` will help us process this data in a concise and reproducible manner that is readily shareable.
+### Multiple Experiments
+Often researchers need to annotate multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze and share with collaborators.
 
 ```{r}
 
 hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
-wgcna <- hypdat$wgcna
 
 ```
+
+In the following example, we're interested in exploring the signatures from a [Weighted Gene Co-expression Analysis](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. Using `hyp_to_rmd()` will help us process this data in a concise and reproducible manner that is readily shareable.
 
 ```{r}
 
-str(wgcna)
+signatures <- hypdat$wgcna
+str(signatures)
 
 ```
 
-### Hyper enrichment
 Because we have a nested list of signatures, we use `hyper()` with the `lapply` function. This results in a list of `multihyp` objects, which can be directly passed to `hyp_to_rmd()`.
+
 ```{r, eval=FALSE}
 
 genesets <- hyperdb_rgsets("REACTOME", "70.0")
-lmultihyp_obj <- lapply(wgcna, hypeR, genesets, test="hypergeometric", background=50000, fdr=0.01, plotting=FALSE)
+
+lmultihyp_obj <- lapply(signatures, hypeR, genesets, test="hypergeometric", background=50000, fdr=0.01)
 
 ```
 
-### Markdown reports
-`hyp_to_rmd()` will accept multiple formats, including a single `hyp` or `multihyp` object as well as a list of either, including a list of `hyp` or `multihyp` objects together. When a list of `multihyp` objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`, allowing customization of their functionality per report.
+### Generating Markdown Reports
+
+`hyp_to_rmd()` will accept multiple formats, including a single `hyp` or `multihyp` object as well as a list of either, including a list of `hyp` or `multihyp` objects together. 
+
+When a list of `multihyp` objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. 
+
+Lists of keyword arguments can be passed for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`, allowing customization of their functionality per report. See `hyp_to_rmd()` for details.
+
 ```{r, eval=FALSE}
 
 hyp_to_rmd(lmultihyp_obj,
-           file_path="hyper-enrichment.rmd",
-           title="Hyper Enrichment (hypeR)",
+           file_path="hypeR.rmd",
+           title="hypeR Report",
            subtitle="Weighted Gene Co-expression Analysis",
            author="Anthony Federico, Stefano Monti",
            show_dots=T,

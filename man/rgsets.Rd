@@ -3,13 +3,13 @@
 \docType{data}
 \name{rgsets}
 \alias{rgsets}
-\title{Relational genesets}
+\title{A relational genesets object}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 rgsets
 }
 \description{
-Relational genesets
+A relational genesets object
 }
 \section{Arguments}{
 
@@ -50,14 +50,13 @@ on geneset labels
 \section{See Also}{
 
 
+\code{gsets}
 \code{pvector}
 }
 
 \examples{
 testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-rgsets <- rgsets$new(genesets=testdat$genesets,
-                     nodes=testdat$nodes,
-                     edges=testdat$edges)
+rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testdat$edges, name="Example", version="v1.0")
 
 }
 \keyword{datasets}

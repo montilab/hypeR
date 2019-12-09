@@ -75,10 +75,10 @@ kinds of signatures are expected. There are three types of signatures
 signature <- c("GENE1", "GENE2", "GENE3")
 
 # A ranked character vector of symbols (kstest)
-ranked.signature <-  c("GENE2", "GENE1", "GENE3")
+ranked.signature <- c("GENE2", "GENE1", "GENE3")
 
 # A ranked named numerical vector of symbols with ranking weights (gsea)
-weighted.signature <-  c("GENE2"=1.22, "GENE1"=0.94, "GENE3"=0.77)
+weighted.signature <- c("GENE2"=1.22, "GENE1"=0.94, "GENE3"=0.77)
 ```
 
 ### Geneset
