@@ -4,7 +4,7 @@
 \name{rgsets}
 \alias{rgsets}
 \title{A relational genesets object}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 rgsets
 }

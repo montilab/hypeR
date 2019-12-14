@@ -4,7 +4,7 @@
 \name{pvector}
 \alias{pvector}
 \title{A push/pop capable vector}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 pvector
 }

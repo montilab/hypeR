@@ -4,7 +4,7 @@
 \name{hyp}
 \alias{hyp}
 \title{A hyp object}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 hyp
 }

@@ -4,7 +4,7 @@
 \name{gsets}
 \alias{gsets}
 \title{A genesets object}
-\format{An object of class \code{R6ClassGenerator} of length 24.}
+\format{An object of class \code{R6ClassGenerator} of length 25.}
 \usage{
 gsets
 }
