@@ -4,8 +4,16 @@
 \alias{hyp_dots}
 \title{Visualize hyp/multihyp objects as a dots plot}
 \usage{
-hyp_dots(hyp_obj, top = 20, abrv = 50, sizes = TRUE, pval = 1,
-  fdr = 1, val = c("fdr", "pval"), title = "")
+hyp_dots(
+  hyp_obj,
+  top = 20,
+  abrv = 50,
+  sizes = TRUE,
+  pval = 1,
+  fdr = 1,
+  val = c("fdr", "pval"),
+  title = ""
+)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}

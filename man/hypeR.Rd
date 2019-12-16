@@ -4,9 +4,18 @@
 \alias{hypeR}
 \title{Calculate enrichment of one or more signatures}
 \usage{
-hypeR(signature, genesets, test = c("hypergeometric", "kstest"),
-  background = 23467, power = 1, absolute = FALSE, pval = 1,
-  fdr = 1, plotting = FALSE, quiet = TRUE)
+hypeR(
+  signature,
+  genesets,
+  test = c("hypergeometric", "kstest"),
+  background = 23467,
+  power = 1,
+  absolute = FALSE,
+  pval = 1,
+  fdr = 1,
+  plotting = FALSE,
+  quiet = TRUE
+)
 }
 \arguments{
 \item{signature}{A vector of symbols}

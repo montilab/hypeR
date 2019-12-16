@@ -4,8 +4,14 @@
 \alias{hyp_hmap}
 \title{Visualize hyp/multihyp objects as a hiearchy map}
 \usage{
-hyp_hmap(hyp_obj, pval = 1, fdr = 1, val = c("fdr", "pval"),
-  top = NULL, title = "")
+hyp_hmap(
+  hyp_obj,
+  pval = 1,
+  fdr = 1,
+  val = c("fdr", "pval"),
+  top = NULL,
+  title = ""
+)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}

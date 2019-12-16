@@ -4,8 +4,7 @@
 \alias{hyp_to_table}
 \title{Export hyp/multihyp object to table}
 \usage{
-hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL,
-  version = TRUE)
+hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL, version = TRUE)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}

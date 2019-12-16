@@ -4,10 +4,17 @@
 \alias{.enrichment_map}
 \title{Plot enrichment map}
 \usage{
-.enrichment_map(hyp_df, genesets,
+.enrichment_map(
+  hyp_df,
+  genesets,
   similarity_metric = c("jaccard_similarity", "overlap_similarity"),
-  similarity_cutoff = 0.2, pval_cutoff = 1, fdr_cutoff = 1,
-  val = c("fdr", "pval"), top = NULL, title = "")
+  similarity_cutoff = 0.2,
+  pval_cutoff = 1,
+  fdr_cutoff = 1,
+  val = c("fdr", "pval"),
+  top = NULL,
+  title = ""
+)
 }
 \arguments{
 \item{hyp_df}{A dataframe from a hyp object}

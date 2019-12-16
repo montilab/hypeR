@@ -4,8 +4,12 @@
 \alias{.hyper_enrichment}
 \title{Overrepresentation test via hyper-geometric distribution}
 \usage{
-.hyper_enrichment(signature, genesets,
-  background = length(unique(unlist(genesets))), plotting = TRUE)
+.hyper_enrichment(
+  signature,
+  genesets,
+  background = length(unique(unlist(genesets))),
+  plotting = TRUE
+)
 }
 \arguments{
 \item{signature}{A vector of symbols}

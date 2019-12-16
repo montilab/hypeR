@@ -4,9 +4,16 @@
 \alias{hyp_emap}
 \title{Visualize hyp/multihyp objects as an enrichment map}
 \usage{
-hyp_emap(hyp_obj, similarity_metric = c("jaccard_similarity",
-  "overlap_similarity"), similarity_cutoff = 0.2, pval = 1, fdr = 1,
-  val = c("fdr", "pval"), top = NULL, title = "")
+hyp_emap(
+  hyp_obj,
+  similarity_metric = c("jaccard_similarity", "overlap_similarity"),
+  similarity_cutoff = 0.2,
+  pval = 1,
+  fdr = 1,
+  val = c("fdr", "pval"),
+  top = NULL,
+  title = ""
+)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}

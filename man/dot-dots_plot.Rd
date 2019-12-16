@@ -4,9 +4,16 @@
 \alias{.dots_plot}
 \title{Plot top enriched genesets}
 \usage{
-.dots_plot(hyp_df, top = 20, abrv = 50, sizes = TRUE,
-  pval_cutoff = 1, fdr_cutoff = 1, val = c("fdr", "pval"),
-  title = "")
+.dots_plot(
+  hyp_df,
+  top = 20,
+  abrv = 50,
+  sizes = TRUE,
+  pval_cutoff = 1,
+  fdr_cutoff = 1,
+  val = c("fdr", "pval"),
+  title = ""
+)
 }
 \arguments{
 \item{hyp_df}{A dataframe from a hyp object}

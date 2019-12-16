@@ -4,8 +4,15 @@
 \alias{.kstest}
 \title{One-sided Kolmogorov–Smirnov test}
 \usage{
-.kstest(n.x, y, weights = NULL, weights.pwr = 1, absolute = FALSE,
-  plotting = FALSE, plot.title = "")
+.kstest(
+  n.x,
+  y,
+  weights = NULL,
+  weights.pwr = 1,
+  absolute = FALSE,
+  plotting = FALSE,
+  plot.title = ""
+)
 }
 \arguments{
 \item{n.x}{The length of a ranked list}

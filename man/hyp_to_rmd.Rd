@@ -4,15 +4,26 @@
 \alias{hyp_to_rmd}
 \title{Export hyp object to rmarkdown}
 \usage{
-hyp_to_rmd(hyp_obj, file_path, title = "Workflow Report",
-  subtitle = "", author = "", header = "Results", version = TRUE,
-  show_dots = TRUE, show_emaps = TRUE, show_hmaps = FALSE,
-  show_tables = TRUE, hyp_dots_args = list(top = 15, val = "fdr"),
-  hyp_emap_args = list(top = 25, val = "fdr", similarity_metric =
-  "jaccard_similarity", similarity_cutoff = 0.2),
+hyp_to_rmd(
+  hyp_obj,
+  file_path,
+  title = "Workflow Report",
+  subtitle = "",
+  author = "",
+  header = "Results",
+  version = TRUE,
+  show_dots = TRUE,
+  show_emaps = TRUE,
+  show_hmaps = FALSE,
+  show_tables = TRUE,
+  hyp_dots_args = list(top = 15, val = "fdr"),
+  hyp_emap_args = list(top = 25, val = "fdr", similarity_metric = "jaccard_similarity",
+    similarity_cutoff = 0.2),
   hyp_hmap_args = list(top = 25, val = "fdr"),
-  custom_rmd_config = NULL, custom_pre_content = NULL,
-  custom_post_content = NULL)
+  custom_rmd_config = NULL,
+  custom_pre_content = NULL,
+  custom_post_content = NULL
+)
 }
 \arguments{
 \item{hyp_obj}{A hyp object, multihyp object, or list of multihyp objects}

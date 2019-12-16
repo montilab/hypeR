@@ -4,8 +4,15 @@
 \alias{.hiearchy_map}
 \title{Plot hiearchy map}
 \usage{
-.hiearchy_map(hyp_df, rgsets_obj, pval_cutoff = 1, fdr_cutoff = 1,
-  val = c("fdr", "pval"), top = NULL, title = "")
+.hiearchy_map(
+  hyp_df,
+  rgsets_obj,
+  pval_cutoff = 1,
+  fdr_cutoff = 1,
+  val = c("fdr", "pval"),
+  top = NULL,
+  title = ""
+)
 }
 \arguments{
 \item{hyp_df}{A dataframe from a hyp object}

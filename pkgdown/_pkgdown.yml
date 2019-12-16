@@ -71,5 +71,7 @@ navbar:
     - text: "Reference"
       href: reference/index.html
   right:
+    - text: "Change Log"
+      href: news/index.html
     - icon: fa-github
       href: https://github.com/montilab/hypeR

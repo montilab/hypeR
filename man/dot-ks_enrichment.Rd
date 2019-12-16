@@ -4,8 +4,14 @@
 \alias{.ks_enrichment}
 \title{Enrichment test via one-sided Kolmogorov–Smirnov test}
 \usage{
-.ks_enrichment(signature, genesets, weights = NULL, weights.pwr = 1,
-  absolute = FALSE, plotting = TRUE)
+.ks_enrichment(
+  signature,
+  genesets,
+  weights = NULL,
+  weights.pwr = 1,
+  absolute = FALSE,
+  plotting = TRUE
+)
 }
 \arguments{
 \item{signature}{A vector of ranked symbols}

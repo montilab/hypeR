@@ -22,6 +22,8 @@ hyperdb_info <- function() {
 #' @examples
 #' REACTOME <- hyperdb_rgsets("REACTOME", "70.0")
 #'
+#' @importFrom httr GET
+#'
 #' @export
 hyperdb_rgsets <- function(rgsets, version) {
     base <- "https://github.com/montilab/hyperdb/raw/master/data"
