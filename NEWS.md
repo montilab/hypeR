@@ -1,3 +1,6 @@
+# hypeR 1.3.00
+* Force version bump for bioconductor release 3.10
+
 # hypeR 1.2.00
 * Added the genesets object with versioning
 * Downloaded genesets are now wrapped into gsets or rgsets objects automatically
