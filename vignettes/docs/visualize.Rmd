@@ -58,11 +58,11 @@ hyp_emap(hyp_obj, similarity_cutoff=0.70)
 
 ```
 
-# Hiearchy map
+# Hiearchy Map
 
 When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them.
 
-### Relational genesets
+### Relational Genesets
 
 For example, [Reactome](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`. 
 
