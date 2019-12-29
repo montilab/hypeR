@@ -1,6 +1,6 @@
 Package: hypeR
 Title: Hyper Enrichment
-Version: 1.3.0
+Version: 1.2.0
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
              role=c("aut","cre")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
