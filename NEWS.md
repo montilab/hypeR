@@ -12,6 +12,7 @@
 * Removed option to disable titles when multiple signatures are plotted
 * Removed option to show/return plots
 * Some variable names across functions were made shorter or more clear
+* Version bump for bioconductor release 3.10
 
 # hypeR 1.1.10
 * Changed default order of elements under each tab in `hyp_to_rmd()` function.
