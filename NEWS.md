@@ -1,5 +1,5 @@
 # hypeR 1.3.00
-* Force version bump for bioconductor release 3.10
+* Version bump for bioconductor release 3.11
 
 # hypeR 1.2.00
 * Added the genesets object with versioning
