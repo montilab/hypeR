@@ -1,3 +1,94 @@
+#' Plot top enriched genesets across multiple signatures
+#'
+#' @param multihyp_data A list of hyp objects
+#' @param top Limit number of genesets shown
+#' @param abrv Abbreviation length of genesetlabels
+#' @param sizes Size dots by geneset sizes
+#' @param pval_cutoff Filter results to be less than pval cutoff
+#' @param fdr_cutoff Filter results to be less than fdr cutoff
+#' @param val Choose significance value e.g. c("fdr", "pval")
+#' @param title Plot title
+#' @return A ggplot object
+#'
+#' @importFrom reshape2 melt
+#' @importFrom magrittr %>% set_colnames
+#' @importFrom dplyr filter select
+#' @importFrom ggplot2 ggplot aes geom_point labs scale_color_continuous scale_size_continuous guides theme element_text element_blank
+#' 
+#' @keywords internal
+.dots_multi_plot <- function(multihyp_data,
+                             top=20,
+                             abrv=50,
+                             sizes=TRUE,
+                             pval_cutoff=1, 
+                             fdr_cutoff=1,
+                             val=c("fdr", "pval"),
+                             title="") {
+    
+    # Default arguments
+    val <- match.arg(val)
+
+    # Count significant genesets across signatures
+    multihyp_dfs <- lapply(multihyp_data, function(hyp_obj) {
+        hyp_obj$data %>%
+        dplyr::filter(pval <= pval_cutoff) %>%
+        dplyr::filter(fdr <= fdr_cutoff) %>%
+        dplyr::select(label)
+    })
+
+    # Take top genesets
+    labels <- names(sort(table(unlist(multihyp_dfs)), decreasing=TRUE))
+    if (!is.null(top)) labels <- head(labels, top)
+
+    # Handle empty dataframes
+    if (length(labels) == 0) return(ggempty())
+
+    # Create a multihyp dataframe
+    multihyp_df <- lapply(multihyp_data, function(hyp_obj) {
+        hyp_df <- hyp_obj$data
+        rownames(hyp_df) <- hyp_df$label
+        hyp_df[labels, val, drop=FALSE]
+    }) %>%
+    do.call(cbind, .) %>%
+    magrittr::set_colnames(names(multihyp_data))
+
+    # Highly enriched genesets appear at top
+    multihyp_df <- multihyp_df[rev(labels),]
+
+    # Abbreviate labels
+    label.abrv <- substr(rownames(multihyp_df), 1, abrv)
+    if (any(duplicated(label.abrv))) {
+        stop("Non-unique labels after abbreviating")
+    } else {
+        rownames(multihyp_df) <- factor(label.abrv, levels=label.abrv)   
+    }
+
+    if (val == "pval") {
+        cutoff <- pval_cutoff
+        color.label <- "P-Value"
+    }
+    if (val == "fdr") {
+        cutoff <- fdr_cutoff
+        color.label <- "FDR"
+    }
+
+    df.melted <- reshape2::melt(as.matrix(multihyp_df))
+    colnames(df.melted) <- c("label", "signature", "significance")
+    df.melted$size <- if(sizes) df.melted$significance else 1
+
+    df.melted %>%
+    dplyr::filter(significance <= cutoff) %>%
+    ggplot(aes(x=signature, y=label, color=significance, size=size)) +
+    geom_point() +
+    scale_color_continuous(low="#114357", high="#E53935", trans=.reverselog_trans(10)) +
+    scale_size_continuous(trans=.reverselog_trans(10), guide="none") +
+    labs(title=title, color=color.label) +  
+    theme(plot.title=element_text(hjust=0.5),
+          axis.title.y=element_blank(),
+          axis.title.x=element_blank(),
+          axis.text.x=element_text(angle=45, hjust=1))
+}
+
 #' Plot top enriched genesets
 #'
 #' @param hyp_df A dataframe from a hyp object
@@ -51,9 +142,16 @@
         df$label.abrv <- factor(label.abrv, levels=label.abrv)   
     }
 
+    if (val == "pval") {
+        color.label <- "P-Value"
+    }
+    if (val == "fdr") {
+        color.label <- "FDR"
+    }
+
     ggplot(df, aes(x=label.abrv, y=significance, color=significance, size=log10(size))) +
     geom_point() +
-    labs(title=title, y=ifelse(val == "pval", "P-Value", "FDR")) +  
+    labs(title=title, y=color.label, color=color.label) +
     scale_color_continuous(low="#E53935", high="#114357", guide=guide_colorbar(reverse=TRUE)) +
     coord_flip() +
     scale_y_continuous(trans=.reverselog_trans(10)) +
@@ -73,6 +171,7 @@
 #' @param fdr Filter results to be less than fdr cutoff
 #' @param val Choose significance value for plot e.g. c("fdr", "pval")
 #' @param title Plot title
+#' @param merge Use true to merge a multihyp object into one plot
 #' @return A ggplot object
 #'
 #' @examples
@@ -94,7 +193,8 @@ hyp_dots <- function(hyp_obj,
                      pval=1, 
                      fdr=1,
                      val=c("fdr", "pval"), 
-                     title="") {
+                     title="",
+                     merge=FALSE) {
 
     stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
@@ -104,19 +204,26 @@ hyp_dots <- function(hyp_obj,
     # Handling of multiple signatures
     if (is(hyp_obj, "multihyp")) {
         multihyp_obj <- hyp_obj
-        
-        mapply(function(hyp_obj, title) {
 
-            hyp_dots(hyp_obj,
-                     top=top,
-                     abrv=abrv,
-                     sizes=sizes,
-                     pval=pval,
-                     fdr=fdr,
-                     val=val,
-                     title=title)
+        # Merge multple signatures into a single plot
+        if (merge) {
+            .dots_multi_plot(multihyp_obj$data, top, abrv, sizes, pval, fdr, val, title)
+        } 
+        # Return a list of plots for each signature
+        else {
+            mapply(function(hyp_obj, title) {
 
-        }, multihyp_obj$data, names(multihyp_obj$data), USE.NAMES=TRUE, SIMPLIFY=FALSE)
+                hyp_dots(hyp_obj,
+                         top=top,
+                         abrv=abrv,
+                         sizes=sizes,
+                         pval=pval,
+                         fdr=fdr,
+                         val=val,
+                         title=title)
+
+            }, multihyp_obj$data, names(multihyp_obj$data), USE.NAMES=TRUE, SIMPLIFY=FALSE)
+        }
     } 
     else {
         .dots_plot(hyp_obj$data, top, abrv, sizes, pval, fdr, val, title)

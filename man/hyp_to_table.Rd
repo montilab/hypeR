@@ -4,7 +4,7 @@
 \alias{hyp_to_table}
 \title{Export hyp/multihyp object to table}
 \usage{
-hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL, version = TRUE)
+hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL, versioning = TRUE)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
@@ -15,7 +15,7 @@ hyp_to_table(hyp_obj, file_path, sep = "\\t", cols = NULL, version = TRUE)
 
 \item{cols}{Dataframe columns to include}
 
-\item{version}{Add header with versioning information}
+\item{versioning}{Add header with versioning information}
 }
 \description{
 Export hyp/multihyp object to table

@@ -1,3 +1,8 @@
+# hypeR 1.3.01
+* Multiple signatures can now be merged into a single plot with `hyp_dots(merge=TRUE)`
+* Set the `hyp_dots() legend title to the significance measure used`
+* Versioning information used in export functions now includes parameters passed to `hypeR()`
+
 # hypeR 1.3.00
 * Version bump for bioconductor release 3.11
 

@@ -8,24 +8,6 @@ A hyp object
 
 A hyp object
 }
-\section{Arguments}{
-
-\describe{
-  \item{data}{A dataframe returned by \code{hypeR}}
-  \item{plots}{A list of plots returned by \code{hypeR}}
-  \item{args}{A list of arguments passed to \code{hypeR}}
-}
-}
-
-\section{Methods}{
-
-
-\code{print(hyp)} shows some information about the object data as
-well as the arguments used in creating it.
-
-\code{hyp$as.data.frame()} returns the dataframe slot.
-}
-
 \section{See Also}{
 
 
@@ -37,6 +19,19 @@ data <- data.frame(replicate(5,sample(0:1,10,rep=TRUE)))
 args <- list("arg_1"=1, "arg_2"=2, "arg_3"=3)
 hyp_obj <- hyp$new(data, args=args)
 
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{data}}{A dataframe returned by hypeR()}
+
+\item{\code{plots}}{A list of plots returned by hypeR()}
+
+\item{\code{args}}{A list of arguments passed to hypeR()}
+
+\item{\code{info}}{Exported information for reproducibility}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -50,26 +45,51 @@ hyp_obj <- hyp$new(data, args=args)
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Create a hyp object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hyp$new(data, plots = NULL, args = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hyp$new(data, plots = NULL, args = NULL, info = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{A dataframe returned by hypeR()}
+
+\item{\code{plots}}{A list of plots returned by hypeR()}
+
+\item{\code{args}}{A list of arguments passed to hypeR()}
+
+\item{\code{info}}{Exported information for reproducibility}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new hyp object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \subsection{Method \code{print()}}{
+Print hyp obect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hyp$print(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-as.data.frame"></a>}}
 \subsection{Method \code{as.data.frame()}}{
+Extract dataframe from hyp obect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{hyp$as.data.frame(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

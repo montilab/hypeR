@@ -4,7 +4,7 @@
 \alias{hyp_to_excel}
 \title{Export hyp/multihyp object to excel}
 \usage{
-hyp_to_excel(hyp_obj, file_path, cols = NULL, version = TRUE)
+hyp_to_excel(hyp_obj, file_path, cols = NULL, versioning = TRUE)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
@@ -13,7 +13,7 @@ hyp_to_excel(hyp_obj, file_path, cols = NULL, version = TRUE)
 
 \item{cols}{Dataframe columns to include}
 
-\item{version}{Add sheet with versioning information}
+\item{versioning}{Add sheet with versioning information}
 }
 \description{
 Export hyp/multihyp object to excel

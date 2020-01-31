@@ -11,7 +11,7 @@ hyp_to_rmd(
   subtitle = "",
   author = "",
   header = "Results",
-  version = TRUE,
+  versioning = TRUE,
   show_dots = TRUE,
   show_emaps = TRUE,
   show_hmaps = FALSE,
@@ -22,7 +22,8 @@ hyp_to_rmd(
   hyp_hmap_args = list(top = 25, val = "fdr"),
   custom_rmd_config = NULL,
   custom_pre_content = NULL,
-  custom_post_content = NULL
+  custom_post_content = NULL,
+  session_info = FALSE
 )
 }
 \arguments{
@@ -38,7 +39,7 @@ hyp_to_rmd(
 
 \item{header}{Header name of tabset section}
 
-\item{version}{Add versioning information}
+\item{versioning}{Add versioning information}
 
 \item{show_dots}{Option to show dots plots in tabs}
 
@@ -59,6 +60,8 @@ hyp_to_rmd(
 \item{custom_pre_content}{Insert custom content before tabset section}
 
 \item{custom_post_content}{Insert custom content after tabset section}
+
+\item{session_info}{Use true to include session info}
 }
 \description{
 Export hyp object to rmarkdown

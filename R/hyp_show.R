@@ -17,6 +17,7 @@
 #'
 #' @importFrom reactable reactable
 #' @importFrom stringr str_to_title
+#' 
 #' @export
 hyp_show <- function(hyp_obj, simple=FALSE) {
     stopifnot(is(hyp_obj, "hyp"))

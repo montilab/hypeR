@@ -3,7 +3,7 @@
 #' @param hyp_obj A hyp or multihyp object
 #' @param file_path A file path
 #' @param cols Dataframe columns to include
-#' @param version Add sheet with versioning information
+#' @param versioning Add sheet with versioning information
 #' @return NULL
 #'
 #' @examples
@@ -18,8 +18,9 @@
 #' hyp_to_excel(hyp_obj, file_path="pathways.xlsx")
 #'
 #' @importFrom openxlsx createWorkbook addWorksheet writeData saveWorkbook
+#' 
 #' @export
-hyp_to_excel <- function(hyp_obj, file_path, cols=NULL, version=TRUE) {
+hyp_to_excel <- function(hyp_obj, file_path, cols=NULL, versioning=TRUE) {
     
     stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
@@ -49,14 +50,10 @@ hyp_to_excel <- function(hyp_obj, file_path, cols=NULL, version=TRUE) {
         openxlsx::writeData(wb, sheet=i, x=x, colNames=TRUE, rowNames=FALSE)
     }
 
-    if (version) {
-        name <- hyp_obj$args$genesets$name
-        version <- hyp_obj$args$genesets$version
-        header <- matrix(c(.format_str("Generated with hypeR v{1}", packageVersion("hypeR")),
-                           .format_str("Using the following genesets: {1} {2}", name, version)))    
-                  
-        sheet <- openxlsx::addWorksheet(wb, sheetName="version")     
-        openxlsx::writeData(wb, sheet="version", x=header, colNames=FALSE, rowNames=FALSE)        
+    if (versioning) {
+        x <- mapply(function(x) x$info, multihyp_obj$data)
+        sheet <- openxlsx::addWorksheet(wb, sheetName="versioning")
+        openxlsx::writeData(wb, sheet="versioning", x=x, colNames=ncol(x) > 1, rowNames=TRUE)    
     }
 
     suppressMessages(openxlsx::saveWorkbook(wb, file=file_path, overwrite=TRUE))

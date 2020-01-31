@@ -7,6 +7,7 @@
 #' @return A list of data and plots
 #'
 #' @importFrom stats phyper p.adjust
+#' 
 #' @keywords internal
 .hyper_enrichment <- function(signature,
                               genesets,

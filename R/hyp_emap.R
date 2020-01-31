@@ -15,6 +15,7 @@
 #' @importFrom dplyr filter
 #' @importFrom igraph graph.adjacency V
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction toVisNetworkData visIgraphLayout
+#' 
 #' @keywords internal
 .enrichment_map <- function(hyp_df,
                             genesets, 

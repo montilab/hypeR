@@ -8,21 +8,6 @@ A multihyp object
 
 A multihyp object
 }
-\section{Arguments}{
-
-\describe{
-  \item{data}{A list of \code{hyp} objects}
-}
-}
-
-\section{Methods}{
-
-
-\code{print(multihyp)} shows some information about the object data
-
-\code{multihyp$as.list()} returns a list of \code{hyp} objects as dataframes.
-}
-
 \section{See Also}{
 
 
@@ -37,6 +22,13 @@ data <- list("hyp_1"=hyp_obj, "hyp_2"=hyp_obj,"hyp_3"=hyp_obj)
 multihyp_obj <- multihyp$new(data)
 
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{data}}{A list of hyp objects}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -49,26 +41,45 @@ multihyp_obj <- multihyp$new(data)
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Create a multihyp object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{multihyp$new(data)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{A list of hyp objects}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new multihyp object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \subsection{Method \code{print()}}{
+Print multihyp obect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{multihyp$print(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-as.list"></a>}}
 \subsection{Method \code{as.list()}}{
+Print multihyp obect
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{multihyp$as.list(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+A list of hyp objects as dataframes
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

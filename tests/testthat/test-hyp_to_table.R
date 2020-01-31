@@ -8,7 +8,7 @@ test_that("hyp_to_table() is working", {
     experiment <- testdat$experiment
     
     hyp_obj <- hypeR(signature, gsets_obj)
-    multihyp_obj <- hypeR(experiment, gsets_obj)
+    multihyp_obj <- hypeR(experiment, rgsets_obj)
     
     # A single file
     hyp_to_table(hyp_obj, file_path="signature.txt", sep="\t")

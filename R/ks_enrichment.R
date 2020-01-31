@@ -10,6 +10,7 @@
 #' @return A list of data and plots
 #'
 #' @importFrom stats ks.test
+#' 
 #' @keywords internal
 .kstest <- function(n.x,
                     y, 

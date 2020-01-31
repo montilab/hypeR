@@ -68,5 +68,6 @@ test_that("hyp_to_rmd() is working", {
                                                                     show_emaps=FALSE,
                                                                     show_hmaps=TRUE,
                                                                     show_tables=FALSE,
+                                                                    session_info=TRUE,
                                                                     hyp_hmap_args=list(top=10, val="pval"))
 })

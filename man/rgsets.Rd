@@ -8,47 +8,10 @@ A relational genesets object
 
 A relational genesets object
 }
-\section{Arguments}{
-
-\describe{
-  \item{genesets}{A list of genesets where list names refers to geneset
-  labels and values are geneset members represented as a vector}
-  \item{nodes}{A data frame of labeled nodes e.g.
-    \cr
-    \tabular{rrrr}{
-      \tab label\cr
-      G1 \tab Geneset 1 \tab\cr
-      G2 \tab Geneset 2 \tab\cr
-      G3 \tab Geneset 3 \tab\cr
-    }
-  }
-  \item{edges}{A data frame of directed edges
-    \cr
-    \tabular{rrrr}{
-      from \tab to\cr
-      G1 \tab G2 \tab\cr
-      G1 \tab G3 \tab\cr
-    }
-  }
-  \item{name}{A character vector describing source of genesets}
-  \item{version}{A character vector describing versioning}
-}
-}
-
-\section{Methods}{
-
-
-\code{print(rgsets)} shows some information about the object data
-
-\code{rgsets$subset(labels)} returns an rgsets object subsetted
-on geneset labels
-}
-
 \section{See Also}{
 
 
 \code{gsets}
-\code{pvector}
 }
 
 \examples{
@@ -56,11 +19,27 @@ testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.r
 rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testdat$edges, name="Example", version="v1.0")
 
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{genesets}}{A list of genesets where list names refers to geneset labels and values are geneset members represented as a vector}
+
+\item{\code{nodes}}{A data frame of labeled nodes}
+
+\item{\code{edges}}{A data frame of directed edges}
+
+\item{\code{name}}{A character vector describing source of genesets}
+
+\item{\code{version}}{A character vector describing versioning}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{rgsets$new()}}
 \item \href{#method-print}{\code{rgsets$print()}}
+\item \href{#method-info}{\code{rgsets$info()}}
 \item \href{#method-reduce}{\code{rgsets$reduce()}}
 \item \href{#method-subset}{\code{rgsets$subset()}}
 \item \href{#method-clone}{\code{rgsets$clone()}}
@@ -69,34 +48,100 @@ rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testd
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Create a rgsets object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{rgsets$new(genesets, nodes, edges, name = "", version = "", quiet = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{rgsets$new(
+  genesets,
+  nodes,
+  edges,
+  name = "Custom",
+  version = "",
+  quiet = FALSE
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{genesets}}{A list of genesets where list names refers to geneset labels and values are geneset members represented as a vector}
+
+\item{\code{nodes}}{A data frame of labeled nodes}
+
+\item{\code{edges}}{A data frame of directed edges}
+
+\item{\code{name}}{A character vector describing source of genesets}
+
+\item{\code{version}}{A character vector describing versioning}
+
+\item{\code{quiet}}{Use true to silence warnings}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new rgsets object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \subsection{Method \code{print()}}{
+Print relational genesets information
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{rgsets$print(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-info"></a>}}
+\subsection{Method \code{info()}}{
+Returns versioning information
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{rgsets$info()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A character vector with name and version
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reduce"></a>}}
 \subsection{Method \code{reduce()}}{
+Reduces genesets to a background distribution of symbols
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{rgsets$reduce(background)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{background}}{A character vector of symbols}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A rgsets object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-subset"></a>}}
 \subsection{Method \code{subset()}}{
+Subsets genesets on a character vector of labels
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{rgsets$subset(labels)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{labels}}{A character vector of genesets}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A rgsets object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

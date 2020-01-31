@@ -1,21 +1,4 @@
-#' A multihyp object
-#'
-#' @name multihyp
-#'
-#' @section Arguments:
-#' \describe{
-#'   \item{data}{A list of \code{hyp} objects}
-#' }
-#'
-#' @section Methods:
-#'
-#' \code{print(multihyp)} shows some information about the object data
-#'
-#' \code{multihyp$as.list()} returns a list of \code{hyp} objects as dataframes.
-#' 
-#' @section See Also:
-#' 
-#' \code{hyp}
+#' @title A multihyp object
 #'
 #' @examples
 #' data <- data.frame(replicate(5,sample(0:1,10,rep=TRUE)))
@@ -24,14 +7,27 @@
 #' data <- list("hyp_1"=hyp_obj, "hyp_2"=hyp_obj,"hyp_3"=hyp_obj)
 #' multihyp_obj <- multihyp$new(data)
 #'
+#' @section See Also:
+#' 
+#' \code{hyp}
+#' 
 #' @importFrom R6 R6Class
 #' 
 #' @export
 multihyp <- R6Class("multihyp", list(
+    #' @field data A list of hyp objects
     data = NULL,
+
+    #' @description
+    #' Create a multihyp object
+    #' @param data A list of hyp objects
+    #' @return A new multihyp object  
     initialize = function(data) {
         self$data <- data
     },
+    #' @description
+    #' Print multihyp obect
+    #' @return NULL
     print = function(...) {
         cat("(multihyp) \n")
         for (i in names(self$data)) {
@@ -41,6 +37,9 @@ multihyp <- R6Class("multihyp", list(
         }
         invisible(self)
     },
+    #' @description
+    #' Print multihyp obect
+    #' @return A list of hyp objects as dataframes
     as.list = function(...) {
         lapply(self$data, function(x) x$as.data.frame())
     }

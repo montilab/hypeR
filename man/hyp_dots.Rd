@@ -12,7 +12,8 @@ hyp_dots(
   pval = 1,
   fdr = 1,
   val = c("fdr", "pval"),
-  title = ""
+  title = "",
+  merge = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ hyp_dots(
 \item{val}{Choose significance value for plot e.g. c("fdr", "pval")}
 
 \item{title}{Plot title}
+
+\item{merge}{Use true to merge a multihyp object into one plot}
 }
 \value{
 A ggplot object

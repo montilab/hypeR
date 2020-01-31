@@ -88,3 +88,11 @@ p <- hyp_dots(multihyp_obj)
 p[1:3]
 
 ```
+
+Alternatively `hyp_dots(merge=TRUE)` can combine mulitple signatures into a single plot...
+
+```{r}
+
+hyp_dots(multihyp_obj, merge=TRUE)
+
+```

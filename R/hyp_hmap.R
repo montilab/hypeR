@@ -12,6 +12,7 @@
 #' @importFrom purrr when
 #' @importFrom dplyr filter
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction
+#' 
 #' @keywords internal
 .hiearchy_map <- function(hyp_df,
                           rgsets_obj,

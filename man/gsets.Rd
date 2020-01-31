@@ -8,23 +8,6 @@ A genesets object
 
 A genesets object
 }
-\section{Arguments}{
-
-\describe{
-  \item{genesets}{A named list of genesets}
-  \item{name}{A character vector describing source of genesets}
-  \item{version}{A character vector describing versioning}
-}
-}
-
-\section{Methods}{
-
-
-\code{print(gsets)} prints geneset information.
-
-\code{gsets$reduce(background)} reduces genesets to a background distribution of symbols.
-}
-
 \section{See Also}{
 
 
@@ -40,11 +23,24 @@ gsets_obj <- gsets$new(genesets, name="example", version="v1.0")
 print(gsets_obj)
 
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{genesets}}{A named list of genesets}
+
+\item{\code{name}}{A character vector describing source of genesets}
+
+\item{\code{version}}{A character vector describing versioning}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{gsets$new()}}
 \item \href{#method-print}{\code{gsets$print()}}
+\item \href{#method-list}{\code{gsets$list()}}
+\item \href{#method-info}{\code{gsets$info()}}
 \item \href{#method-reduce}{\code{gsets$reduce()}}
 \item \href{#method-clone}{\code{gsets$clone()}}
 }
@@ -52,26 +48,82 @@ print(gsets_obj)
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Create a gsets object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{gsets$new(genesets, name = "", version = "", quiet = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{gsets$new(genesets, name = "Custom", version = "", quiet = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{genesets}}{A named list of genesets}
+
+\item{\code{name}}{A character vector describing source of genesets}
+
+\item{\code{version}}{A character vector describing versioning}
+
+\item{\code{quiet}}{Use true to silence warnings}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new gsets object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \subsection{Method \code{print()}}{
+Print genesets information
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{gsets$print(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-list"></a>}}
+\subsection{Method \code{list()}}{
+Return genesets as a list
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{gsets$list(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A list of genesets
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-info"></a>}}
+\subsection{Method \code{info()}}{
+Returns versioning information
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{gsets$info()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+A character vector with name and version
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reduce"></a>}}
 \subsection{Method \code{reduce()}}{
+Reduces genesets to a background distribution of symbols
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{gsets$reduce(background)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{background}}{A character vector of symbols}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A gsets object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

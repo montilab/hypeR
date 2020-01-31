@@ -95,6 +95,7 @@ hypeR <- function(signature,
 
     # Overrepresentation test
     if (test == "hypergeometric") {
+        signature.type <- "symbols"
         data <- data.frame(matrix(ncol=8, nrow=0))
         colnames(data) <- c("label", "pval", "fdr", "signature", "geneset", "overlap", "background", "hits")
         results <- .hyper_enrichment(signature=signature, 
@@ -109,8 +110,10 @@ hypeR <- function(signature,
             if (is.null(names(signature))) stop("Weighted signatures must be named")
             weights <- signature
             signature <- names(weights)
+            signature.type <- "weighted"
         } else {
           weights <- NULL
+          signature.type <- "ranked"
         }
         data <- data.frame(matrix(ncol=7, nrow=0))
         colnames(data) <- c("label", "pval", "fdr", "signature", "geneset", "overlap", "score")
@@ -145,6 +148,32 @@ hypeR <- function(signature,
         plots <- results$plots[data$label]
     }
     
+    # Reproducibility information
+    info <- list()
+    info$hypeR <- paste("v", packageVersion("hypeR"), sep="")
+    info$signature.head <- paste(head(signature), collapse=",")
+    info$signature.size <- length(signature)
+    info$signature.type <- signature.type
+    info$genesets <- gsets.obj$info()
+    info$background <- ifelse(is.numeric(args$background), args$background, length(args$background))
+
+    # Static args
+    info <- c(info, args[c("pval", "fdr", "test", "power", "absolute")])
+    info <- lapply(info, as.character)
+
+    # Make pretty
+    names(info) <- c("hypeR",
+                     "Signature Head",
+                     "Signature Size",
+                     "Signature Type",
+                     "Genesets", 
+                     "Background",
+                     "P-Value",
+                     "FDR",
+                     "Test",
+                     "Power",
+                     "Absolute")
+
     # Wrap dataframe in hyp object
-    return(hyp$new(data=data, plots=plots, args=args))
+    return(hyp$new(data=data, plots=plots, args=args, info=info))
 }

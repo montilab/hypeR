@@ -8,32 +8,13 @@ A push/pop capable vector
 
 A push/pop capable vector
 }
-\section{Arguments}{
-
+\keyword{internal}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
 \describe{
-  \item{values}{A vector of values}
+\item{\code{values}}{A vector of values}
 }
-}
-
-\section{Methods}{
-
-
-\code{print(pvector)} prints vector values.
-
-\code{pvector$length()} returns length of vector values.
- 
-\code{pvector$pop()} pops vector, returning popped value.
-
-\code{pvector$push()} pushes to vector.
-}
-
-\examples{
-pv <- pvector$new(c(1,2,3))
-popped <- pv$pop()
-pv$push(4)
-pv$push(c(5,6))
-print(pv) 
-
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -49,42 +30,76 @@ print(pv)
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
+Create a pvector
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pvector$new(values = c())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{values}}{A vector of values}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A new pvector
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \subsection{Method \code{print()}}{
+Print pvector
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{pvector$print(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{pvector$print()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-length"></a>}}
 \subsection{Method \code{length()}}{
+Get length of pvector
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pvector$length()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+An integer
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pop"></a>}}
 \subsection{Method \code{pop()}}{
+Pop vector
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pvector$pop()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+Popped value
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-push"></a>}}
 \subsection{Method \code{push()}}{
+Push values
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{pvector$push(pushed.values)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{pushed.values}}{A vector of values}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

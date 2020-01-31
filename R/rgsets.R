@@ -1,61 +1,43 @@
-#' A relational genesets object
-#'
-#' @name rgsets
-#'
-#' @section Arguments:
-#' \describe{
-#'   \item{genesets}{A list of genesets where list names refers to geneset
-#'   labels and values are geneset members represented as a vector}
-#'   \item{nodes}{A data frame of labeled nodes e.g.
-#'     \cr
-#'     \tabular{rrrr}{
-#'       \tab label\cr
-#'       G1 \tab Geneset 1 \tab\cr
-#'       G2 \tab Geneset 2 \tab\cr
-#'       G3 \tab Geneset 3 \tab\cr
-#'     }
-#'   }
-#'   \item{edges}{A data frame of directed edges
-#'     \cr
-#'     \tabular{rrrr}{
-#'       from \tab to\cr
-#'       G1 \tab G2 \tab\cr
-#'       G1 \tab G3 \tab\cr
-#'     }
-#'   }
-#'   \item{name}{A character vector describing source of genesets}
-#'   \item{version}{A character vector describing versioning}
-#' }
-#'
-#' @section Methods:
-#'
-#' \code{print(rgsets)} shows some information about the object data
-#'
-#' \code{rgsets$subset(labels)} returns an rgsets object subsetted
-#' on geneset labels
+#' @title A relational genesets object
 #' 
-#' @section See Also:
-#' 
-#' \code{gsets}
-#' \code{pvector}
-#'
 #' @examples
 #' testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
 #' rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testdat$edges, name="Example", version="v1.0")
 #'
+#' @section See Also:
+#' 
+#' \code{gsets}
+#' 
 #' @importFrom R6 R6Class
 #' @importFrom dplyr filter pull %>%
 #' 
 #' @export
 rgsets <- R6Class("rgsets", list(
+    #' @field genesets A list of genesets where list names refers to geneset labels and values are geneset members represented as a vector
+    #' @field nodes A data frame of labeled nodes
+    #' @field edges A data frame of directed edges
+    #' @field name A character vector describing source of genesets
+    #' @field version A character vector describing versioning
     genesets = NULL,
     nodes = NULL,
     edges = NULL,
     name = NULL,
     version = NULL,
-    initialize = function(genesets, nodes, edges, name="", version="", quiet=FALSE) {
-        if (name == "" & !quiet) warning("Describing genesets with a name will aid reproducibility")
+
+    #' @description
+    #' Create a rgsets object
+    #' @param genesets A list of genesets where list names refers to geneset labels and values are geneset members represented as a vector
+    #' @param nodes A data frame of labeled nodes
+    #' @param edges A data frame of directed edges
+    #' @param name A character vector describing source of genesets
+    #' @param version A character vector describing versioning
+    #' @param quiet Use true to silence warnings
+    #' @return A new rgsets object
+    initialize = function(genesets, nodes, edges, name="Custom", version="", quiet=FALSE) {
+        # Handle versioning information
+        if (name == "Custom" & !quiet) warning("Describing genesets with a name will aid reproducibility")
         if (version == "" & !quiet) warning("Including a version number will aid reproducibility")
+        
         self$genesets <- genesets
         self$nodes <- nodes
         self$edges <- edges
@@ -64,10 +46,11 @@ rgsets <- R6Class("rgsets", list(
         self$name <- name
         self$version <- version
     },
+    #' @description
+    #' Print relational genesets information
+    #' @return NULL
     print = function(...) {
-        if (self$name != "") cat(.format_str("{1} ", self$name))
-        if (self$version != "") cat(.format_str("{1}", self$version))
-        if (self$name != "" | self$version != "") cat("\n\n")
+        cat(self$info(), "\n\n")
         cat("Genesets\n\n")
         for (i in head(names(self$genesets))) {
             cat(.format_str("{1} ({2})\n", i, length(self$genesets[[i]])))
@@ -78,10 +61,24 @@ rgsets <- R6Class("rgsets", list(
         base::print(head(self$edges)) 
         invisible(self)
     },
+    #' @description
+    #' Returns versioning information
+    #' @return A character vector with name and version
+    info = function() {
+        return(.format_str("{1} {2}", self$name, self$version))
+    },
+    #' @description
+    #' Reduces genesets to a background distribution of symbols
+    #' @param background A character vector of symbols
+    #' @return A rgsets object
     reduce = function(background) {
         genesets <- lapply(self$genesets, function(x) intersect(x, background))
         return(rgsets$new(genesets, self$nodes, self$edges, self$name, self$version, quiet=TRUE))
     },
+    #' @description
+    #' Subsets genesets on a character vector of labels
+    #' @param labels A character vector of genesets
+    #' @return A rgsets object
     subset = function(labels) {
 
         children <- self$nodes %>%

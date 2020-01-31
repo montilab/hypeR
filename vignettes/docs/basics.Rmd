@@ -155,6 +155,9 @@ hyp_obj$plots[[1]]
 
 ```
 
+For permutation-based significance testing and normalized enrichment scores, please see https://bioconductor.org/packages/release/bioc/html/fgsea.html ...
+
+
 ### Downstream Analysis
 
 #### The `hyp` Object

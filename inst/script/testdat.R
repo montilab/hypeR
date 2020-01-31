@@ -65,6 +65,6 @@ edges <- "G13,G10
                    strip.white=TRUE,
                    stringsAsFactors=FALSE)
 
-testdat$gsets <- gsets$new(genesets, name="test", version="1.0")
-testdat$rgsets <- rgsets$new(genesets, nodes, edges, name="test", version="1.0")
+testdat$gsets <- gsets$new(genesets, name="test", version="v1.0")
+testdat$rgsets <- rgsets$new(genesets, nodes, edges, name="test", version="v1.0")
 saveRDS(testdat, file.path(system.file("extdata", package="hypeR"), "testdat.rds"))

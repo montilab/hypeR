@@ -30,8 +30,16 @@ rmd_tabset <- "
 ##  {.tabset .tabset-fade}
 "
 
-rmd_versioning <- "
-**Using the following genesets**: `r tabsets[['{3}']][['{1}']]$args$genesets$name` `r tabsets[['{3}']][['{1}']]$args$genesets$version`
+rmd_tab <- "
+### {1} 
+```{r {2}, fig.width=8.25, fig.align='center'}
+hyp_obj <- tabsets[['{3}']][['{1}']] 
+{4}
+{5}
+{6}
+{7}
+{8}
+```
 "
 
 tab_dots <- "
@@ -59,6 +67,21 @@ rownames(df) <- NULL
 df
 "
 
+rmd_versioning <- "
+info <- hyp_obj$info
+mat <- matrix(c(names(hyp_obj$info), as.character(hyp_obj$info)), ncol=2)
+df <- as.data.frame(mat)
+colnames(df) <- NULL
+df
+"
+
+rmd_session <- "
+# Session Info
+```{r}
+sessionInfo()
+```
+"
+
 #' Export hyp object to rmarkdown
 #'
 #' @param hyp_obj A hyp object, multihyp object, or list of multihyp objects
@@ -67,7 +90,7 @@ df
 #' @param subtitle Subtitle of markdown report
 #' @param author Authors of markdown report
 #' @param header Header name of tabset section
-#' @param version Add versioning information
+#' @param versioning Add versioning information
 #' @param show_dots Option to show dots plots in tabs
 #' @param show_emaps Option to show enrichment maps in tabs
 #' @param show_hmaps Option to show hiearchy maps in tabs
@@ -78,6 +101,7 @@ df
 #' @param custom_rmd_config Replace configuration section of markdown report
 #' @param custom_pre_content Insert custom content before tabset section
 #' @param custom_post_content Insert custom content after tabset section
+#' @param session_info Use true to include session info
 #' @return NULL
 #'
 #' @import kableExtra
@@ -91,7 +115,7 @@ hyp_to_rmd <- function(hyp_obj,
                        subtitle="",
                        author="",
                        header="Results",
-                       version=TRUE,
+                       versioning=TRUE,
                        show_dots=TRUE,
                        show_emaps=TRUE,
                        show_hmaps=FALSE,
@@ -106,7 +130,8 @@ hyp_to_rmd <- function(hyp_obj,
                                           val="fdr"),    
                        custom_rmd_config=NULL,
                        custom_pre_content=NULL,
-                       custom_post_content=NULL) {
+                       custom_post_content=NULL,
+                       session_info=FALSE) {
     
     # Markdown configuration
     if (!is.null(custom_rmd_config)) {
@@ -173,36 +198,24 @@ hyp_to_rmd <- function(hyp_obj,
         for (tab in names(tabs)) {
 
             tab_id <- ids$pop()
-            
-            rmd_tab <- "### {1}"
-            if (version) rmd_tab <- paste(rmd_tab, rmd_versioning)
-            rmd_tab <- paste(rmd_tab, "```{r {2}, fig.width=8.25, fig.align='center'}", sep="")
-            rmd_tab <- paste(rmd_tab, "hyp_obj <- tabsets[['{3}']][['{1}']]", sep="\n")
-            rmd_tab <- .format_str(rmd_tab, tab, tab_id, tabset)
+        
+            dots_area <- ifelse(show_dots,  .format_str(tab_dots, .string_args(hyp_dots_args)), "")
+            data_area <- ifelse(show_tables, tab_table, "")
+            emap_area <- ifelse(show_emaps, .format_str(tab_emap, .string_args(hyp_emap_args)), "")
+            hmap_area <- ifelse(show_hmaps, .format_str(tab_hmap, .string_args(hyp_hmap_args)), "")
+            vers_area <- ifelse(versioning, rmd_versioning, "")
 
-            if (show_dots) {
-                rmd_tab <- paste(rmd_tab, .format_str(tab_dots, .string_args(hyp_dots_args)), sep="\n")
-            }
-            if (show_tables) {
-                rmd_tab <- paste(rmd_tab, tab_table, sep="\n")
-            }
-            if (show_emaps) {
-                rmd_tab <- paste(rmd_tab, .format_str(tab_emap, .string_args(hyp_emap_args)), sep="\n")
-            }
-            if (show_hmaps) {
-                rmd_tab <- paste(rmd_tab, .format_str(tab_hmap, .string_args(hyp_hmap_args)), sep="\n")
-            }
-
-            rmd_tab <- paste(rmd_tab, "```\n", sep="\n")
-
-            write(rmd_tab, file=file_path, append=TRUE)
+            rmd_tab %>%
+            .format_str(tab, tab_id, tabset, dots_area, data_area, emap_area, hmap_area, vers_area) %>%
+            write(file=file_path, append=TRUE)
         }
     }
 
-    # Content after hyper enrichment tabs
-    if (!is.null(custom_post_content)) {
-        write(custom_post_content, file=file_path, append=TRUE)
-    }
+    # Session info
+    if (session_info) write(rmd_session, file=file_path, append=TRUE)
+    
+    # Trailing content
+    if (!is.null(custom_post_content)) write(custom_post_content, file=file_path, append=TRUE)
 
     rmarkdown::render(input=file_path, 
                       output_format="html_document",
