@@ -2,9 +2,11 @@ Package: hypeR
 Title: Hyper Enrichment
 Version: 1.3.01
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
-             role=c("aut","cre")),
+             role=c("aut", "cre"),
+             comment = c(ORCID = "0000-0002-9200-1689")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
-             role=c("aut")))
+             role=c("aut"),
+             comment = c(ORCID = "0000-0002-9376-0660")))
 Description: An R Package for Geneset Enrichment Workflows.
 Depends: R (>= 3.6.0)
 License: GPL-3 + file LICENSE
