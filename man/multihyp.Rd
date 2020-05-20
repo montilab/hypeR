@@ -40,6 +40,7 @@ multihyp_obj <- multihyp$new(data)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a multihyp object
 \subsection{Usage}{
@@ -59,10 +60,11 @@ A new multihyp object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print multihyp obect
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{multihyp$print(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{multihyp$print()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -71,10 +73,11 @@ NULL
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-as.list"></a>}}
+\if{latex}{\out{\hypertarget{method-as.list}{}}}
 \subsection{Method \code{as.list()}}{
 Print multihyp obect
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{multihyp$as.list(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{multihyp$as.list()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -83,6 +86,7 @@ A list of hyp objects as dataframes
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

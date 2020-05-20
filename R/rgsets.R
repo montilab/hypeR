@@ -49,7 +49,7 @@ rgsets <- R6Class("rgsets", list(
     #' @description
     #' Print relational genesets information
     #' @return NULL
-    print = function(...) {
+    print = function() {
         cat(self$info(), "\n\n")
         cat("Genesets\n\n")
         for (i in head(names(self$genesets))) {

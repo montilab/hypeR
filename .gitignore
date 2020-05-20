@@ -5,6 +5,7 @@
 /art/
 /docs/
 pkgdown/favicon
+*.gmt
 
 # General
 .DS_Store

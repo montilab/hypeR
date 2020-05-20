@@ -44,6 +44,7 @@ hyp_obj <- hyp$new(data, args=args)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a hyp object
 \subsection{Usage}{
@@ -69,10 +70,11 @@ A new hyp object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print hyp obect
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hyp$print(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hyp$print()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -81,10 +83,11 @@ NULL
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-as.data.frame"></a>}}
+\if{latex}{\out{\hypertarget{method-as.data.frame}{}}}
 \subsection{Method \code{as.data.frame()}}{
 Extract dataframe from hyp obect
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{hyp$as.data.frame(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{hyp$as.data.frame()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -93,6 +96,7 @@ NULL
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

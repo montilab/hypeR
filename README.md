@@ -3,7 +3,7 @@
 
 # hypeR
 
-[![](https://api.travis-ci.org/montilab/hypeR.svg?branch=master&status=passed)]()
+[![](https://travis-ci.org/montilab/hypeR.svg?branch=master)](https://travis-ci.org/montilab/hypeR)
 [![](https://img.shields.io/badge/bioconductor-3.10-3a6378.svg)](https://doi.org/doi:10.18129/B9.bioc.hypeR)
 [![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
 [![](https://img.shields.io/badge/lifecycle-maturing-4ba598.svg)](https://www.tidyverse.org/lifecycle/#maturing)

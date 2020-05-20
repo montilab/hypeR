@@ -45,7 +45,7 @@ gsets <- R6Class("gsets", list(
     #' @description
     #' Print genesets information
     #' @return NULL
-    print = function(...) {
+    print = function() {
         cat(self$info(), "\n")
         for (i in head(names(self$genesets))) {
             cat(.format_str("{1} ({2})\n", i, length(self$genesets[[i]])))
@@ -55,7 +55,7 @@ gsets <- R6Class("gsets", list(
     #' @description
     #' Return genesets as a list
     #' @return A list of genesets
-    list = function(...) {
+    list = function() {
         return(self$genesets)
     },
     #' @description

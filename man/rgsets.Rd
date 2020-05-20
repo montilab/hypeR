@@ -47,6 +47,7 @@ rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testd
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a rgsets object
 \subsection{Usage}{
@@ -83,10 +84,11 @@ A new rgsets object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print relational genesets information
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{rgsets$print(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{rgsets$print()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -95,6 +97,7 @@ NULL
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-info"></a>}}
+\if{latex}{\out{\hypertarget{method-info}{}}}
 \subsection{Method \code{info()}}{
 Returns versioning information
 \subsection{Usage}{
@@ -107,6 +110,7 @@ A character vector with name and version
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Reduces genesets to a background distribution of symbols
 \subsection{Usage}{
@@ -126,6 +130,7 @@ A rgsets object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-subset"></a>}}
+\if{latex}{\out{\hypertarget{method-subset}{}}}
 \subsection{Method \code{subset()}}{
 Subsets genesets on a character vector of labels
 \subsection{Usage}{
@@ -145,6 +150,7 @@ A rgsets object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -47,6 +47,7 @@ print(gsets_obj)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a gsets object
 \subsection{Usage}{
@@ -72,10 +73,11 @@ A new gsets object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print genesets information
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{gsets$print(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{gsets$print()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -84,10 +86,11 @@ NULL
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-list"></a>}}
+\if{latex}{\out{\hypertarget{method-list}{}}}
 \subsection{Method \code{list()}}{
 Return genesets as a list
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{gsets$list(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{gsets$list()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -96,6 +99,7 @@ A list of genesets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-info"></a>}}
+\if{latex}{\out{\hypertarget{method-info}{}}}
 \subsection{Method \code{info()}}{
 Returns versioning information
 \subsection{Usage}{
@@ -108,6 +112,7 @@ A character vector with name and version
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Reduces genesets to a background distribution of symbols
 \subsection{Usage}{
@@ -127,6 +132,7 @@ A gsets object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

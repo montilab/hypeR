@@ -1,5 +1,6 @@
 language: r
-sudo: true
+os: linux
+dist: xenial
 cache: packages
 warnings_are_errors: false
 

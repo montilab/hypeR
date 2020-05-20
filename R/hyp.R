@@ -38,7 +38,7 @@ hyp <- R6Class("hyp", list(
     #' @description
     #' Print hyp obect
     #' @return NULL
-    print = function(...) {
+    print = function() {
         cat("(hyp) \n\n")
         cat("  data: \n")
         base::print(head(self$data), row.names=FALSE)
@@ -49,7 +49,7 @@ hyp <- R6Class("hyp", list(
     #' @description
     #' Extract dataframe from hyp obect
     #' @return NULL
-    as.data.frame = function(...) {
+    as.data.frame = function() {
         self$data
     }
 ))

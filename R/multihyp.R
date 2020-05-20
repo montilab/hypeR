@@ -28,7 +28,7 @@ multihyp <- R6Class("multihyp", list(
     #' @description
     #' Print multihyp obect
     #' @return NULL
-    print = function(...) {
+    print = function() {
         cat("(multihyp) \n")
         for (i in names(self$data)) {
             dims <- dim(self$data[[i]]$data)
@@ -40,7 +40,7 @@ multihyp <- R6Class("multihyp", list(
     #' @description
     #' Print multihyp obect
     #' @return A list of hyp objects as dataframes
-    as.list = function(...) {
+    as.list = function() {
         lapply(self$data, function(x) x$as.data.frame())
     }
 ))

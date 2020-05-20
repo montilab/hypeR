@@ -1,18 +1,16 @@
 Package: hypeR
-Title: Hyper Enrichment
+Title: An R Package For Geneset Enrichment Workflows
 Version: 1.3.01
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
-             role=c("aut", "cre"),
-             comment = c(ORCID = "0000-0002-9200-1689")),
+             role=c("aut", "cre")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
-             role=c("aut"),
-             comment = c(ORCID = "0000-0002-9376-0660")))
+             role=c("aut")))
 Description: An R Package for Geneset Enrichment Workflows.
 Depends: R (>= 3.6.0)
 License: GPL-3 + file LICENSE
 URL: https://github.com/montilab/hypeR
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 LazyData: true
 Imports:
     ggplot2,
