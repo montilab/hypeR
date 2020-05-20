@@ -1,3 +1,30 @@
+#' Clean labels of genesets
+#' 
+#' @param x A vector of labels
+#' 
+#' @examples
+#' HALLMARK <- msigdb_download("Homo sapiens", "H", "")
+#' names(HALLMARK) <- clean_genesets(names(HALLMARK))
+#' head(names(HALLMARK))
+#' 
+#' @importFrom stringr str_to_sentence
+#' 
+#' @export
+clean_genesets <- function(x) {
+    # Longest leading common substring
+    x.split <- strsplit(x, '')
+    x.split <- lapply(x.split, `length<-`, max(nchar(x)))
+    x.mat <- do.call(rbind, x.split)
+    csl <- which.max(apply(x.mat, 2, function(col) !length(unique(col)) == 1)) - 1
+    lcls <- substr(x[1], 1, csl)
+    
+    # Clean
+    x <- gsub(lcls, "", x)
+    x <- gsub("_", " ", x)
+    x <- stringr::str_to_title(x)
+    return(x)
+}
+
 #' Check overlap of signature across genesets
 #' 
 #' @param signature A vector of symbols

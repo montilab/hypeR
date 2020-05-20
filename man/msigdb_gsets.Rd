@@ -4,7 +4,7 @@
 \alias{msigdb_gsets}
 \title{Download data from msigdb in the form of a gsets object}
 \usage{
-msigdb_gsets(species, category, subcategory = "")
+msigdb_gsets(species, category, subcategory = "", clean = FALSE)
 }
 \arguments{
 \item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}
@@ -12,6 +12,8 @@ msigdb_gsets(species, category, subcategory = "")
 \item{category}{Geneset category (refer to ?msigdbr::msigdbr for avilable categories)}
 
 \item{subcategory}{Geneset subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)}
+
+\item{clean}{Use true to clean labels of genesets}
 }
 \value{
 A gsets object

@@ -51,7 +51,13 @@ print(gsets_obj)
 \subsection{Method \code{new()}}{
 Create a gsets object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{gsets$new(genesets, name = "Custom", version = "", quiet = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{gsets$new(
+  genesets,
+  name = "Custom",
+  version = "",
+  clean = FALSE,
+  quiet = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -62,6 +68,8 @@ Create a gsets object
 \item{\code{name}}{A character vector describing source of genesets}
 
 \item{\code{version}}{A character vector describing versioning}
+
+\item{\code{clean}}{Use true to clean labels of genesets}
 
 \item{\code{quiet}}{Use true to silence warnings}
 }

@@ -28,15 +28,20 @@ gsets <- R6Class("gsets", list(
     #' @param genesets A named list of genesets
     #' @param name A character vector describing source of genesets
     #' @param version A character vector describing versioning
+    #' @param clean Use true to clean labels of genesets
     #' @param quiet Use true to silence warnings
     #' @return A new gsets object
-    initialize = function(genesets, name="Custom", version="", quiet=FALSE) {
+    initialize = function(genesets, name="Custom", version="", clean=FALSE, quiet=FALSE) {
         if (!is(genesets, "list")) stop("Genesets must be a named list of symbols")
         if (is.null(names(genesets))) stop("Genesets must be a named list of symbols")
         
         # Handle versioning information
         if (name == "Custom" & !quiet) warning("Describing genesets with a name will aid reproducibility")
         if (version == "" & !quiet) warning("Including a version number will aid reproducibility")
+        
+        if (clean) {
+            names(genesets) <- clean_genesets(names(genesets))
+        }
         
         self$genesets <- genesets
         self$name <- name

@@ -64,6 +64,7 @@ enrichr_download <- function(genesets) {
 #' Download data from enrichr in the form of a gsets object
 #'
 #' @param genesets A name corresponding to available genesets
+#' @param clean Use true to clean labels of genesets
 #' @return A gsets object
 #'
 #' @examples
@@ -72,9 +73,9 @@ enrichr_download <- function(genesets) {
 #' @importFrom httr content
 #' 
 #' @export
-enrichr_gsets <- function(genesets) {
+enrichr_gsets <- function(genesets, clean=FALSE) {
     name <- genesets
     genesets <- enrichr_download(genesets)
     version <- .format_str("Downloaded: {1}", Sys.Date())
-    gsets$new(genesets, name=name, version=version)
+    gsets$new(genesets, name=name, version=version, clean=clean)
 }

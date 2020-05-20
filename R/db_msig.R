@@ -161,15 +161,16 @@ msigdb_download <- function(species, category, subcategory="") {
 #' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)
 #' @param category Geneset category (refer to ?msigdbr::msigdbr for avilable categories)
 #' @param subcategory Geneset subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)
+#' @param clean Use true to clean labels of genesets
 #' @return A gsets object
 #'
 #' @examples
 #' HALLMARK <- msigdb_gsets("Homo sapiens", "H", "")
 #'
 #' @export
-msigdb_gsets <- function(species, category, subcategory="") {
+msigdb_gsets <- function(species, category, subcategory="", clean=FALSE) {
     genesets <- msigdb_download(species, category, subcategory)
     name <- ifelse(subcategory == "", category, paste(category, subcategory, sep="."))
     version <- msigdb_version()
-    gsets$new(genesets, name=name, version=version)
+    gsets$new(genesets, name=name, version=version, clean=clean)
 }
