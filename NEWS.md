@@ -1,18 +1,22 @@
-# hypeR 1.3.02
+# hypeR 1.05.00
+* Version bump for bioconductor
 * Fixed `hyp_dots(merge=TRUE)` bug where some genesets were not showing
 * Added support for fetching non-human Enrichr libraries (e.g. Yeast, Fly, Worm, Fish)
-* Better reporting through `rctbl_hyp()` and `rctbl_mhyp`
+* Better reporting through `rctbl_hyp()` and `rctbl_mhyp()`
 
-# hypeR 1.3.01
+# hypeR 1.04.00
+* Version bump for bioconductor
+
+# hypeR 1.03.01
 * Ability to clean genesets names
 * Multiple signatures can now be merged into a single plot with `hyp_dots(merge=TRUE)`
-* Set the `hyp_dots()` legend title to the significance measure used`
+* Set the `hyp_dots()` legend title to the significance measure used
 * Versioning information used in export functions now includes parameters passed to `hypeR()`
 
-# hypeR 1.3.00
-* Version bump for bioconductor release 3.11
+# hypeR 1.03.00
+* Version bump for bioconductor
 
-# hypeR 1.2.00
+# hypeR 1.02.00
 * Added the genesets object with versioning
 * Downloaded genesets are now wrapped into gsets or rgsets objects automatically
 * Added functionality to download genesets directly from enrichr
@@ -23,11 +27,11 @@
 * Removed option to disable titles when multiple signatures are plotted
 * Removed option to show/return plots
 * Some variable names across functions were made shorter or more clear
-* Version bump for bioconductor release 3.10
+* Version bump for bioconductor
 
-# hypeR 1.1.10
+# hypeR 1.01.10
 * Changed default order of elements under each tab in `hyp_to_rmd()` function.
 
-# hypeR 1.1.09
+# hypeR 1.01.09
 * Published in Bioinformatics
 * https://doi.org/10.1093/bioinformatics/btz700
