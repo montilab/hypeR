@@ -1,7 +1,7 @@
 # hypeR 1.3.02
 * Fixed `hyp_dots(merge=TRUE)` bug where some genesets were not showing
 * Added support for fetching non-human Enrichr libraries (e.g. Yeast, Fly, Worm, Fish)
-* 
+* Better reporting through `rctbl_hyp()` and `rctbl_mhyp`
 
 # hypeR 1.3.01
 * Ability to clean genesets names
