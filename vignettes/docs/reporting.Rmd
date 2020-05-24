@@ -2,8 +2,10 @@
 title: "Generating Reports"
 vignette: >
   %\VignetteIndexEntry{Generating Reports}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
@@ -11,44 +13,84 @@ knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALS
 devtools::load_all(".")
 ```
 
-### Multiple Experiments
-Often researchers need to annotate multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze and share with collaborators.
+Often researchers need to annotate multiple signatures across multiple experiments. Typically, the best way to manage this data is to process it all at once and generate a markdown report to analyze and share with collaborators. Let's take an example where we have one experiment with many signatures.
 
 ```{r}
+data(wgcna)
 
-hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
-
-```
-
-In the following example, we're interested in exploring the signatures from a [Weighted Gene Co-expression Analysis](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/) of two different phenotypes. In `hypdat`, we take the resulting co-expression modules from WGCNA ran separately on gene expression data from carcinogenic and non-carcinogenic compounds. There are 15 modules of co-expressed genes for carcinogenic compounds and 16 modules of co-expressed genes for non-carcinogenic compounds. Using `hyp_to_rmd()` will help us process this data in a concise and reproducible manner that is readily shareable.
-
-```{r}
-
-signatures <- hypdat$wgcna
+signatures <- wgcna[[1]]
 str(signatures)
-
 ```
 
-Because we have a nested list of signatures, we use `hyper()` with the `lapply` function. This results in a list of `multihyp` objects, which can be directly passed to `hyp_to_rmd()`.
+```{r, message=FALSE, warning=FALSE, results='hide'}
+genesets <- hyperdb_rgsets("KEGG", "92.0")
+mhyp <- hypeR(signatures, genesets, test="hypergeometric", background=36000, fdr=0.05)
+```
 
-```{r, eval=FALSE}
+We have included some convenient functions that return some html for turning `hyp` and `mhyp` objects into concise tables for markdown documents. These tables can also include some plots for each individual `hyp` object.
+```{r}
+rctbl_mhyp(mhyp, show_hmaps=TRUE)
+```
 
-genesets <- hyperdb_rgsets("REACTOME", "70.0")
+Alright, how about we process all of these nested signatures and provide an example of what your markdown report might look like. Because we have a nested list of signatures, we use `hyper()` with the `lapply` function. This results in a list of `mhyp` objects.
 
-lmultihyp_obj <- lapply(signatures, hypeR, genesets, test="hypergeometric", background=50000, fdr=0.01)
+```{r, message=FALSE, warning=FALSE, results='hide'}
+lmhyp <- lapply(wgcna, hypeR, genesets, test="hypergeometric", background=36000, fdr=0.05)
+```
 
+First start with a nice theme and include the css required to make the tables pretty.
+
+```r
+title: "Project Title"
+subtitle: "Project Subtitle"
+author: "Anthony Federico"
+date: "Last Modified: 'r Sys.Date()'"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: false
+    code_folding: hide
+    toc_depth: 4
+    css: 'r system.file("style", "rctbl.css", package="hypeR")'
+```
+
+
+### LA
+
+```{r}
+hyp_dots(lmhyp$LA, merge=TRUE)
+rctbl_mhyp(lmhyp$LA, show_hmaps=TRUE)
+```
+
+### LB
+```{r}
+hyp_dots(lmhyp$LB, merge=TRUE)
+rctbl_mhyp(lmhyp$LB, show_hmaps=TRUE)
+```
+
+### H2
+```{r}
+hyp_dots(lmhyp$H2, merge=TRUE)
+rctbl_mhyp(lmhyp$H2, show_hmaps=TRUE)
+```
+
+### BL
+```{r}
+hyp_dots(lmhyp$BL, merge=TRUE)
+rctbl_mhyp(lmhyp$BL, show_hmaps=TRUE)
+```
+
+### Session Info
+```{r}
+sessionInfo()
 ```
 
 ### Generating Markdown Reports
 
-`hyp_to_rmd()` will accept multiple formats, including a single `hyp` or `multihyp` object as well as a list of either, including a list of `hyp` or `multihyp` objects together. 
-
-When a list of `multihyp` objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. 
-
-Lists of keyword arguments can be passed for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`, allowing customization of their functionality per report. See `hyp_to_rmd()` for details.
+For quick report generation one can use `hyp_to_rmd()` which will accept multiple formats, including a single `hyp` or `multihyp` object as well as a list of either, including a list of `hyp` or `multihyp` objects together. When a list of `multihyp` objects are passed for example, each experiment will become its own section, while each signature becomes its own tab within that section. Lists of keyword arguments can be passed for `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()`, allowing customization of their functionality per report. See `hyp_to_rmd()` for details.
 
 ```{r, eval=FALSE}
-
 hyp_to_rmd(lmultihyp_obj,
            file_path="hypeR.rmd",
            title="hypeR Report",
@@ -58,7 +100,4 @@ hyp_to_rmd(lmultihyp_obj,
            show_emaps=T,
            show_hmaps=T,
            show_tables=T)
-
 ```
-
-An example of these types of reports can be viewed at https://montilab.github.io/hypeR-reporting.

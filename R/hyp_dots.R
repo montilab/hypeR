@@ -27,7 +27,7 @@
     
     # Default arguments
     val <- match.arg(val)
-
+    
     # Count significant genesets across signatures
     multihyp_dfs <- lapply(multihyp_data, function(hyp_obj) {
         hyp_obj$data %>%
@@ -35,34 +35,33 @@
         dplyr::filter(fdr <= fdr_cutoff) %>%
         dplyr::select(label)
     })
-
+    
     # Take top genesets
     labels <- names(sort(table(unlist(multihyp_dfs)), decreasing=TRUE))
     if (!is.null(top)) labels <- head(labels, top)
-
+    
     # Handle empty dataframes
     if (length(labels) == 0) return(ggempty())
-
+    
     # Create a multihyp dataframe
-    multihyp_df <- lapply(multihyp_data, function(hyp_obj) {
+    dfs <- lapply(multihyp_data, function(hyp_obj) {
         hyp_df <- hyp_obj$data
-        rownames(hyp_df) <- hyp_df$label
-        hyp_df[labels, val, drop=FALSE]
-    }) %>%
-    do.call(cbind, .) %>%
-    magrittr::set_colnames(names(multihyp_data))
-
-    # Highly enriched genesets appear at top
-    multihyp_df <- multihyp_df[rev(labels),]
-
+        hyp_df[hyp_df$label %in% labels, c("label", val), drop=FALSE]
+    })
+    
+    df <- suppressWarnings(Reduce(function(x, y) merge(x, y, by="label", all=TRUE), dfs))
+    colnames(df) <- c("label", names(dfs))
+    rownames(df) <- df$label
+    df <- df[rev(labels), names(dfs)]
+    
     # Abbreviate labels
-    label.abrv <- substr(rownames(multihyp_df), 1, abrv)
+    label.abrv <- substr(rownames(df), 1, abrv)
     if (any(duplicated(label.abrv))) {
         stop("Non-unique labels after abbreviating")
     } else {
-        rownames(multihyp_df) <- factor(label.abrv, levels=label.abrv)   
+        rownames(df) <- factor(label.abrv, levels=label.abrv)   
     }
-
+    
     if (val == "pval") {
         cutoff <- pval_cutoff
         color.label <- "P-Value"
@@ -71,11 +70,11 @@
         cutoff <- fdr_cutoff
         color.label <- "FDR"
     }
-
-    df.melted <- reshape2::melt(as.matrix(multihyp_df))
+    
+    df.melted <- reshape2::melt(as.matrix(df))
     colnames(df.melted) <- c("label", "signature", "significance")
     df.melted$size <- if(sizes) df.melted$significance else 1
-
+    
     df.melted %>%
     dplyr::filter(significance <= cutoff) %>%
     ggplot(aes(x=signature, y=label, color=significance, size=size)) +

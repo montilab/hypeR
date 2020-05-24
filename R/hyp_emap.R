@@ -34,8 +34,8 @@
               purrr::when(!is.null(top) ~ head(., top), ~ .)
 
     # Handle empty dataframes
-    if (nrow(hyp_df) == 0) return(ggempty())
-
+    if (nrow(hyp_df) == 0) return(NULL)
+    
     # Geneset similarity matrix
     hyp.genesets <- genesets[hyp_df$label]
     hyp.genesets.mat <- sapply(hyp.genesets, function(x) {

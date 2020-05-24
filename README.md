@@ -3,6 +3,8 @@
 
 # hypeR
 
+<img src="media/logo.png" height="100px" align="right"/>
+
 [![](https://travis-ci.org/montilab/hypeR.svg?branch=master)](https://travis-ci.org/montilab/hypeR)
 [![](https://img.shields.io/badge/bioconductor-3.11-3a6378.svg)](https://doi.org/doi:10.18129/B9.bioc.hypeR)
 [![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
@@ -16,9 +18,10 @@ Please visit <https://montilab.github.io/hypeR-docs/>
 
 ## Requirements
 
-**hypeR** currently requires the latest version of R (\>= 3.6.0) to be
-installed directly from Github or Bioconductor. To install with R (\>=
-3.5.0) see below. Use with R (\< 3.5.0) is not recommended.
+We recommend the latest version of R (\>= 4.0.0) but **hypeR** currently
+requires R (\>= 3.6.0) to be installed directly from Github or
+Bioconductor. To install with R (\>= 3.5.0) see below. Use with R (\<
+3.5.0) is not recommended.
 
 ## Installation
 
@@ -61,6 +64,61 @@ install.packages("path/to/hypeR", repos=NULL, type="source")
 ``` r
 library(hypeR)
 ```
+
+``` r
+data(wgcna)
+
+# Process many signatures
+signatures <- wgcna[[1]]
+str(signatures)
+```
+
+    #> List of 21
+    #>  $ turquoise   : chr [1:1902] "CLEC3A" "KCNJ3" "SCGB2A2" "SERPINA6" ...
+    #>  $ blue        : chr [1:1525] "GSTM1" "BMPR1B" "BMPR1B-DT" "PYDC1" ...
+    #>  $ magenta     : chr [1:319] "DSCAM-AS1" "VSTM2A" "UGT2B11" "CYP4Z1" ...
+    #>  $ brown       : chr [1:1944] "SLC25A24P1" "CPB1" "GRIA2" "CST9" ...
+    #>  $ pink        : chr [1:578] "MUC6" "GLRA3" "OPRPN" "ARHGAP36" ...
+    #>  $ red         : chr [1:681] "KCNC2" "SLC5A8" "HNRNPA1P57" "CBLN2" ...
+    #>  $ darkred     : chr [1:43] "OR4K12P" "GRAMD4P7" "FAR2P3" "CXADRP3" ...
+    #>  $ tan         : chr [1:161] "LEP" "SIK1" "TRARG1" "CIDEC" ...
+    #>  $ lightcyan   : chr [1:82] "CDC20B" "FOXJ1" "CDHR4" "MCIDAS" ...
+    #>  $ purple      : chr [1:308] "C10orf82" "GUSBP3" "IGLV10-54" "IGKV1D-13" ...
+    #>  $ lightyellow : chr [1:48] "SLC6A4" "ERICH3" "GP2" "TRIM72" ...
+    #>  $ cyan        : chr [1:143] "NOP56P1" "FABP6" "GNAQP1" "ZNF725P" ...
+    #>  $ royalblue   : chr [1:47] "PCDHA12" "PCDHA11" "PCDHA4" "PCDHA1" ...
+    #>  $ black       : chr [1:864] "NSFP1" "USP32P2" "OCLNP1" "RN7SL314P" ...
+    #>  $ yellow      : chr [1:904] "NPIPB15" "MAFA-AS1" "C1orf167" "NT5CP2" ...
+    #>  $ lightgreen  : chr [1:60] "HIST1H2APS3" "HIST1H2AI" "HIST1H1PS1" "HIST1H3H" ...
+    #>  $ darkgrey    : chr [1:34] "MTND4P12" "MTRNR2L1" "MT-TT" "MTCYBP18" ...
+    #>  $ darkgreen   : chr [1:43] "STK19B" "SNCG" "ELANE" "TNXA" ...
+    #>  $ midnightblue: chr [1:92] "LRRC26" "ARHGDIG" "TGFBR3L" "HS6ST1P1" ...
+    #>  $ grey60      : chr [1:71] "KRT8P48" "KRT8P42" "KRT8P11" "CRIP1P4" ...
+    #>  $ salmon      : chr [1:151] "UBA52P3" "NPM1P33" "MYL6P5" "RPL29P30" ...
+
+``` r
+# Access to hundreds of genesets
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+print(genesets)
+```
+
+    #> C2.CP:KEGG v7.1.1 
+    #> Abc Transporters (44)
+    #> Acute Myeloid Leukemia (57)
+    #> Adherens Junction (73)
+    #> Adipocytokine Signaling Pathway (67)
+    #> Alanine Aspartate And Glutamate Metabolism (32)
+    #> Aldosterone Regulated Sodium Reabsorption (42)
+
+``` r
+mhyp <- hypeR(signatures, genesets, test="hypergeometric", background=30000)
+```
+
+``` r
+hyp_dots(mhyp, merge=TRUE, fdr=0.05, title="Co-expression Modules")
+```
+
+<img src="README_files/figure-gfm/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ## Terminology
 

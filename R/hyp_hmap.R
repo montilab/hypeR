@@ -29,7 +29,7 @@
               purrr::when(!is.null(top) ~ head(., top), ~ .)
         
     # Handle empty dataframes
-    if (nrow(hyp_df) == 0) return(ggempty())
+    if (nrow(hyp_df) == 0) return(NULL)
     
     # Subset relational genesets
     rgsets.obj.subset <- rgsets_obj$subset(hyp_df$label)

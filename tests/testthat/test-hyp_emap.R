@@ -8,7 +8,7 @@ hyp_emap_tests <- function(hyp_obj, return_obj=FALSE) {
     expect_is(p, "visNetwork")
     expect_is(p, "htmlwidget")
     p <- hyp_emap(hyp_obj,  top=0)
-    expect_is(p, "gg")
+    expect_true(is.null(p))
     if (return_obj) return(hyp_obj)
 }
 

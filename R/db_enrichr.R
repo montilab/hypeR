@@ -1,13 +1,30 @@
+#' Get url base for species-specific enrichr libraries
+#'
+#' @param db A species
+#' @return A url
+#' 
+#' @keywords internal
+enrichr_urls <- function(db=c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr")) {
+    switch(match.arg(db),
+        "Enrichr"      = "http://amp.pharm.mssm.edu/Enrichr/{1}",
+        "YeastEnrichr" = "http://amp.pharm.mssm.edu/YeastEnrichr/{1}",
+        "FlyEnrichr"   = "http://amp.pharm.mssm.edu/FlyEnrichr/{1}",
+        "WormEnrichr"  = "http://amp.pharm.mssm.edu/WormEnrichr/{1}",
+        "FishEnrichr"  = "http://amp.pharm.mssm.edu/FishEnrichr/{1}"
+    )
+}
+
 #' Connect to the enrichr web application
 #'
 #' @param endpoint The url endpoint to connect to
+#' @param db A species
 #' @return A web response
 #'
 #' @importFrom httr GET http_status
 #' 
 #' @keywords internal
-enrichr_connect <- function(endpoint) {
-    url <- "http://amp.pharm.mssm.edu/Enrichr/{1}"
+enrichr_connect <- function(endpoint, db=c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr")) {
+    url <- enrichr_urls(db)
     response <- httr::GET(.format_str(url, endpoint))   
     if (!http_status(response)$category == "Success") {
         stop(http_status(response)$message)
@@ -17,6 +34,7 @@ enrichr_connect <- function(endpoint) {
 
 #' Get enrichr available genesets
 #'
+#' @param db A species
 #' @return A dataframe of available genesets
 #'
 #' @examples
@@ -27,8 +45,8 @@ enrichr_connect <- function(endpoint) {
 #' @importFrom dplyr select
 #' 
 #' @export
-enrichr_available <- function() {
-    response <- enrichr_connect("datasetStatistics")
+enrichr_available <- function(db=c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr")) {
+    response <- enrichr_connect("datasetStatistics", db)
     data <- content(response, "parsed")  
     data$statistics %>%
     lapply(function(x) do.call(cbind.data.frame, x)) %>%
@@ -40,6 +58,7 @@ enrichr_available <- function() {
 #' Download data from enrichr in the form of a named list
 #'
 #' @param genesets A name corresponding to available genesets
+#' @param db A species
 #' @return A list of genesets
 #'
 #' @examples
@@ -48,8 +67,8 @@ enrichr_available <- function() {
 #' @importFrom httr content
 #' 
 #' @export
-enrichr_download <- function(genesets) {
-    response <- enrichr_connect(.format_str("geneSetLibrary?mode=text&libraryName={1}", genesets))
+enrichr_download <- function(genesets, db=c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr")) {
+    response <- enrichr_connect(.format_str("geneSetLibrary?mode=text&libraryName={1}", genesets), db)
     data <- content(response, "text")
     split <- strsplit(data, split="\n")[[1]]
     genesets <- sapply(split, function(x) strsplit(x, "\t")[[1]])
@@ -64,6 +83,7 @@ enrichr_download <- function(genesets) {
 #' Download data from enrichr in the form of a gsets object
 #'
 #' @param genesets A name corresponding to available genesets
+#' @param db A species
 #' @param clean Use true to clean labels of genesets
 #' @return A gsets object
 #'
@@ -73,9 +93,9 @@ enrichr_download <- function(genesets) {
 #' @importFrom httr content
 #' 
 #' @export
-enrichr_gsets <- function(genesets, clean=FALSE) {
-    name <- genesets
-    genesets <- enrichr_download(genesets)
+enrichr_gsets <- function(genesets, db=c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr"), clean=FALSE) {
+    name <- .format_str("{1} ({2})", genesets, match.arg(db))
+    genesets <- enrichr_download(genesets, db)
     version <- .format_str("Downloaded: {1}", Sys.Date())
     gsets$new(genesets, name=name, version=version, clean=clean)
 }

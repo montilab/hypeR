@@ -1,10 +1,11 @@
-# Devolpment scripts
+# Development scripts
 /vignettes/examples/data
+data-raw/raw/
 /inst/data-raw/*.txt
+/media/logo.psd
+/pkgdown/favicon/
 /dev/
-/art/
 /docs/
-pkgdown/favicon
 *.gmt
 
 # General

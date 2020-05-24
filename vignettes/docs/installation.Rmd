@@ -6,22 +6,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-**hypeR** currently requires the latest version of R (\>= 3.6.0) to be
-installed directly from Github or Bioconductor. To install with R (\>=
-3.5.0) see below. Use with R (\< 3.5.0) is not recommended.
+We recommend the latest version of R (\>= 4.0.0) but **hypeR** currently requires R (\>= 3.6.0) to be installed directly from Github or Bioconductor. To install with R (\>= 3.5.0) see below. Use with R (\< 3.5.0) is not recommended.
 
 Install the development version of the package from Github.
 ```{r, eval=FALSE}
-
 devtools::install_github("montilab/hypeR")
-
 ```
 
 Or install the development version of the package from Bioconductor.
 ```{r, eval=FALSE}
-
 BiocManager::install("montilab/hypeR", version="devel")
-
 ```
 
 Or install with Conda.
@@ -35,7 +29,6 @@ devtools::install_github("montilab/hypeR")
 ```
 
 Or install with previous versions of R.
-
 ```{r eval=FALSE}
 git clone https://github.com/montilab/hypeR
 nano hypeR/DESCRIPTION
@@ -47,7 +40,5 @@ install.packages("path/to/hypeR", repos=NULL, type="source")
 
 Load the package into an R session.
 ```{r, eval=FALSE}
-
 library(hypeR)
-
 ```

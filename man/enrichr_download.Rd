@@ -4,10 +4,15 @@
 \alias{enrichr_download}
 \title{Download data from enrichr in the form of a named list}
 \usage{
-enrichr_download(genesets)
+enrichr_download(
+  genesets,
+  db = c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr")
+)
 }
 \arguments{
 \item{genesets}{A name corresponding to available genesets}
+
+\item{db}{A species}
 }
 \value{
 A list of genesets

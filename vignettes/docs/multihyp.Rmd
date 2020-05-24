@@ -14,37 +14,28 @@ devtools::load_all(".")
 Often computational biologists must process, interpret, and share large amounts of biological data. A common example is interpreting gene co-expression modules across one or more phenotype, resulting in potentially hundreds of signatures to annotate. Here we have signatures of gene co-expression modules, generated with WGCNA, for two distinct phenotypes. In this case, we can feed `hypeR()` a named list of signatures and a `multihyp` object will be returned. This object is essentially just multiple `hyp` objects. However it is recognized and handled differently by downstream methods.
 
 ```{r}
-
-hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
-
+data(wgcna)
 ```
 
 We start by annotating signatures for the first phenotype..
 
 ```{r}
-
-wgcna <- hypdat$wgcna
 signatures <- wgcna[[1]]
 str(signatures)
-
 ```
 
 The signatures will be processed together...
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE, results='hide'}
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
 
-genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
-
-multihyp_obj <- hypeR(signatures, genesets, test="hypergeometric", background=50000, fdr=0.01)
-
+mhyp <- hypeR(signatures, genesets, test="hypergeometric", background=50000, fdr=0.05)
 ```
 
 ### A `multihyp` Object
 
 ```{r}
-
-print(multihyp_obj)
-
+print(mhyp)
 ```
 
 A `multihyp` object can be passed to any downstream method, with some altered behavior.
@@ -54,45 +45,33 @@ A `multihyp` object can be passed to any downstream method, with some altered be
 With `hyp_to_excel` each signature is exported to its own sheet...
 
 ```{r, eval=FALSE}
-
-hyp_to_excel(multihyp_obj, file_path="hypeR.xlsx")
-
+hyp_to_excel(mhyp, file_path="hypeR.xlsx")
 ```
 
 With `hyp_to_table` each signature is exported as its own table in a single directory...
 
 ```{r, eval=FALSE}
-
-hyp_to_table(multihyp_obj, file_path="hypeR")
-
+hyp_to_table(mhyp, file_path="hypeR")
 ```
 
 With `hyp_to_rmd` each signature is displayed under its own tab...
 
 ```{r, eval=FALSE}
-
 hyp_to_rmd(lmultihyp_obj, file_path="hypeR.rmd",
-
 ```
 
 With `hyp_dots()`, `hyp_emap()`, and `hyp_hmap()` each signatures is plotted and returned separately...
 
 ```{r}
-
-p <- hyp_dots(multihyp_obj)
-
+p <- hyp_dots(mhyp)
 ```
 
 ```{r, fig.height=5}
-
 p[1:3]
-
 ```
 
 Alternatively `hyp_dots(merge=TRUE)` can combine mulitple signatures into a single plot...
 
 ```{r}
-
-hyp_dots(multihyp_obj, merge=TRUE)
-
+hyp_dots(mhyp, merge=TRUE)
 ```

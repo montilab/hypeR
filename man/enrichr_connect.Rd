@@ -4,10 +4,15 @@
 \alias{enrichr_connect}
 \title{Connect to the enrichr web application}
 \usage{
-enrichr_connect(endpoint)
+enrichr_connect(
+  endpoint,
+  db = c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr")
+)
 }
 \arguments{
 \item{endpoint}{The url endpoint to connect to}
+
+\item{db}{A species}
 }
 \value{
 A web response

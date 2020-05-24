@@ -11,6 +11,8 @@ devtools::load_all(".")
 
 # hypeR
 
+<img src="media/logo.png" height="100px" align="right"/>
+
 [![](https://travis-ci.org/montilab/hypeR.svg?branch=master)](https://travis-ci.org/montilab/hypeR)
 [![](https://img.shields.io/badge/bioconductor-3.11-3a6378.svg)](https://doi.org/doi:10.18129/B9.bioc.hypeR)
 [![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
@@ -24,7 +26,7 @@ Please visit <https://montilab.github.io/hypeR-docs/>
 
 ## Requirements
 
-__hypeR__ currently requires the latest version of R (>= 3.6.0) to be installed directly from Github or Bioconductor. To install with R (>= 3.5.0) see below. Use with R (< 3.5.0) is not recommended.
+We recommend the latest version of R (\>= 4.0.0) but **hypeR** currently requires R (\>= 3.6.0) to be installed directly from Github or Bioconductor. To install with R (\>= 3.5.0) see below. Use with R (\< 3.5.0) is not recommended.
 
 ## Installation
 
@@ -63,9 +65,27 @@ install.packages("path/to/hypeR", repos=NULL, type="source")
 ## Usage
 
 ```{r, eval=FALSE}
-
 library(hypeR)
+```
 
+```{r}
+data(wgcna)
+
+# Process many signatures
+signatures <- wgcna[[1]]
+str(signatures)
+
+# Access to hundreds of genesets
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+print(genesets)
+```
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+mhyp <- hypeR(signatures, genesets, test="hypergeometric", background=30000)
+```
+
+```{r, fig.width=8, fig.align='center'}
+hyp_dots(mhyp, merge=TRUE, fdr=0.05, title="Co-expression Modules")
 ```
 
 ## Terminology
@@ -87,19 +107,15 @@ weighted.signature <- c("GENE2"=1.22, "GENE1"=0.94, "GENE3"=0.77)
 ### Geneset
 A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined.
 ```{r}
-
 genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
                  "GSET2" = c("GENE4", "GENE5", "GENE6"),
                  "GSET3" = c("GENE7", "GENE8", "GENE9"))
-
 ```
 
 #### Hyper enrichment
 All workflows begin with performing hyper enrichment with `hyper()`. Often we are just interested in a single signature, as described above. In this case, `hyper()` will return a `hyp` object. This object contains relevant information to the enrichment results and is recognized by downstream methods.
 ```{r}
-
 hyp_obj <- hypeR(signature, genesets)
-
 ```
 
 #### Downstream methods
@@ -107,16 +123,13 @@ Please visit the [documentation](https://montilab.github.io/hypeR-docs/) for det
 
 ##### Downloading genesets
 ```{r, eval=FALSE}
-
 BIOCARTA <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:BIOCARTA")
 KEGG     <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:KEGG")
 REACTOME <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:REACTOME")
-
 ```
 
 ##### Visualize results
 ```{r, eval=FALSE}
-
 # Show interactive table
 hyp_show(hyp_obj)
 
@@ -128,12 +141,10 @@ hyp_emap(hyp_obj)
 
 # Plot hiearchy map
 hyp_hmap(hyp_obj)
-
 ```
 
 ##### Saving results
 ```{r, eval=FALSE}
-
 # Save to excel
 hyp_to_excel(hyp_obj, file_path="hypeR.xlsx")
 
@@ -146,7 +157,6 @@ hyp_to_rmd(hyp_obj,
            title="Hyper Enrichment (hypeR)",
            subtitle="YAP, TNF, and TAZ Knockout Experiments",
            author="Anthony Federico, Stefano Monti")
-
 ```
 
 ## Related Repositories

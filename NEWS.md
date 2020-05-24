@@ -1,4 +1,10 @@
+# hypeR 1.3.02
+* Fixed `hyp_dots(merge=TRUE)` bug where some genesets were not showing
+* Added support for fetching non-human Enrichr libraries (e.g. Yeast, Fly, Worm, Fish)
+* 
+
 # hypeR 1.3.01
+* Ability to clean genesets names
 * Multiple signatures can now be merged into a single plot with `hyp_dots(merge=TRUE)`
 * Set the `hyp_dots()` legend title to the significance measure used`
 * Versioning information used in export functions now includes parameters passed to `hypeR()`

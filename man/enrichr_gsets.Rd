@@ -4,10 +4,16 @@
 \alias{enrichr_gsets}
 \title{Download data from enrichr in the form of a gsets object}
 \usage{
-enrichr_gsets(genesets, clean = FALSE)
+enrichr_gsets(
+  genesets,
+  db = c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr"),
+  clean = FALSE
+)
 }
 \arguments{
 \item{genesets}{A name corresponding to available genesets}
+
+\item{db}{A species}
 
 \item{clean}{Use true to clean labels of genesets}
 }

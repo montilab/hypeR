@@ -9,9 +9,6 @@ vignette: >
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(comment="", cache=FALSE, fig.align="center")
 library(tidyverse)
-library(magrittr)
-library(dplyr)
-library(reactable)
 devtools::load_all(".")
 ```
 
@@ -23,7 +20,6 @@ All analyses with __hypeR__ must include one or more signatures and genesets.
 There are multiple types of enrichment analyses (e.g. hypergeometric, kstest, gsea) one can perform. Depending on the type, different kinds of signatures are expected. There are three types of signatures `hypeR()` expects.
 
 ```{r}
-
 # Simply a character vector of symbols (hypergeometric)
 signature <- c("GENE1", "GENE2", "GENE3")
 
@@ -32,18 +28,15 @@ ranked.signature <- c("GENE2", "GENE1", "GENE3")
 
 # A ranked named numerical vector of symbols with ranking weights (gsea)
 weighted.signature <- c("GENE2"=1.22, "GENE1"=0.94, "GENE3"=0.77)
-
 ```
 
 ### Geneset
 A geneset is simply a list of vectors, therefore, one can use any custom geneset in their analyses, as long as it's appropriately defined. Additionally, `hypeR()` recognized object oriented genesets called `gsets` and `rgsets` objects, which are [explained later](https://montilab.github.io/hypeR-docs/articles/docs/data.html) in the documentation.
 
 ```{r}
-
 genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
                  "GSET2" = c("GENE4", "GENE5", "GENE6"),
                  "GSET3" = c("GENE7", "GENE8", "GENE9"))
-
 ```
 
 # Usage
@@ -53,18 +46,13 @@ genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
 In these tutorials, we will use example data. The example data includes pre-computed results from common gene expression analysis workflows such as diffential expression and weighted gene co-expression.
 
 ```{r}
-
-hypdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "hypdat.rds"))
-
+data(limma)
 ```
 
 Using a differential expression dataframe created with Limma, we will extract a signature of upregulated genes for use with a *hypergeometric* test and rank genes descending by their differential expression level for use with a *kstest*.
 
 ```{r}
-
-limma <- hypdat$limma
 reactable(limma)
-
 ```
 
 ### Downloading Genesets
@@ -72,9 +60,7 @@ reactable(limma)
 We'll also import the latest genesets from [Kegg](https://www.kegg.jp) using another set of functions provided by __hypeR__ for downloading and loading hundreds of open source genesets. 
 
 ```{r}
-
 genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
-
 ```
 
 See [Downloading Genesets](https://montilab.github.io/hypeR-docs/articles/docs/data.html) for more information.
@@ -88,23 +74,19 @@ The most basic signature is an unranked vector of genes. This could be a differe
 #### Unranked Signature
 
 ```{r}
-
-signature <- limma %>% filter(t > 0 & fdr < 0.001) %>% use_series(symbol)
-
+signature <- limma %>% 
+             dplyr::filter(t > 0 & fdr < 0.001) %>% 
+             magrittr::use_series(symbol)
 ```
 
 ```{r}
-
 length(signature)
 head(signature)
-
 ```
 
 ```{r}
-
 hyp_obj <- hypeR(signature, genesets, test="hypergeometric", background=50000, fdr=0.01, plotting=TRUE)
 hyp_obj$plots[[1]]
-
 ```
 
 #### Ranked Signature
@@ -112,23 +94,19 @@ hyp_obj$plots[[1]]
 Rather than setting a specific cutoff to define a differential expression signature, one could rank genes by their expression and provide the entire ranked vector as signature. From the differential expression dataframe, we order genes descending so upregulated genes are near the top, then extract the gene symbol column as a vector.
 
 ```{r}
-
-signature <- limma %>% arrange(desc(t)) %>% use_series(symbol)
-
+signature <- limma %>% 
+             dplyr::arrange(desc(t)) %>% 
+             magrittr::use_series(symbol)
 ```
 
 ```{r}
-
 length(signature)
 head(signature)
-
 ```
 
 ```{r}
-
 hyp_obj <- hypeR(signature, genesets, test="kstest", fdr=0.05, plotting=TRUE)
 hyp_obj$plots[[1]]
-
 ```
 
 #### Weighted Signature
@@ -136,26 +114,23 @@ hyp_obj$plots[[1]]
 In addition to providing a ranked signature, one could also add weights by including the t-statistic of the differential expression. From the differential expression dataframe, we order genes descending so upregulated genes are near the top, then extract and deframe the gene symbol and t-statistic columns as a named vector of weights.
 
 ```{r}
-
-signature <- limma %>% arrange(desc(t)) %>% select(symbol, t) %>% deframe()
-
+signature <- limma %>% 
+             dplyr::arrange(desc(t)) %>% 
+             dplyr::select(symbol, t) %>% 
+             tibble::deframe()
 ```
 
 ```{r}
-
 length(signature)
 head(signature)
-
 ```
 
 ```{r}
-
 hyp_obj <- hypeR(signature, genesets, test="kstest", fdr=0.05, plotting=TRUE)
 hyp_obj$plots[[1]]
-
 ```
 
-For permutation-based significance testing and normalized enrichment scores, please see https://bioconductor.org/packages/release/bioc/html/fgsea.html ...
+For permutation-based significance testing and normalized enrichment scores, please see [here](https://bioconductor.org/packages/release/bioc/html/fgsea.html).
 
 
 ### Downstream Analysis
@@ -165,14 +140,11 @@ For permutation-based significance testing and normalized enrichment scores, ple
 A `hyp` object contains all information relevant to the enrichment analysis, including the parameters used, a dataframe of results, plots for each geneset tested, as well as the arguments used to perform the analysis. All downstream functions used for analysis, visualization, and reporting recognize `hyp` objects and utilize their data. Adopting an object oriented framework brings modularity to hypeR, enabling flexible and reproducible workflows.
 
 ```{r}
-
 print(hyp_obj)
-
 ```
 
 #### The `hyp` Methods
 ```{r, eval=FALSE}
-
 # Show interactive table
 hyp_show(hyp_obj)
 
@@ -193,7 +165,6 @@ hyp_to_table(hyp_obj)
 
 # Generate markdown report
 hyp_to_rmd(hyp_obj)
-           
 ```
 
 Continue to [Visualize Results](https://montilab.github.io/hypeR-docs/articles/docs/visualize.html) to see these methods in action.
