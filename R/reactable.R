@@ -11,7 +11,7 @@
 #' @importFrom htmltools div tagAppendChild
 #' @importFrom dplyr select
 #' 
-#' @keywords export
+#' @export
 rctbl_hyp <- function(hyp,
                       type=c("inner", "outer"),
                       show_emaps=FALSE,
@@ -66,7 +66,7 @@ rctbl_hyp <- function(hyp,
 #' @importFrom reactable reactable colDef
 #' @importFrom htmltools div
 #' 
-#' @keywords export
+#' @export
 rctbl_mhyp <- function(mhyp,
                        show_emaps=FALSE,
                        show_hmaps=FALSE,
@@ -106,7 +106,7 @@ rctbl_mhyp <- function(mhyp,
 #' 
 #' @param obj A hyp or multihyp object
 #' 
-#' @keywords export
+#' @export
 rctbl_build <- function(obj, ...) {
     if (is(obj, "hyp")) {
         return(rctbl_hyp(obj, type="outer", ...))

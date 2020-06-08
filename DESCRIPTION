@@ -11,7 +11,7 @@ License: GPL-3 + file LICENSE
 URL: https://github.com/montilab/hypeR
 Encoding: UTF-8
 RoxygenNote: 7.1.0
-LazyData: true
+LazyData: false
 Imports:
     ggplot2,
     ggforce,

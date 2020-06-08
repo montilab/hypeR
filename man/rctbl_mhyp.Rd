@@ -26,4 +26,3 @@ rctbl_mhyp(
 \description{
 Reactable table for multihyp objects
 }
-\keyword{export}

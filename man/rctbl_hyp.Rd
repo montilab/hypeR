@@ -29,4 +29,3 @@ rctbl_hyp(
 \description{
 Reactable table for hyp objects
 }
-\keyword{export}

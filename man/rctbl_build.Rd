@@ -12,4 +12,3 @@ rctbl_build(obj, ...)
 \description{
 Reactable builder for hyp or mhyp objects
 }
-\keyword{export}
