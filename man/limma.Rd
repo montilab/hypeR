@@ -5,7 +5,7 @@
 \alias{limma}
 \title{Differential Expression}
 \format{
-An object of class \code{data.frame} with 9682 rows and 5 columns.
+A data frame
 }
 \usage{
 limma
