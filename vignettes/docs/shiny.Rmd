@@ -7,7 +7,7 @@ vignette: >
 ---
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=10, fig.height=8, cache=FALSE)
 devtools::load_all(".")
 ```
 
@@ -85,10 +85,8 @@ server <- function(input, output, session) {
 }
 ```
 
-## Preview
+## Run
 
 ```{r, eval=FALSE}
 shinyApp(ui, server)
 ```
-
-`r knitr::include_graphics(system.file(package='hypeR', 'vignettes', 'shiny-ex.png'))`
