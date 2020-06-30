@@ -39,13 +39,29 @@ reference:
   - '`enrichr_gsets`'
   - '`hyperdb_info`'
   - '`hyperdb_rgsets`'
-- title: Objects
+- title: Markdown Modules
+  desc: ~
+  contents:
+  - '`rctbl_hyp`'
+  - '`rctbl_mhyp`'
+  - '`rctbl_build`'
+- title: Shiny Modules
+  desc: ~
+  contents:
+  - '`genesets_UI`'
+  - '`genesets_Server`'
+- title: R6 Objects
   desc: ~
   contents:
   - '`hyp`'
   - '`multihyp`'
   - '`gsets`'
   - '`rgsets`'
+- title: Data Objects
+  desc: ~
+  contents:
+  - '`wgcna`'
+  - '`limma`'
 
 navbar:
   title: "hypeR"
@@ -66,6 +82,8 @@ navbar:
         href: articles/docs/multihyp.html
       - text: "Generating Reports"
         href: articles/docs/reporting.html
+      - text: "Shiny Modules"
+        href: articles/docs/shiny.html
     - text: "Reference"
       href: reference/index.html
   right:
