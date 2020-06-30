@@ -1,4 +1,6 @@
 # Development scripts
+/inst/script/genesets.R
+
 /vignettes/examples/data
 data-raw/raw/
 /inst/data-raw/*.txt

@@ -1,3 +1,7 @@
+# hypeR 1.05.01
+* Fixed bug for wrong column names from `enrichr_available()`
+* Added the first shiny module for geneset selection
+
 # hypeR 1.05.00
 * Version bump for bioconductor
 * Fixed `hyp_dots(merge=TRUE)` bug where some genesets were not showing

@@ -105,6 +105,7 @@ rctbl_mhyp <- function(mhyp,
 #' Reactable builder for hyp or mhyp objects
 #' 
 #' @param obj A hyp or multihyp object
+#' @param ... Arguments passed to table generators 
 #' 
 #' @export
 rctbl_build <- function(obj, ...) {

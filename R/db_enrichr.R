@@ -51,8 +51,8 @@ enrichr_available <- function(db=c("Enrichr", "YeastEnrichr", "FlyEnrichr", "Wor
     data$statistics %>%
     lapply(function(x) do.call(cbind.data.frame, x)) %>%
     do.call(rbind.data.frame, .) %>%
-    magrittr::set_colnames(c("Coverage", "Genes Per Set", "Geneset", "Source", "Set Number")) %>%
-    dplyr::select(c("Geneset", "Set Number", "Coverage", "Genes Per Set", "Source"))
+    dplyr::select("libraryName", "numTerms", "geneCoverage", "genesPerTerm", "link") %>%
+    magrittr::set_colnames(c("Geneset", "Set Number", "Coverage", "Genes Per Set", "Source"))
 }
 
 #' Download data from enrichr in the form of a named list

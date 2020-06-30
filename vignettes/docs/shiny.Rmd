@@ -8,14 +8,87 @@ vignette: >
 
 ```{r, include=FALSE, messages=FALSE, warnings=FALSE}
 knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
+devtools::load_all(".")
 ```
 
-### Example application
+# Shiny Modules
+All __hypeR__ methods output objects that are compatible with R Shiny and can be incorporated into a variety of applications (e.g. `hyp_dots()` returns a `ggplot` object). The most difficult challenge in incorporating geneset enrichment tasks in Shiny applications is the geneselect selection / fetching itself. To help with this, __hypeR__ includes module functions that abstract away the geneset selection code.
 
-All __hypeR__ methods are compatible with R Shiny and can be incorporated into a variety of applications. For users looking to adopt __hypeR__ in their own projects, we have created an example project using various __hypeR__ methods in Shiny. If you are looking to use __hypeR__ in your own applications and need help or have questions on the implementation, please feel free to reach out to us!.
+## What Are Shiny Modules?
 
-#### Live demo
-https://anfederico.shinyapps.io/hypeR-shiny
+Shiny modules are functions that generato Shiny UI / Server code. They are composable elements that can be used within and interface with existing applications. For more information, check out the [latest documentation](https://shiny.rstudio.com/articles/modules.html).
 
-#### Code example
-https://github.com/montilab/hypeR-shiny
+## Example
+
+For those familiar with Shiny, you will have accompanying modules for the ui and server sections of your application. These modules are `hypeR::genesets_UI()` and `hypeR::genesets_Server()` respectively.
+
+### UI
+
+Here we create a simple interface where we use the genesets selection module. Through that module, users can select genesets available through **hypeR** and the application will load those genesets into a *reactive variable* (more on this later). We add additional code to take a user-defined gene signature and produce an enrichment plot which represents components specific to your Shiny application. This can be anything!
+
+```{r, eval=FALSE}
+ui <- fluidPage(
+        sidebarLayout(
+            sidebarPanel(
+                # Put your geneset selector module anywhere
+                hypeR::genesets_UI("genesets"),
+                
+                # Add components specific to your application
+                textAreaInput("signature", 
+                              label="Signature", 
+                              rows=5,
+                              placeholder="GENE1,GENE2,GENE3", 
+                              resize="vertical"),
+                
+                actionButton("enrichment", "Enrichment")
+            ),
+            mainPanel(
+                # Enrichment plot
+                plotOutput("plot")
+            )
+        )
+    )
+```
+
+### Server
+
+Now we need to create the server code that is responsible for all the backend work. Again, we provide an associated module function for the server code. The serve code returns a *reactive variable* containing the fetched genesets that were selected. **Selection changes will update this variable and propogate to downstream functions**. Importantly, this variable holding the genesets can be accessed by any part of your application now, enabling you to make applications completely customizable while still utilizing this feature. As an example, our custom function is producing a simple enrichment plot.
+
+```{r, eval=FALSE}
+server <- function(input, output, session) {
+    # Retrieve selected genesets as a reactive variable
+    # Selection changes will update this variable and propogate to downstream functions
+    genesets <- hypeR::genesets_Server("genesets")
+    
+    # Your custom downstream functions
+    reactive_plot <- eventReactive(input$enrichment, {
+        
+        # Here are the fetched genesets
+        gsets <- genesets()
+        
+        # Process the signature into a character vector
+        signature <- input$signature %>%
+                     stringr::str_split(pattern=",", simplify=TRUE) %>%
+                     as.vector()
+        
+        # Run hypeR
+        hyp <- hypeR::hypeR(signature, gsets, test="hypergeometric")
+        p <- hypeR::hyp_dots(hyp, top=10, fdr=0.25)
+        
+        # These are just ggplot objects you could customize
+        p + theme(axis.text=element_text(size=12, face="bold"))
+    })
+    
+    output$plot <- renderPlot({
+        reactive_plot()
+    })
+}
+```
+
+## Preview
+
+```{r, eval=FALSE}
+shinyApp(ui, server)
+```
+
+`r knitr::include_graphics(system.file(package='hypeR', 'vignettes', 'shiny-ex.png'))`

@@ -8,6 +8,8 @@ rctbl_build(obj, ...)
 }
 \arguments{
 \item{obj}{A hyp or multihyp object}
+
+\item{...}{Arguments passed to table generators}
 }
 \description{
 Reactable builder for hyp or mhyp objects

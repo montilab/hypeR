@@ -1,6 +1,6 @@
 Package: hypeR
 Title: An R Package For Geneset Enrichment Workflows
-Version: 1.5.0
+Version: 1.5.1
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
              role=c("aut", "cre")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
@@ -10,7 +10,7 @@ Depends: R (>= 3.6.0)
 License: GPL-3 + file LICENSE
 URL: https://github.com/montilab/hypeR
 Encoding: UTF-8
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 LazyData: false
 Imports:
     ggplot2,
@@ -32,8 +32,10 @@ Imports:
     kableExtra,
     rmarkdown,
     igraph,
-    visNetwork
+    visNetwork,
+    shiny
 Suggests:
+    tidyverse,
     devtools,
     testthat,
     knitr

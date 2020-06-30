@@ -2,7 +2,8 @@
 #' 
 #' @examples
 #' testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-#' rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testdat$edges, name="Example", version="v1.0")
+#' rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testdat$edges, 
+#'                      name="Example", version="v1.0")
 #'
 #' @section See Also:
 #' 
