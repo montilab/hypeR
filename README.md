@@ -222,6 +222,25 @@ hyp_to_rmd(hyp_obj,
 
 ## Cite
 
-Anthony Federico, Stefano Monti (2019) hypeR: An R Package for Geneset
-Enrichment Workflows. *Bioinformatics*.
-<https://doi.org/10.1093/bioinformatics/btz700>
+``` r
+citation("hypeR")
+```
+
+    #> 
+    #> To cite hypeR in publications use:
+    #> 
+    #>   Federico, A. & Monti, S. hypeR: an R package for geneset enrichment
+    #>   workflows. Bioinformatics 36, 1307–1308 (2020).
+    #> 
+    #> A BibTeX entry for LaTeX users is
+    #> 
+    #>   @Article{,
+    #>     title = {hypeR: an R package for geneset enrichment workflows},
+    #>     author = {Anthony Federico and Stefano Monti},
+    #>     journal = {Bioinformatics},
+    #>     year = {2020},
+    #>     volume = {36},
+    #>     number = {4},
+    #>     pages = {1307-1308},
+    #>     url = {https://doi.org/10.1093/bioinformatics/btz700},
+    #>   }

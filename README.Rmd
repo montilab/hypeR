@@ -171,5 +171,6 @@ hyp_to_rmd(hyp_obj,
 *Materials for a hypeR tutorial workshop*
 
 ## Cite
-
-Anthony Federico, Stefano Monti (2019) hypeR: An R Package for Geneset Enrichment Workflows. _Bioinformatics_. https://doi.org/10.1093/bioinformatics/btz700
+```{r}
+citation("hypeR")
+```

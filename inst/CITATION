@@ -1,0 +1,16 @@
+citHeader("To cite hypeR in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "hypeR: an R package for geneset enrichment workflows",
+  author   = "Anthony Federico, Stefano Monti",
+  journal  = "Bioinformatics",
+  year     = "2020",
+  volume   = "36",
+  number   = "4",
+  pages    = "1307-1308",
+  url      = "https://doi.org/10.1093/bioinformatics/btz700",
+  textVersion = paste(
+  "Federico, A. & Monti, S. hypeR: an R package for geneset enrichment workflows. Bioinformatics 36, 1307–1308 (2020)."
+  )
+)
