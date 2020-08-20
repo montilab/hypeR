@@ -1,3 +1,7 @@
+# hypeR 1.05.02
+* Correct file extensions (.rmd/.html) from output of `hyp_to_rmd()`
+* Relative paths are now supported by `hyp_to_rmd()`
+
 # hypeR 1.05.01
 * Fixed bug for wrong column names from `enrichr_available()`
 * Added the first shiny module for geneset selection

@@ -1,7 +1,7 @@
 hyp_to_rmd_tests <- function(hyp_obj, file_path, ...) {
     hyp_to_rmd(hyp_obj, file_path, ...)
     expect_true(file.exists(file_path))
-    expect_true(file.exists(paste(file_path, "html", sep=".")))   
+    expect_true(file.exists(gsub("rmd", "html", file_path)))
 }
 
 test_that("hyp_to_rmd() is working", {

@@ -145,7 +145,7 @@ hyp_to_rmd <- function(hyp_obj,
 
     # Content before hyper enrichment tabs
     if (!is.null(custom_pre_content)) {
-        write(custom_pre_content, file = file_path, append = TRUE)
+        write(custom_pre_content, file=file_path, append=TRUE)
     }
 
     # Iterate over the following object structure
@@ -219,5 +219,5 @@ hyp_to_rmd <- function(hyp_obj,
 
     rmarkdown::render(input=file_path, 
                       output_format="html_document",
-                      output_file=paste(file_path, "html", sep="."))
+                      output_file=gsub("rmd", "html", basename(file_path)))
 }
