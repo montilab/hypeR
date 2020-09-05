@@ -26,6 +26,7 @@ rctbl_hyp <- function(hyp,
 
     df <- dplyr::select(hyp$data, c("label", "pval", "fdr", "geneset", "overlap", "hits"))
     tbl <- reactable(df,
+                     rownames=FALSE,
                      resizable=TRUE,
                      showPageSizeOptions=FALSE,
                      compact=TRUE, 
