@@ -1,3 +1,7 @@
+# hypeR 1.05.03
+* `rctbl_build()` now wraps `hyp` objects into unlabled `multihyp` objects
+* `rctbl_build()` nested tables shows the number of enriched genesets
+
 # hypeR 1.05.02
 * Correct file extensions (.rmd/.html) from output of `hyp_to_rmd()`
 * Relative paths are now supported by `hyp_to_rmd()`
@@ -38,7 +42,7 @@
 * Version bump for bioconductor
 
 # hypeR 1.01.10
-* Changed default order of elements under each tab in `hyp_to_rmd()` function.
+* Changed default order of elements under each tab in `hyp_to_rmd()` function
 
 # hypeR 1.01.09
 * Published in Bioinformatics

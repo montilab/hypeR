@@ -29,7 +29,7 @@ mhyp <- hypeR(signatures, genesets, test="hypergeometric", background=36000, fdr
 
 We have included some convenient functions that return some html for turning `hyp` and `mhyp` objects into concise tables for markdown documents. These tables can also include some plots for each individual `hyp` object.
 ```{r}
-rctbl_mhyp(mhyp, show_hmaps=TRUE)
+rctbl_build(mhyp, show_hmaps=TRUE)
 ```
 
 Alright, how about we process all of these nested signatures and provide an example of what your markdown report might look like. Because we have a nested list of signatures, we use `hyper()` with the `lapply` function. This results in a list of `mhyp` objects.
@@ -60,30 +60,33 @@ output:
 
 ```{r}
 hyp_dots(lmhyp$LA, merge=TRUE)
-rctbl_mhyp(lmhyp$LA, show_hmaps=TRUE)
+rctbl_build(lmhyp$LA, show_hmaps=TRUE)
 ```
 
 ### LB
 ```{r}
 hyp_dots(lmhyp$LB, merge=TRUE)
-rctbl_mhyp(lmhyp$LB, show_hmaps=TRUE)
+rctbl_build(lmhyp$LB, show_hmaps=TRUE)
 ```
 
 ### H2
 ```{r}
 hyp_dots(lmhyp$H2, merge=TRUE)
-rctbl_mhyp(lmhyp$H2, show_hmaps=TRUE)
+rctbl_build(lmhyp$H2, show_hmaps=TRUE)
 ```
 
 ### BL
 ```{r}
 hyp_dots(lmhyp$BL, merge=TRUE)
-rctbl_mhyp(lmhyp$BL, show_hmaps=TRUE)
+rctbl_build(lmhyp$BL, show_hmaps=TRUE)
 ```
 
-### Session Info
+If you're only looking at one signature you can format it with a dropdown table.
+
 ```{r}
-sessionInfo()
+hyp <- hypeR(signatures[[1]], genesets, test="hypergeometric", background=36000, fdr=0.05)
+
+rctbl_build(hyp)
 ```
 
 ### Generating Markdown Reports

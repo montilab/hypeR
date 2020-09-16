@@ -34,7 +34,7 @@ rctbl_hyp <- function(hyp,
                      columns=list(label   = colDef(name="Label", minWidth=300),
                                   pval    = colDef(name="P-Value"),
                                   fdr     = colDef(name="FDR"),
-                                  geneset = colDef(name="Geneset"),
+                                  geneset = colDef(name="Geneset Size"),
                                   overlap = colDef(name="Overlap"),
                                   hits    = colDef(name="Hits")),
                      class=class.tbl)
@@ -76,6 +76,7 @@ rctbl_mhyp <- function(mhyp,
 
     mhyp.df <- data.frame(signature=names(mhyp$data), 
                           size=sapply(mhyp$data, function(hyp) hyp$info[["Signature Size"]]),
+                          enriched=sapply(mhyp$data, function(hyp) nrow(hyp$data)),
                           gsets=sapply(mhyp$data, function(hyp) hyp$info[["Genesets"]]),
                           bg=sapply(mhyp$data, function(hyp) hyp$info[["Background"]]))
     
@@ -87,7 +88,8 @@ rctbl_mhyp <- function(mhyp,
         rownames = FALSE,
         defaultColDef = colDef(headerClass="rctbl-outer-header"),
         columns = list(signature = colDef(name="Signature", minWidth=300),
-                       size = colDef(name="Size"),
+                       size = colDef(name="Signature Size"),
+                       enriched = colDef(name="Enriched Genesets"),
                        gsets = colDef(name="Genesets"),
                        bg = colDef(name="Background")),
         
@@ -111,9 +113,7 @@ rctbl_mhyp <- function(mhyp,
 #' @export
 rctbl_build <- function(obj, ...) {
     if (is(obj, "hyp")) {
-        return(rctbl_hyp(obj, type="outer", ...))
+        obj <- multihyp$new(data=list(" " = obj))
     }
-    if (is(obj, "multihyp")) {
-        return(rctbl_mhyp(obj, ...))
-    }
+    return(rctbl_mhyp(obj, ...))
 }
