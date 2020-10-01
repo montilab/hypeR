@@ -21,8 +21,7 @@ editor_options:
     chunk_output_type: console
 ---
 
-```{r include=FALSE, messages=FALSE, warnings=FALSE}
-knitr::opts_chunk$set(message=FALSE, fig.width=6.75)
+```{r, eval=FALSE}
 devtools::load_all(".")
 library(tidyverse)
 library(magrittr)
@@ -98,9 +97,9 @@ genesets <- list("GSET1" = c("GENE1", "GENE2", "GENE3"),
 
 ## Downloading Genesets
 ```{r, eval=FALSE}
-BIOCARTA <- msigdb_gsets(category="C2", subcategory="CP:BIOCARTA")
-KEGG     <- msigdb_gsets(category="C2", subcategory="CP:KEGG")
-REACTOME <- msigdb_gsets(category="C2", subcategory="CP:REACTOME")
+BIOCARTA <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:BIOCARTA")
+KEGG     <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:KEGG")
+REACTOME <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:REACTOME")
 ```
 
 ## Hyper Enrichment

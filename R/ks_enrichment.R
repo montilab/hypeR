@@ -75,7 +75,8 @@
     
     # One-sided Kolmogorov–Smirnov test
     results <- suppressWarnings(ks.test(1:n.x, y, alternative="less"))
-    
+    results$statistic <- score  # Use the signed statistic
+
     # Enrichment plot
     p <- if (plotting) ggeplot(n.x, y, x.axis, y.axis, plot.title) else ggempty()
 
