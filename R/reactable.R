@@ -7,6 +7,17 @@
 #' @param hyp_emap_args A list of keyword arguments passed to hyp_emap
 #' @param hyp_hmap_args A list of keyword arguments passed to hyp_hmap
 #' 
+#' @examples
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+#'
+#' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
+#'               "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
+#'               "IDH2","IDH1","OGDHL","PC","SDHA","SUCLG1","SUCLA2","SUCLG2")
+#'
+#' hyp_obj <- hypeR(signature, genesets, background=2522)
+#'
+#' rctbl_hyp(hyp_obj)
+#'
 #' @importFrom reactable reactable colDef
 #' @importFrom htmltools div tagAppendChild
 #' @importFrom dplyr select
@@ -64,6 +75,16 @@ rctbl_hyp <- function(hyp,
 #' @param hyp_emap_args A list of keyword arguments passed to hyp_emap
 #' @param hyp_hmap_args A list of keyword arguments passed to hyp_hmap
 #' 
+#' @examples
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+#'
+#' experiment <- list("S1"=c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502"),
+#'                    "S2"=c("PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC"))
+#'
+#' mhyp_obj <- hypeR(experiment, genesets, background=2522)
+#'
+#' rctbl_mhyp(mhyp_obj)
+#' 
 #' @importFrom reactable reactable colDef
 #' @importFrom htmltools div
 #' 
@@ -109,6 +130,16 @@ rctbl_mhyp <- function(mhyp,
 #' 
 #' @param obj A hyp or multihyp object
 #' @param ... Arguments passed to table generators 
+#' 
+#' @examples
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+#'
+#' experiment <- list("S1"=c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502"),
+#'                    "S2"=c("PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC"))
+#'
+#' mhyp_obj <- hypeR(experiment, genesets, background=2522)
+#'
+#' rctbl_build(mhyp_obj)
 #' 
 #' @export
 rctbl_build <- function(obj, ...) {

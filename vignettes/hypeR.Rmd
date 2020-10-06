@@ -21,12 +21,14 @@ editor_options:
     chunk_output_type: console
 ---
 
-```{r, eval=FALSE}
-devtools::load_all(".")
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
+library(devtools)
 library(tidyverse)
 library(magrittr)
 library(dplyr)
 library(reactable)
+devtools::load_all(".")
 ```
 
 # Introduction

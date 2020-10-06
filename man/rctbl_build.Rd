@@ -14,3 +14,14 @@ rctbl_build(obj, ...)
 \description{
 Reactable builder for hyp or mhyp objects
 }
+\examples{
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+
+experiment <- list("S1"=c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502"),
+                   "S2"=c("PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC"))
+
+mhyp_obj <- hypeR(experiment, genesets, background=2522)
+
+rctbl_build(mhyp_obj)
+
+}

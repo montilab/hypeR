@@ -20,7 +20,7 @@ msigdb_version <- function() {
 #' @importFrom msigdbr msigdbr_show_species
 #' @export
 msigdb_species <- function() {
-    msigdbr::msigdbr_show_species()
+    msigdbr::msigdbr_species()$species_name
 }
 
 #' Check if species is available
