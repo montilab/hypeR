@@ -26,6 +26,7 @@ Bioconductor. To install with R (\>= 3.5.0) see below. Use with R (\<
 ## Installation
 
 Install the development version of the package from Github.
+<span style="color:#0278ae">**\[Recommended\]**</span>
 
 ``` r
 devtools::install_github("montilab/hypeR")
@@ -102,7 +103,7 @@ genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
 print(genesets)
 ```
 
-    #> C2.CP:KEGG v7.1.1 
+    #> C2.CP:KEGG v7.2.1 
     #> Abc Transporters (44)
     #> Acute Myeloid Leukemia (57)
     #> Adherens Junction (73)

@@ -30,7 +30,7 @@ We recommend the latest version of R (\>= 4.0.0) but **hypeR** currently require
 
 ## Installation
 
-Install the development version of the package from Github.
+Install the development version of the package from Github. <span style="color:#0278ae">**[Recommended]**</span>
 
 ``` r
 devtools::install_github("montilab/hypeR")
