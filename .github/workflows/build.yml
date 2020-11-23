@@ -1,0 +1,35 @@
+name: build
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: bioconductor/bioconductor_docker:latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+          apt-utils \
+          libglpk-dev \
+          libcurl4-openssl-dev \
+          libxml2-dev \
+          libssl-dev && \
+          apt-get clean && \
+          rm -rf /var/lib/apt/lists/*
+
+      - name: Install hypeR
+        run: |
+          options(repos = c(CRAN = "https://cran.r-project.org"))
+          BiocManager::repositories()
+          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories())
+          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
+      - name: Check
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
