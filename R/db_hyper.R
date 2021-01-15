@@ -35,3 +35,26 @@ hyperdb_rgsets <- function(rgsets, version) {
               httr::write_disk(temp, overwrite=TRUE))    
     return(readRDS(temp))
 }
+
+#' Download data from hyperdb in the form of a gsets object
+#'
+#' @param gsets A name corresponding to an available genesets object
+#' @param version A version number
+#' @return A gsets object
+#'
+#' @examples
+#' SMPDB <- hyperdb_gsets("SMPDB", "2.75")
+#'
+#' @importFrom httr GET
+#'
+#' @export
+hyperdb_gsets <- function(gsets, version) {
+    base <- "https://github.com/montilab/hyperdb/raw/master/data"
+    file <- .format_str("{1}/{1}_v{2}.rds", gsets, version)
+    url <- .format_str("{1}/{2}", base, file)
+    temp <- tempfile(fileext=".rds")
+    httr::GET(gsub("\\{0}", gsets, url), 
+              .send_headers = c("Accept" = "application/octet-stream"),
+              httr::write_disk(temp, overwrite=TRUE))    
+    return(readRDS(temp))
+}
