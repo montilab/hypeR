@@ -2,22 +2,22 @@
 % Please edit documentation in R/db_hyper.R
 \name{hyperdb_gsets}
 \alias{hyperdb_gsets}
-\title{Download data from hyperdb in the form of a gsets object}
+\title{Download data from hyperdb}
 \usage{
-hyperdb_gsets(gsets, version)
+hyperdb_gsets(source, gsets)
 }
 \arguments{
-\item{gsets}{A name corresponding to an available genesets object}
+\item{source}{A source identifier}
 
-\item{version}{A version number}
+\item{gsets}{A genesets identifier}
 }
 \value{
-A gsets object
+A list
 }
 \description{
-Download data from hyperdb in the form of a gsets object
+Download data from hyperdb
 }
 \examples{
-SMPDB <- hyperdb_gsets("SMPDB", "2.75")
+KEGG <- hyperdb_gsets("KEGG", "KEGG_v92.0.rds")
 
 }

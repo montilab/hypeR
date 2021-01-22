@@ -13,6 +13,66 @@ hyperdb_info <- function() {
     cat("Versions: 92.0")
 }
 
+#' Check available data to download from hyperdb
+#' 
+#' @examples
+#' hyperdb_available()
+#'
+#' @importFrom httr GET stop_for_status
+#' @importFrom reshape2 melt
+#' @importFrom magrittr set_colnames
+#' @importFrom dplyr relocate
+#'
+#' @export
+hyperdb_available <- function() {
+    base <- "https://api.github.com/repos/montilab/hypeRdb/git/trees/master"
+    url <- .format_str("{1}?recursive=1", base)
+    response <- httr::GET(url)
+    httr::stop_for_status(response)
+    repo <- unlist(lapply(content(response)$tree, "[", "path"), use.names=F)
+    fl <- repo[grepl("^data/.", repo)]
+    ll <- list()
+    for (f in fl) {
+        name <- NULL
+        split <- strsplit(f , "/")[[1]]
+        if (length(split) > 2){
+            name <- split[2]
+            rds <- split[3]
+            if (!name %in% names(ll)) {
+                ll[[name]] <- c(rds)
+            } else {
+                ll[[name]] <- c(ll[[name]], rds)
+            }
+        }
+    }
+    ll %>%
+    reshape2::melt() %>%
+    magrittr::set_colnames(c("gsets", "source")) %>%
+    dplyr::relocate(source, gsets)
+}
+
+#' Download data from hyperdb
+#'
+#' @param source A source identifier
+#' @param gsets A genesets identifier
+#' @return A list
+#'
+#' @examples
+#' KEGG <- hyperdb_gsets("KEGG", "KEGG_v92.0.rds")
+#'
+#' @importFrom httr GET
+#'
+#' @export
+hyperdb_gsets <- function(source, gsets) {
+    base <- "https://github.com/montilab/hyperdb/raw/master/data"
+    url <- .format_str("{1}/{2}/{3}", base, source, gsets)
+    temp <- tempfile(fileext=".rds")
+    httr::GET(gsub("\\{0}", gsets, url), 
+              .send_headers = c("Accept"="application/octet-stream"),
+              httr::write_disk(temp, overwrite=TRUE))    
+    return(readRDS(temp))
+}
+
 #' Download data from hyperdb in the form of a rgsets object
 #'
 #' @param rgsets A name corresponding to an available relational genesets object
@@ -31,30 +91,7 @@ hyperdb_rgsets <- function(rgsets, version) {
     url <- .format_str("{1}/{2}", base, file)
     temp <- tempfile(fileext=".rds")
     httr::GET(gsub("\\{0}", rgsets, url), 
-              .send_headers = c("Accept" = "application/octet-stream"),
-              httr::write_disk(temp, overwrite=TRUE))    
-    return(readRDS(temp))
-}
-
-#' Download data from hyperdb in the form of a gsets object
-#'
-#' @param gsets A name corresponding to an available genesets object
-#' @param version A version number
-#' @return A gsets object
-#'
-#' @examples
-#' SMPDB <- hyperdb_gsets("SMPDB", "2.75")
-#'
-#' @importFrom httr GET
-#'
-#' @export
-hyperdb_gsets <- function(gsets, version) {
-    base <- "https://github.com/montilab/hyperdb/raw/master/data"
-    file <- .format_str("{1}/{1}_v{2}.rds", gsets, version)
-    url <- .format_str("{1}/{2}", base, file)
-    temp <- tempfile(fileext=".rds")
-    httr::GET(gsub("\\{0}", gsets, url), 
-              .send_headers = c("Accept" = "application/octet-stream"),
+              .send_headers = c("Accept"="application/octet-stream"),
               httr::write_disk(temp, overwrite=TRUE))    
     return(readRDS(temp))
 }
