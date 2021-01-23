@@ -1,16 +1,28 @@
-#' Print hypeR-db rgsets information
+#' Get base url for hyperdb
+#' 
+#' @return A base url
 #'
-#' @return NULL
+#' @keywords internal
+.hyperdb_url <- function(api=FALSE) {
+    if (api) {
+        return("https://api.github.com/repos/montilab/hyperdb")
+    } else {
+        return("https://github.com/montilab/hyperdb")   
+    }
+}
+
+#' Load an rds file directly from github
+#' 
+#' @param url A url
+#' @return A list
 #'
-#' @examples
-#' hyperdb_info()
+#' @importFrom httr GET
 #'
-#' @export
-hyperdb_info <- function() {
-    cat("REACTOME\n")
-    cat("Versions: 70.0\n")
-    cat("KEGG\n")
-    cat("Versions: 92.0")
+#' @keywords internal
+.github_rds <- function(url) {
+    temp <- tempfile(fileext=".rds")
+    httr::GET(url, .send_headers = c("Accept"="application/octet-stream"), httr::write_disk(temp, overwrite=TRUE))    
+    return(readRDS(temp))
 }
 
 #' Check available data to download from hyperdb
@@ -25,8 +37,8 @@ hyperdb_info <- function() {
 #'
 #' @export
 hyperdb_available <- function() {
-    base <- "https://api.github.com/repos/montilab/hypeRdb/git/trees/master"
-    url <- .format_str("{1}?recursive=1", base)
+    base <- .hyperdb_url(api=TRUE)
+    url <- .format_str("{1}/git/trees/master?recursive=1", base)
     response <- httr::GET(url)
     httr::stop_for_status(response)
     repo <- unlist(lapply(content(response)$tree, "[", "path"), use.names=F)
@@ -64,13 +76,9 @@ hyperdb_available <- function() {
 #'
 #' @export
 hyperdb_gsets <- function(source, gsets) {
-    base <- "https://github.com/montilab/hyperdb/raw/master/data"
-    url <- .format_str("{1}/{2}/{3}", base, source, gsets)
-    temp <- tempfile(fileext=".rds")
-    httr::GET(gsub("\\{0}", gsets, url), 
-              .send_headers = c("Accept"="application/octet-stream"),
-              httr::write_disk(temp, overwrite=TRUE))    
-    return(readRDS(temp))
+    base <- .hyperdb_url()
+    url <- .format_str("{1}/raw/master/data/{2}/{3}", base, source, gsets)
+    .github_rds(url)
 }
 
 #' Download data from hyperdb in the form of a rgsets object
@@ -86,12 +94,7 @@ hyperdb_gsets <- function(source, gsets) {
 #'
 #' @export
 hyperdb_rgsets <- function(rgsets, version) {
-    base <- "https://github.com/montilab/hyperdb/raw/master/data"
-    file <- .format_str("{1}/{1}_v{2}.rds", rgsets, version)
-    url <- .format_str("{1}/{2}", base, file)
-    temp <- tempfile(fileext=".rds")
-    httr::GET(gsub("\\{0}", rgsets, url), 
-              .send_headers = c("Accept"="application/octet-stream"),
-              httr::write_disk(temp, overwrite=TRUE))    
-    return(readRDS(temp))
+    base <- .hyperdb_url()
+    url <- .format_str("{1}/raw/master/data/{2}/{2}_v{3}.rds", base, rgsets, version)
+    .github_rds(url)
 }
