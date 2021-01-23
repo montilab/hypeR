@@ -21,7 +21,7 @@
 #' @keywords internal
 .github_rds <- function(url) {
     temp <- tempfile(fileext=".rds")
-    httr::GET(url, .send_headers = c("Accept"="application/octet-stream"), httr::write_disk(temp, overwrite=TRUE))    
+    httr::GET(url, .send_headers=c("Accept"="application/octet-stream"), httr::write_disk(temp, overwrite=TRUE))    
     return(readRDS(temp))
 }
 
@@ -71,9 +71,7 @@ hyperdb_available <- function() {
 #'
 #' @examples
 #' KEGG <- hyperdb_gsets("KEGG", "KEGG_v92.0.rds")
-#'
-#' @importFrom httr GET
-#'
+#' 
 #' @export
 hyperdb_gsets <- function(source, gsets) {
     base <- .hyperdb_url()
@@ -89,8 +87,6 @@ hyperdb_gsets <- function(source, gsets) {
 #'
 #' @examples
 #' REACTOME <- hyperdb_rgsets("REACTOME", "70.0")
-#'
-#' @importFrom httr GET
 #'
 #' @export
 hyperdb_rgsets <- function(rgsets, version) {
