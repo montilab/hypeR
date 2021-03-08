@@ -6,11 +6,11 @@
 #' @keywords internal
 enrichr_urls <- function(db=c("Enrichr", "YeastEnrichr", "FlyEnrichr", "WormEnrichr", "FishEnrichr")) {
     switch(match.arg(db),
-        "Enrichr"      = "http://amp.pharm.mssm.edu/Enrichr/{1}",
-        "YeastEnrichr" = "http://amp.pharm.mssm.edu/YeastEnrichr/{1}",
-        "FlyEnrichr"   = "http://amp.pharm.mssm.edu/FlyEnrichr/{1}",
-        "WormEnrichr"  = "http://amp.pharm.mssm.edu/WormEnrichr/{1}",
-        "FishEnrichr"  = "http://amp.pharm.mssm.edu/FishEnrichr/{1}"
+        "Enrichr"      = "http://maayanlab.cloud/Enrichr/{1}",
+        "YeastEnrichr" = "http://maayanlab.cloud/YeastEnrichr/{1}",
+        "FlyEnrichr"   = "http://maayanlab.cloud/FlyEnrichr/{1}",
+        "WormEnrichr"  = "http://maayanlab.cloud/WormEnrichr/{1}",
+        "FishEnrichr"  = "http://maayanlab.cloud/FishEnrichr/{1}"
     )
 }
 
