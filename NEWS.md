@@ -1,4 +1,4 @@
-# hypeR 1.07.03
+# hypeR 1.07.00
 * Version bump for bioconductor
 
 # hypeR 1.05.03
