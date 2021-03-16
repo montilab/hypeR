@@ -1,3 +1,6 @@
+# hypeR 1.07.03
+* Version bump for bioconductor
+
 # hypeR 1.05.03
 * `rctbl_build()` now wraps `hyp` objects into unlabled `multihyp` objects
 * `rctbl_build()` nested tables shows the number of enriched genesets
