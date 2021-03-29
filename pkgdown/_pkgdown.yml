@@ -37,8 +37,9 @@ reference:
   - '`enrichr_available`'
   - '`enrichr_download`'
   - '`enrichr_gsets`'
-  - '`hyperdb_info`'
+  - '`hyperdb_available`'
   - '`hyperdb_rgsets`'
+  - '`hyperdb_gsets`'
 - title: Markdown Modules
   desc: ~
   contents:

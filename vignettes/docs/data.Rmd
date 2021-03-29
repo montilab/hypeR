@@ -107,7 +107,7 @@ When dealing with hundreds of genesets, it's often useful to understand the rela
 We currently curate some relational genesets for use with __hypeR__ and plan to add more continuously.
 
 ```{r}
-hyperdb_info()
+hyperdb_available()
 ```
 
 Downloading relational genesets is easy...

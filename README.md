@@ -15,6 +15,10 @@
 
 Please visit <https://montilab.github.io/hypeR-docs/>
 
+You can also try out our
+[web-application](https://hyper-shiny.shinyapps.io/wapp/) if you prefer
+an interface\!
+
 ## Requirements
 
 We recommend the latest version of R (\>= 4.0.0) but **hypeR** currently
@@ -213,8 +217,10 @@ hyp_to_rmd(hyp_obj,
 
   - [hypeR-db](https://github.com/montilab/hypeR-db) *A repository for
     commonly used open source genesets used by hypeR*
-  - [hypeR-shiny](https://github.com/montilab/hypeR-shiny) *An example
-    shiny application using hypeR*
+  - [hypeR-shiny](https://github.com/montilab/hypeR-shiny) *Our Shiny
+    web application built on hypeR*
+  - [hypeR-shiny-modules](https://github.com/montilab/hypeR-shiny-modules)
+    *ntegration of hypeR modules in custom Shiny applications*
   - [hypeR-docs](https://github.com/montilab/hypeR-docs) *Landing site
     for hosting documentation for hypeR*
   - [hypeR-workshop](https://github.com/montilab/hypeR-workshop)
