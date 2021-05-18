@@ -8,7 +8,7 @@
 ![](https://github.com/montilab/hypeR/workflows/build/badge.svg)
 [![](https://img.shields.io/badge/bioconductor-3.11-3a6378.svg)](https://doi.org/doi:10.18129/B9.bioc.hypeR)
 [![](https://img.shields.io/badge/platforms-linux%20%7C%20osx%20%7C%20win-2a89a1.svg)](https://bioconductor.org/checkResults/3.9/bioc-LATEST/hypeR/)
-[![](https://img.shields.io/badge/lifecycle-maturing-4ba598.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![](https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![](https://img.shields.io/github/last-commit/montilab/hypeR.svg)](https://github.com/montilab/hypeR/commits/master)
 
 ## Documentation
@@ -106,12 +106,12 @@ genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
 print(genesets)
 ```
 
-    #> C2.CP:KEGG v7.2.1 
-    #> Abc Transporters (44)
-    #> Acute Myeloid Leukemia (57)
-    #> Adherens Junction (73)
-    #> Adipocytokine Signaling Pathway (67)
-    #> Alanine Aspartate And Glutamate Metabolism (32)
+    #> C2.CP:KEGG v7.4.1 
+    #> Abc Transporters (61)
+    #> Acute Myeloid Leukemia (59)
+    #> Adherens Junction (81)
+    #> Adipocytokine Signaling Pathway (85)
+    #> Alanine Aspartate And Glutamate Metabolism (33)
     #> Aldosterone Regulated Sodium Reabsorption (42)
 
 ``` r
