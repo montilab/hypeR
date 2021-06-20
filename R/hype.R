@@ -44,7 +44,9 @@ hypeR <- function(signature,
         }
 
         lhyp <- mapply(function(x, id) {
-            cat(.format_str("{1}\n", id))
+            if (!quiet) {
+                cat(.format_str("\n{1}\n", id)) 
+            }
 
             hypeR(x,
                   genesets=genesets, 
