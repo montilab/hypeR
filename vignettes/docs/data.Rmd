@@ -43,6 +43,19 @@ To aid in workflow efficiency, __hypeR__ enables users to download genesets, wra
 
 Most researchers will find the genesets hosted by [msigdb](https://software.broadinstitute.org/gsea/msigdb/collections.jsp) are adequate to perform geneset enrichment analysis. There are various types of genesets available across multiple species.
 
+**Please pay attention to the versioning** - `hypeR` will default to the `msigdbr` version installed on your machine which updates with the curation version of the genesets frequently done by the Broad. Check to make sure you are using the genesets you expect.
+
+```{r}
+msigdb_version()
+```
+
+If you want a specific version, you need to reinstall the dependency.
+
+```{r}
+devtools::install_version("msigdbr", version="7.2.1", repos="http://cran.us.r-project.org"
+```
+
+
 ```{r}
 msigdb_info()
 ```
