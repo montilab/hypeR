@@ -45,18 +45,18 @@ Most researchers will find the genesets hosted by [msigdb](https://software.broa
 
 **Please pay attention to the versioning** - `hypeR` will default to the `msigdbr` version installed on your machine which updates with the curation version of the genesets frequently done by the Broad. Check to make sure you are using the genesets you expect.
 
-```{r}
+```{r eval=FALSE}
 msigdb_version()
 ```
 
 If you want a specific version, you need to reinstall the dependency.
 
-```{r}
-devtools::install_version("msigdbr", version="7.2.1", repos="http://cran.us.r-project.org"
+```{r eval=FALSE}
+devtools::install_version("msigdbr", version="7.2.1", repos="http://cran.us.r-project.org")
 ```
 
 
-```{r}
+```{r eval=FALSE}
 msigdb_info()
 ```
 
