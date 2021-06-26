@@ -1,13 +1,18 @@
-# Development scripts
+# Development
+/tests/testthat/*.Rmd
+/tests/testthat/*.html
+/tests/testthat/*.txt
+/tests/testthat/*.xlsx
+/tests/testthat/*.png
+/tests/testthat/*/*
 /inst/script/genesets.R
-
 /vignettes/examples/data
 data-raw/raw/
 /inst/data-raw/*.txt
-/media/logo.psd
 /pkgdown/favicon/
 /dev/
 /docs/
+*.psd
 *.gmt
 
 # General

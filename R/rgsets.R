@@ -1,10 +1,4 @@
 #' @title A relational genesets object
-#' 
-#' @examples
-#' testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
-#' rgsets <- rgsets$new(genesets=testdat$genesets, nodes=testdat$nodes, edges=testdat$edges, 
-#'                      name="Example", version="v1.0")
-#'
 #' @section See Also:
 #' 
 #' \code{gsets}
@@ -38,6 +32,26 @@ rgsets <- R6Class("rgsets", list(
         # Handle versioning information
         if (name == "Custom" & !quiet) warning("Describing genesets with a name will aid reproducibility")
         if (version == "" & !quiet) warning("Including a version number will aid reproducibility")
+        
+        # Basic checks
+        stopifnot(is(edges, "data.frame"))
+        stopifnot(ncol(edges) == 2)
+        stopifnot(colnames(edges) == c("from", "to"))
+        stopifnot(is(nodes, "data.frame"))
+        stopifnot(ncol(nodes) > 0)
+        stopifnot("label" %in% colnames(nodes))
+        
+        if (!all(unique(unlist(edges)) %in% rownames(nodes))) {
+            stop("Some edge entities are missing from nodes")
+        }
+        if (any(is.na(edges$from) | is.na(edges$to))) {
+            edges <- edges[complete.cases(edges),]
+            warning("Dropping incomplete edges")
+        }
+        if (any(edges$from == edges$to)) {
+            edges <- edges[edges$from != edges$to,]
+            warning("Dropping edges with self loops")
+        }
         
         self$genesets <- genesets
         self$nodes <- nodes

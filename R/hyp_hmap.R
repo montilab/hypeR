@@ -11,7 +11,7 @@
 #'
 #' @importFrom purrr when
 #' @importFrom dplyr filter
-#' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction
+#' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction visIgraphLayout
 #' 
 #' @keywords internal
 .hiearchy_map <- function(hyp_df,
@@ -70,6 +70,7 @@
     visNetwork(nodes, edges, main=list(text=title, style="font-family:Helvetica")) %>%
     visNodes(borderWidth=3, borderWidthSelected=0) %>%
     visEdges(arrows='to', selectionWidth=0) %>%
+    visIgraphLayout(layout="layout_nicely") %>%  
     visInteraction(multiselect=TRUE, tooltipDelay=300) %>%
     visOptions(highlightNearest=TRUE, collapse=list(enabled=TRUE, clusterOptions=list(color="rgba(199,0,57,1.0)")))
 }
