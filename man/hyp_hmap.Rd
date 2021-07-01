@@ -10,7 +10,8 @@ hyp_hmap(
   fdr = 1,
   val = c("fdr", "pval"),
   top = NULL,
-  title = ""
+  title = "",
+  graph = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ hyp_hmap(
 \item{top}{Limit number of pathways shown}
 
 \item{title}{Plot title}
+
+\item{graph}{Return an igraph object instead}
 }
 \value{
 A visNetwork object

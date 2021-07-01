@@ -106,12 +106,12 @@ genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
 print(genesets)
 ```
 
-    #> C2.CP:KEGG v7.4.1 
-    #> Abc Transporters (61)
-    #> Acute Myeloid Leukemia (59)
-    #> Adherens Junction (81)
-    #> Adipocytokine Signaling Pathway (85)
-    #> Alanine Aspartate And Glutamate Metabolism (33)
+    #> C2.CP:KEGG v7.2.1 
+    #> Abc Transporters (44)
+    #> Acute Myeloid Leukemia (57)
+    #> Adherens Junction (73)
+    #> Adipocytokine Signaling Pathway (67)
+    #> Alanine Aspartate And Glutamate Metabolism (32)
     #> Aldosterone Regulated Sodium Reabsorption (42)
 
 ``` r
@@ -192,13 +192,16 @@ hyp_dots(hyp_obj)
 # Plot enrichment map
 hyp_emap(hyp_obj)
 
-# Plot hiearchy map
+# Plot hiearchy map (relational genesets)
 hyp_hmap(hyp_obj)
 ```
 
 ##### Saving results
 
 ``` r
+# Map enrichment to an igraph object (relational genesets)
+hyp_to_graph(hyp_obj)
+
 # Save to excel
 hyp_to_excel(hyp_obj, file_path="hypeR.xlsx")
 

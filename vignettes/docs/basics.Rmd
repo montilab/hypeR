@@ -132,7 +132,6 @@ hyp_obj$plots[[1]]
 
 For permutation-based significance testing and normalized enrichment scores, please see [here](https://bioconductor.org/packages/release/bioc/html/fgsea.html).
 
-
 ### Downstream Analysis
 
 #### The `hyp` Object
@@ -141,6 +140,11 @@ A `hyp` object contains all information relevant to the enrichment analysis, inc
 
 ```{r}
 print(hyp_obj)
+```
+
+All data related to enrichment arguments, parameters, and results and stored into a single `hyp` object. Saving your `hyp` objects will enable reproducible enrichment workflows.
+```{r}
+hyp_obj$info
 ```
 
 #### The `hyp` Methods
@@ -154,8 +158,11 @@ hyp_dots(hyp_obj)
 # Plot enrichment map
 hyp_emap(hyp_obj)
 
-# Plot hiearchy map
+# Plot hiearchy map (relational genesets)
 hyp_hmap(hyp_obj)
+
+# Map enrichment to an igraph object (relational genesets)
+hyp_to_graph(hyp_obj)
 
 # Save to excel
 hyp_to_excel(hyp_obj)

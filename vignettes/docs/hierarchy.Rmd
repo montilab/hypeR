@@ -1,0 +1,246 @@
+---
+title: "Hierarchical Genesets"
+vignette: >
+  %\VignetteIndexEntry{Hierarchical Genesets}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
+library(tidyverse)
+devtools::load_all(".")
+```
+
+## Relational Genesets
+When dealing with hundreds of genesets, it's often useful to understand the relationships between them. This allows researchers to summarize many enriched pathways as more general biological processes. To do this, we rely on curated relationships defined between them. For example, [Reactome](https://reactome.org/) conveniently defines their genesets in a [hiearchy of pathways](https://reactome.org/PathwayBrowser/). This data can be formatted into a relational genesets object called `rgsets`. 
+
+```{r}
+genesets <- hyperdb_rgsets("REACTOME", version="70.0")
+```
+
+Relational genesets have three data atrributes including gsets, nodes, and edges. The `genesets` attribute includes the geneset information for the leaf nodes of the hiearchy, the `nodes` attribute describes all nodes in the hierarchy, including internal nodes, and the `edges` attribute describes the edges in the hiearchy.
+
+```{r}
+print(genesets)
+```
+
+Passing relational genesets works natively with `hypeR()`.
+
+```{r}
+data(limma)
+
+signature <- limma %>% 
+             dplyr::arrange(desc(t)) %>% 
+             magrittr::use_series(symbol)
+
+hyp_obj <- hypeR(signature, genesets, test="kstest", fdr=0.01)
+```
+
+## Interactive Visualization
+
+One can visualize the top enriched genesets using `hyp_hmap()` which will return a hierarchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy. Note: This function only works when the `hyp` object was initialized with an `rgsets` object.
+
+```{r, fig.height=7}
+vn <- hyp_hmap(hyp_obj, top=30)
+vn
+```
+
+Save to an html file.
+
+```{r, eval=FALSE}
+vn <- visNetwork::visOptions(vn, width="1280px", height="720px")
+visNetwork::visSave(vn, "hyp_obj.html”)
+```
+
+## Static Visualization
+
+One of the downsides of the above interactive object is it's difficult to render high quality figures in specific formats. You could take a screenshot after interacting with the figure, however that might not be high enough resolution for a publication. To help with this, you can alternatively return an `igraph` object pre-formatted with enrichment data.
+
+```{r}
+ig <- hyp_hmap(hyp_obj, top=30, graph=TRUE)
+print(ig)
+```
+
+Colors, weights, and normalized sizing properties from the interactive visualization are copied over to the vertex properties of the `igraph` object.
+
+```{r}
+head(igraph::as_data_frame(ig, what="vertices"))[,c("name", "type", "fdr", "size", "color")]
+```
+
+Because genesets labels are typically long, it's static visualizations are difficult. You'll need to make custom adjustments depending on your needs.
+
+```{r, fig.width=12, fig.height=10}
+# Consistent layout
+set.seed(1)
+
+# Overriding existing edge/vertex properties
+plot(ig,
+     vertex.label=substr(ifelse(V(ig)$type == "leaf", V(ig)$label, ""), 1, 32), 
+     vertex.size=5)
+```
+
+#### High quality rendering
+
+```{r, eval=FALSE}
+set.seed(1)
+tiff("hyp_obj.tiff", units="in", width=8, height=8, res=300)
+plot(ig)
+dev.off()
+```
+
+## Raw Graph Objects
+
+You can also directly copy enrichment data from a `hyp` object to an `igraph` object.
+
+```{r}
+ig <- hyp_to_graph(hyp_obj)
+print(ig)
+df.v <- ig %>%
+        igraph::as_data_frame(what="vertices") %>%
+        dplyr::arrange(fdr)
+
+head(df.v)
+```
+
+Notice that internal nodes that don't have associated genesets (just generalized labels) will not have enrichment data associated with them.
+
+```{r}
+tail(df.v)
+```
+
+## Data Driven Hierarchies
+
+*This is an experimental feature and not officially apart of the package.*
+
+Genesets are often redundant, hard to parse, and lack relational structure. Thus it can be useful to infer which genesets are similar before analyzing enrichment results to help group multiple enriched genesets or pathways into more generalizable processes. Here we show a data-driven method using [Hierarchical Set](https://academic.oup.com/bioinformatics/article/33/11/1604/2959905) for turning flat genesets into `rgsets` objects.
+
+#### Explanation from hierarchical sets
+
+> The clustering, in contrast to more traditional approaches to hierarchical clustering, does not rely on a derived distance measure between the sets, but instead works directly with the set data itself using set algebra. This has two results: First, it is much easier to reason about the result in a set context, and second, you are not forced to provide a distance if none exists (sets are completely independent). The clustering is based on a generalization of Jaccard similarity, called Set Family Homogeneity, that, in its simplest form, is defined as the size of the intersection of the sets in the family divided by the size of the union of the sets in the family. The clustering progresses by iteratively merging the set families that shows the highest set family homogeneity and is terminated once all remaining set family pairs have a homogeneity of 0. Note that this means that the clustering does not necessarily end with the all sets in one overall cluster, but possibly split into several hierarchies - this is intentional.
+
+#### Flat genests
+
+What if we want to use the KEGG genesets from MSigDB - but we want to organize them into a hierarchy?
+
+```{r}
+gsets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+genesets <- gsets$genesets
+length(genesets)
+```
+
+#### Clustering
+
+We need some additional packages to help with this...
+
+```{r, messages=FALSE, warnings=FALSE}
+suppressPackageStartupMessages(library(hierarchicalSets))
+suppressPackageStartupMessages(library(qdapTools))
+```
+
+```{r}
+mat <- genesets %>%
+    qdapTools::mtabulate() %>%
+    as.matrix() %>%
+    t() %>%
+    hierarchicalSets::format_sets()
+
+hierarchy <- hierarchicalSets::create_hierarchy(mat, intersectLimit=1)
+print(hierarchy)
+```
+
+```{r, fig.width=12, fig.height=10}
+plot(hierarchy, type='intersectStack', showHierarchy=TRUE, label=FALSE)
+```
+
+There is clearly a lot of overlap between these genesets...
+
+```{r}
+plot(hierarchy, type='outlyingElements', quantiles=0.75, alpha=0.5, label=FALSE)
+```
+
+#### Extracting the hierarchy
+
+```{r, messages=FALSE, warnings=FALSE}
+suppressPackageStartupMessages(library(dendextend))
+suppressPackageStartupMessages(library(stringi))
+```
+
+A helper function for recursively reading and extracting trees from the clustering structure.
+
+```{r}
+find.trees <- function(d) {
+    subtrees <- dendextend::partition_leaves(d)
+    leaves <- subtrees[[1]]
+    find.paths <- function(leaf) {
+        which(sapply(subtrees, function(x) leaf %in% x))
+    }
+    paths <- lapply(leaves, find.paths)
+    edges <- data.frame(from=c(), to=c())
+    if (length(d) > 1) {
+        for (path in paths) {
+            for (i in seq(1, length(path)-1)) {
+                edges <- rbind(edges, data.frame(from=path[i], to=path[i+1]))
+            }
+        }
+        edges <- dplyr::distinct(edges)
+        edges$from <- paste0("N", edges$from)
+        edges$to <- paste0("N", edges$to)
+    }
+    names(subtrees) <- paste0("N", seq(1:length(subtrees)))
+    nodes <- data.frame(id=names(subtrees))
+    rownames(nodes) <- nodes$id
+    nodes$label <- ""
+    leaves <- sapply(subtrees, function(x) length(x) == 1)
+    nodes$label[leaves] <- sapply(subtrees[leaves], function(x) x[[1]])
+    nodes$id <- NULL
+    
+    # Internal nodes will not have labels, so we can generate unique hash identifiers
+    ids <- stringi::stri_rand_strings(nrow(nodes), 32)
+    names(ids) <- rownames(nodes)
+    rownames(nodes) <- ids[rownames(nodes)]
+    edges$from <- ids[edges$from]
+    edges$to <- ids[edges$to]
+    
+    return(list("edges"=edges, "nodes"=nodes))
+}
+```
+
+```{r}
+trees <- lapply(hierarchy$clusters, find.trees)
+length(trees)
+```
+
+Now we can merge the independent trees into a single graph...
+
+#### Nodes
+```{r}
+nodes.all <- lapply(trees, function(x) x$nodes)
+nodes <- do.call(rbind, nodes.all)
+head(nodes)
+```
+
+#### Edges
+```{r}
+edges.all <- lapply(trees, function(x) x$edges)
+edges <- data.frame(do.call(rbind, edges.all))
+head(edges)
+```
+
+Create the relational genesets object...
+
+```{r}
+rgsets_obj <- rgsets$new(genesets, nodes, edges, name="MSIGDB_KEGG", version=msigdb_version())
+rgsets_obj
+```
+
+```{r}
+hyp <- hypeR(signature, rgsets_obj, test="kstest")
+hyp_dots(hyp, fdr=0.1, top=25)
+```
+
+```{r}
+hyp_hmap(hyp, fdr=0.1)
+```

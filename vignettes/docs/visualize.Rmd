@@ -15,7 +15,7 @@ devtools::load_all(".")
 ```
 
 ### Example Data
-The example data includes a pre-computed diffential expression dataframe from limma. From the differential expression dataframe, we order genes descending so upregulated genes are near the top, then extract the gene symbol column as a vector. 
+The example data includes a pre-computed differential expression dataframe from limma. From the differential expression dataframe, we order genes descending so upregulated genes are near the top, then extract the gene symbol column as a vector. 
 
 ```{r}
 data(limma)
@@ -75,7 +75,7 @@ Passing relational genesets works natively with `hypeR()`.
 hyp_obj <- hypeR(signature, genesets, test="kstest", fdr=0.01)
 ```
 
-One can visualize the top enriched genesets using `hyp_hmap()` which will return a hiearchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy. Note: This function only works when the `hyp` object was inialized with an `rgsets` object.
+One can visualize the top enriched genesets using `hyp_hmap()` which will return a hierarchy map. Each node represents a geneset, where the shade of the gold border indicates the normalized significance of enrichment. Hover over the leaf nodes to view the raw value. Double click internal nodes to cluster their first degree connections. Edges represent a directed relationship between genesets in the hiearchy. Note: This function only works when the `hyp` object was initialized with an `rgsets` object.
 
 ```{r, fig.height=7}
 hyp_hmap(hyp_obj, top=30)

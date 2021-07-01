@@ -1,0 +1,136 @@
+---
+title: "Fast Gene Set Enrichment Analysis"
+vignette: >
+  %\VignetteIndexEntry{Fast G}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include=FALSE, messages=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(comment="", fig.align="center", fig.width=8.75, cache=FALSE)
+library(tidyverse)
+devtools::load_all(".")
+```
+
+## Fast Gene Set Enrichment Analysis
+
+The primary focus of `hypeR` is on downstream enrichment analysis workflows. As long as enrichment results are formatted into a `hyp` object, they are compatible. To wrap third-party packages, we create modified version of the `hypeR()` function that calls external packages when performing the enrichment analysis, and then coerces the results into a `hyp` or `multihyp`objects. Here we wrap `fgsea` - an R-package for [fast preranked gene set enrichment analysis (GSEA)](https://www.biorxiv.org/content/10.1101/060012v3).
+
+>`fgsea` is an R-package for fast preranked gene set enrichment analysis (GSEA). This package allows to quickly and accurately calculate arbitrarily low GSEA P-values for a collection of gene sets. P-value estimation is based on an adaptive multi-level split Monte-Carlo scheme.
+
+```{r, messages=FALSE, warnings=FALSE}
+suppressPackageStartupMessages(library(fgsea))
+```
+
+Here we can take a differential expression analysis and rank genes by their t-statstic or some other measure of differential expression between two groups.
+
+```{r}
+data(limma)
+
+signature <- limma %>% arrange(desc(t)) %>% select(symbol, t) %>% deframe()
+
+head(signature)
+tail(signature)
+```
+
+We will also need some genesets...
+
+```{r}
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+```
+
+#### Wrapper function
+
+*This is an experimental feature and not officially apart of the package.*
+
+The wrapper will take a signature and genesets as normally would be pass to `hyper()` and will instead feed them into `fgsea::fgseaMultilevel()`. Please refer to their documentation for specific parameters. This will test your preranked signature in both directions (e.g. enrichment in high and low ranking genes). The wrapper then separates each direction into and up and down signature respectively and formats them within a `hyp` object. Thus the wrapper will return a `multihyp` object.
+
+```{r}
+.handle.genesets <- function(genesets) {
+    if (is(genesets, "list")) {
+        gsets.obj <- gsets$new(genesets, quiet=TRUE)
+    }
+    else if (is(genesets, "gsets") | is(genesets, "rgsets")) {
+        gsets.obj <- genesets
+    } 
+    else {
+        stop("Genesets must be gsets/rgsets object or named list of genesets")
+    }
+    return(gsets.obj)
+}
+
+fgsea.wrapper <- function(signature, genesets, sample.size=101, min.size=1, max.size=Inf, ...) {
+    # Save original arguments
+    args <- as.list(environment())
+    
+    # Save gsets object
+    gsets.obj <- .handle.genesets(genesets)
+    args$genesets <- gsets.obj
+    
+    # Run fgsea
+    results <- fgsea::fgseaMultilevel(stats=signature, 
+                                      pathways=gsets.obj$genesets, 
+                                      sampleSize=sample.size, 
+                                      minSize=min.size, 
+                                      maxSize=max.size, 
+                                      ...)
+    
+    data <- results %>%
+        data.frame() %>%
+        plyr::rename(c("pathway"="label", "padj"="fdr", "log2err"="lte", "size"="overlap", "leadingEdge"="le")) %>%
+        dplyr::rename_with(tolower) %>%
+        mutate(pval=signif(pval, 2)) %>%
+        mutate(fdr=signif(fdr, 2)) %>%
+        mutate(le=sapply(le, function(x) paste(x, collapse=','))) %>%
+        mutate(signature=length(signature)) %>%
+        mutate(geneset=sapply(label, function(x) length(gsets.obj$genesets[[x]]))) %>%
+        dplyr::select(c("label", "pval", "fdr", "lte", "es", "nes", "signature", "geneset", "overlap", "le"))
+    
+    data.up <- data %>%
+        dplyr::filter(es > 0) %>%
+        dplyr::arrange(pval, es)
+
+    data.dn <- data %>%
+        dplyr::filter(es < 0) %>%
+        dplyr::arrange(pval, es)    
+
+    # Reproducibility information
+    info <- list(fgsea=paste("v", packageVersion("fgsea"), sep=""),
+                 signature=length(signature), 
+                 genesets=args$genesets$info())
+    
+    info <- c(info, args[c("sample.size", "min.size", "max.size")])
+    info <- lapply(info, as.character)
+    
+    # Wrap dataframe in hyp object
+    hyp.up <- hyp$new(data=data.up, args=args, info=info)
+    hyp.dn <- hyp$new(data=data.dn, args=args, info=info)
+    mhyp <- multihyp$new(data=list("up"=hyp.up, "dn"=hyp.dn))
+    return(mhyp)
+}
+```
+
+You'll likely see some warnings from `fgsea`...
+
+```{r}
+mhyp_obj <- fgsea.wrapper(signature, genesets)
+print(mhyp_obj)
+```
+
+```{r}
+# The hyp object of the up signature
+hyp.up <- mhyp_obj$data$up
+print(hyp.up$info)
+```
+
+```{r}
+head(hyp.up$data[,1:6])
+```
+
+Now we can use it as we normally would...
+
+```{r}
+hyp_dots(mhyp_obj, merge=TRUE)
+```

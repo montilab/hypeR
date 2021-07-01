@@ -145,3 +145,19 @@ clean_genesets <- function(x) {
         unique()
     }
 }
+
+#' Adjust alpha of a hex string
+#'
+#' @param hex A 6-character hex string (e.g. #000000)
+#' @param percent Alpha level from 0-1
+#' @return A hex string
+#' 
+#' @keywords internal
+.hexa <- function(hex, percent=1) {
+    if (percent < 0) percent <- 0
+    if (percent > 1) percent <- 1
+    percent <- toupper(as.hexmode(floor(percent * 255)))
+    percent <- sprintf("%02s", percent)
+    hex <- paste0(hex, percent)
+    return(hex)
+}

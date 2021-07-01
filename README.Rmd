@@ -140,12 +140,15 @@ hyp_dots(hyp_obj)
 # Plot enrichment map
 hyp_emap(hyp_obj)
 
-# Plot hiearchy map
+# Plot hiearchy map (relational genesets)
 hyp_hmap(hyp_obj)
 ```
 
 ##### Saving results
 ```{r, eval=FALSE}
+# Map enrichment to an igraph object (relational genesets)
+hyp_to_graph(hyp_obj)
+
 # Save to excel
 hyp_to_excel(hyp_obj, file_path="hypeR.xlsx")
 

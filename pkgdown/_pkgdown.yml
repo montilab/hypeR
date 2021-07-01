@@ -22,6 +22,7 @@ reference:
   - '`hyp_dots`'
   - '`hyp_emap`'
   - '`hyp_hmap`'
+  - '`hyp_to_graph`'
   - '`hyp_to_excel`'
   - '`hyp_to_table`'
   - '`hyp_to_rmd`'
@@ -79,12 +80,16 @@ navbar:
         href: articles/docs/visualize.html
       - text: "Downloading Genesets"
         href: articles/docs/data.html
+      - text: "Hierarchical Genesets"
+        href: articles/docs/hierarchy.html
       - text: "Multiple Signatures"
         href: articles/docs/multihyp.html
       - text: "Generating Reports"
         href: articles/docs/reporting.html
       - text: "Shiny Modules"
         href: articles/docs/shiny.html
+      - text: "Fast Gene Set Enrichment Analysis"
+        href: articles/docs/fgsea.html
     - text: "Reference"
       href: reference/index.html
   right:
