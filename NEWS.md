@@ -1,3 +1,6 @@
+# hypeR 1.9.0
+* Version bump for bioconductor
+
 # hypeR 1.7.2
 * Add `hyp_to_graph()`
 * Add optional igraph export for `hyp_hmap()`
