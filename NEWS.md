@@ -1,7 +1,8 @@
 # hypeR 1.7.2
-* Add hyp_to_graph()
-* Add optional igraph export for hyp_hmap()
-* Switch hyp_hmap() node coloring codes from rgba to hex
+* Add `hyp_to_graph()`
+* Add optional igraph export for `hyp_hmap()`
+* Switch `hyp_hmap()` node coloring codes from rgba to hex
+* Fix warning from deprecated `guides()` functionality
 
 # hypeR 1.7.1
 * Add additional input checks for `rgsets` objects

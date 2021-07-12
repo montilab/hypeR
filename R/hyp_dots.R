@@ -155,7 +155,7 @@
     coord_flip() +
     scale_y_continuous(trans=.reverselog_trans(10)) +
     geom_hline(yintercept=0.05, linetype="dotted") +
-    guides(size=FALSE) + 
+    guides(size="none") + 
     theme(plot.title=element_text(hjust=0.5),
           axis.title.y=element_blank())
 }
