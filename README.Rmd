@@ -169,8 +169,8 @@ hyp_to_rmd(hyp_obj,
 *A repository for commonly used open source genesets used by hypeR*
 - [hypeR-shiny](https://github.com/montilab/hypeR-shiny)
 *Our Shiny web application built on hypeR*
-- [hypeR-shiny-modules](https://github.com/montilab/hypeR-shiny-modules)
-*ntegration of hypeR modules in custom Shiny applications*
+- [hypeR-modules](https://github.com/montilab/hypeR-modules)
+*Integration of hypeR modules in custom Shiny applications*
 - [hypeR-docs](https://github.com/montilab/hypeR-docs)
 *Landing site for hosting documentation for hypeR*
 - [hypeR-workshop](https://github.com/montilab/hypeR-workshop)
