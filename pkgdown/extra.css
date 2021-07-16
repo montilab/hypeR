@@ -1,48 +1,46 @@
+/*
+Derived from the R package reactable written by Greg Lin
+License MIT + file LICENSE (https://cran.r-project.org/web/packages/reactable/LICENSE)
+https://github.com/glin/reactable
+https://glin.github.io/reactable
+*/
 .rctbl-outer-obj {
   font-family: Nunito, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13.5px;
 }
-
 .rctbl-outer-tbl {
   border: 1px solid hsl(213, 33%, 93%);
   border-radius: 4px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
 }
-
 .rctbl-outer-header {
   background-color: hsl(213, 45%, 97%);
   border-bottom-color: hsl(213, 33%, 93%);
   border-bottom-width: 2px;
   color: hsl(213, 13%, 33%);
 }
-
 .rctbl-outer-header[aria-sort]:hover {
   color: hsl(212.1,70.7%,16.1%);
 }
-
 .rctbl-inner-obj {
   padding: 18px;
   box-shadow: inset 0 1px 3px #dbdbdb;
   background: hsl(213, 20%, 99%);
 }
-
 .rctbl-inner-tbl {
   border: 1px solid hsl(213, 33%, 93%);
   border-radius: 4px;
   box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.05);
   font-size: 12px;
 }
-
 .rctbl-inner-header {
   border-bottom-color: hsl(213, 33%, 93%);
   border-bottom-width: 2px;
   color: hsl(213, 13%, 33%);
 }
-
 .rctbl-inner-header[aria-sort]:hover {
   color: hsl(212.1,70.7%,16.1%);
 }
-
 /* cyrillic-ext */
 @font-face {
   font-family: 'Nunito';
