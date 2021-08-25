@@ -1,4 +1,5 @@
 # Development
+/renv/
 /tests/testthat/*.Rmd
 /tests/testthat/*.html
 /tests/testthat/*.txt
@@ -80,3 +81,5 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 .Rproj.user
+.Rprofile
+renv/activate.R

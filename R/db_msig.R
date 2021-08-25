@@ -146,13 +146,11 @@ msigdb_download <- function(species, category, subcategory="") {
     
     # Download genesets
     mdf <- msigdbr(species, category, subcategory) %>%
-           dplyr::select(gs_name, gene_symbol) %>%
-           as.data.frame() %>%
-           stats::aggregate(gene_symbol ~ gs_name, data=., c)
+        dplyr::select(gs_name, gene_symbol) %>%
+        dplyr::distinct()
     
     # Convert to list
-    gsets <- as.list(mdf$gene_symbol)
-    names(gsets) <- mdf$gs_name
+    gsets <- split(mdf$gene_symbol, mdf$gs_name)
     return(gsets)
 }
 
