@@ -165,7 +165,7 @@
 #' @param hyp_obj A hyp or multihyp object
 #' @param top Limit number of genesets shown
 #' @param abrv Abbreviation length of geneset labels
-#' @param sizes Size dots by geneset sizes
+#' @param sizes Size dots by geneset sizes (if merge=TRUE, size dots by significance)
 #' @param pval Filter results to be less than pval cutoff
 #' @param fdr Filter results to be less than fdr cutoff
 #' @param val Choose significance value for plot e.g. c("fdr", "pval")

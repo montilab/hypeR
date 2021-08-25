@@ -23,7 +23,7 @@ hyp_dots(
 
 \item{abrv}{Abbreviation length of geneset labels}
 
-\item{sizes}{Size dots by geneset sizes}
+\item{sizes}{Size dots by geneset sizes (if merge=TRUE, size dots by significance)}
 
 \item{pval}{Filter results to be less than pval cutoff}
 
