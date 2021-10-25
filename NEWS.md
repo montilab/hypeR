@@ -1,3 +1,6 @@
+# hypeR 2.0.0
+* Version bump for bioconductor
+
 # hypeR 1.9.1
 * `msigdb_download()` filters by distinct gene symbols within genesets (relevant to `msigdb` >=7.4.1)
 
