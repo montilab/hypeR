@@ -36,7 +36,7 @@ clean_genesets <- function(x) {
 .check_overlap <- function(signature, genesets, threshold=0.05) {
     overlap <- signif(length(intersect(signature, unique(unlist(genesets)))) / length(signature), 2)
     if (overlap < threshold) {
-        warning(.format_str("Only {1}% of signature was found across genesets", overlap))
+        warning(.format_str("Only {1}% of signature was found across genesets", overlap*100))
     }
     return(overlap)
 }
