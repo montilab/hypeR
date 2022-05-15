@@ -8,7 +8,7 @@ hyp_dots(
   hyp_obj,
   top = 20,
   abrv = 50,
-  sizes = TRUE,
+  size_by = c("genesets", "significance", "none"),
   pval = 1,
   fdr = 1,
   val = c("fdr", "pval"),
@@ -23,7 +23,7 @@ hyp_dots(
 
 \item{abrv}{Abbreviation length of geneset labels}
 
-\item{sizes}{Size dots by geneset sizes (if merge=TRUE, size dots by significance)}
+\item{size_by}{Size dots by e.g. c("genesets", "significance", "none")}
 
 \item{pval}{Filter results to be less than pval cutoff}
 
