@@ -1,5 +1,5 @@
 #' Calculate enrichment of one or more signatures
-#' 
+#'
 #' @param signature A vector of symbols
 #' @param genesets A gsets/rgsets object or a named list of genesets
 #' @param test Choose an enrichment type e.g. c("hypergeometric", "kstest")
@@ -23,7 +23,7 @@
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr filter arrange
-#' 
+#'
 #' @export
 hypeR <- function(signature,
                   genesets,
@@ -38,25 +38,25 @@ hypeR <- function(signature,
 
     # Handling of multiple signatures
     if (is(signature, "list")) {
-        
+
         if (is.null(names(signature))) {
             stop("Lists of signatures must be named")
         }
 
         lhyp <- mapply(function(x, id) {
             if (!quiet) {
-                cat(.format_str("\n{1}\n", id)) 
+                cat(.format_str("\n{1}\n", id))
             }
 
             hypeR(x,
-                  genesets=genesets, 
-                  test=test, 
-                  background=background, 
-                  power=power, 
+                  genesets=genesets,
+                  test=test,
+                  background=background,
+                  power=power,
                   absolute=absolute,
                   pval=pval,
                   fdr=fdr,
-                  plotting=plotting, 
+                  plotting=plotting,
                   quiet=quiet)
 
         }, signature, names(signature), USE.NAMES=TRUE, SIMPLIFY=FALSE)
@@ -78,7 +78,7 @@ hypeR <- function(signature,
     }
     else if (is(genesets, "gsets") | is(genesets, "rgsets")) {
         gsets.obj <- genesets
-    } 
+    }
     else {
         stop("Genesets must be gsets/rgsets object or named list of genesets")
     }
@@ -100,12 +100,12 @@ hypeR <- function(signature,
         signature.type <- "symbols"
         data <- data.frame(matrix(ncol=8, nrow=0))
         colnames(data) <- c("label", "pval", "fdr", "signature", "geneset", "overlap", "background", "hits")
-        results <- .hyper_enrichment(signature=signature, 
-                                     genesets=gsets.obj$genesets, 
-                                     background=background, 
+        results <- .hyper_enrichment(signature=signature,
+                                     genesets=gsets.obj$genesets,
+                                     background=background,
                                      plotting=plotting)
     }
-    
+
     # Enrichment test
     if (test == "kstest") {
         if (is(signature, "numeric")) {
@@ -117,13 +117,13 @@ hypeR <- function(signature,
           weights <- NULL
           signature.type <- "ranked"
         }
-        data <- data.frame(matrix(ncol=7, nrow=0))
-        colnames(data) <- c("label", "pval", "fdr", "signature", "geneset", "overlap", "score")
-        results <- .ks_enrichment(signature=signature, 
+        data <- data.frame(matrix(ncol=8, nrow=0))
+        colnames(data) <- c("label", "pval", "fdr", "signature", "geneset", "overlap", "score", "hits")
+        results <- .ks_enrichment(signature=signature,
                                   genesets=gsets.obj$genesets,
-                                  weights=weights, 
-                                  weights.pwr=power, 
-                                  absolute=absolute, 
+                                  weights=weights,
+                                  weights.pwr=power,
+                                  absolute=absolute,
                                   plotting=plotting)
     }
 
@@ -141,7 +141,7 @@ hypeR <- function(signature,
 
     # Filter data
     if (!is.null(results$data)) {
-        
+
         data <- results$data %>%
                 dplyr::filter(pval <= args$pval) %>%
                 dplyr::filter(fdr <= args$fdr) %>%
@@ -149,7 +149,7 @@ hypeR <- function(signature,
 
         plots <- results$plots[data$label]
     }
-    
+
     # Reproducibility information
     info <- list()
     info$hypeR <- paste("v", packageVersion("hypeR"), sep="")
@@ -168,7 +168,7 @@ hypeR <- function(signature,
                      "Signature Head",
                      "Signature Size",
                      "Signature Type",
-                     "Genesets", 
+                     "Genesets",
                      "Background",
                      "P-Value",
                      "FDR",
