@@ -21,7 +21,7 @@
                     plot.title="") 
 {
   n.y <- length(y)
-  err = list(score=0, pval=1, plot=ggempty())
+  err = list(score=0, pval=1, leading_edge=NULL, leading_hits=NA, plot=ggempty())
   if (n.y < 1 ) return(err)
   if (any(y > n.x)) return(err)
   if (any(y < 1)) return(err)
@@ -132,7 +132,18 @@
                          plot.title=title)
     
     results[['geneset']] <- length(geneset)
-    results[['overlap']] <- length(results$leading_hits)
+    edge_idx <- results[['leading_edge']]
+
+    if(is.null(edge_idx)) {
+      results[['hits']] <- NA
+      results[['overlap']] <- 0
+    } else if (!is.null(edge_idx) & edge_idx == 0) {
+      results[['hits']] <- NA
+      results[['overlap']] <- 0
+    } else {
+      results[['hits']] <- paste0("'", signature[results[['leading_hits']]], "'", collapse=',')
+      results[['overlap']] <- edge_idx
+    }
     return(results)
     
   }, genesets, names(genesets), USE.NAMES=TRUE, SIMPLIFY=FALSE)
@@ -141,8 +152,7 @@
   data <- data.frame(apply(results[,c("score", "pval", "geneset", "overlap")], 2, unlist), 
                      stringsAsFactors = FALSE)
   ## add list of genes in the leading edge
-  data <- data %>%
-    dplyr::mutate(hits=sapply(results[,"leading_hits"],function(x) paste(signature[x], collapse=',')))
+  data$hits <- results[,"hits"]
   data$score <- signif(data$score, 2)
   data$pval <- signif(data$pval, 2)
   data$label <- names(genesets)
@@ -153,8 +163,6 @@
     dplyr::relocate(signature,.after=geneset) %>%
     dplyr::relocate(label)
   plots <- results[,"plot"]
-  
   return(list(data=data, 
-              plots=plots, 
-              leading_hits=sapply(results[,"leading_hits"],function(x) signature[x])))
+              plots=plots))
 }
