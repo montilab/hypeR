@@ -1,6 +1,6 @@
 Package: hypeR
 Title: An R Package For Geneset Enrichment Workflows
-Version: 1.17.0
+Version: 1.17.1
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
              role=c("aut", "cre")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
@@ -42,3 +42,4 @@ Suggests:
 biocViews: GeneSetEnrichment, Annotation, Pathways
 VignetteBuilder: knitr
 BugReports: https://github.com/montilab/hypeR/issues
+PackageStatus: Deprecated
