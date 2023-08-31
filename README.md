@@ -106,7 +106,7 @@ genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
 print(genesets)
 ```
 
-    #> C2.CP:KEGG v7.2.1 
+    #> C2.CP:KEGG v7.4.1 
     #> Abc Transporters (44)
     #> Acute Myeloid Leukemia (57)
     #> Adherens Junction (73)
