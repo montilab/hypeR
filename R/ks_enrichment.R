@@ -83,7 +83,7 @@
   
   # Enrichment plot
   p <- if (plotting) {
-    ggplot2::ggplot(n.x, y, x.axis, y.axis, plot.title) + 
+    ggeplot(n.x, y, x.axis, y.axis, plot.title) + 
       geom_vline(xintercept=leading_edge, linetype="dotted", color="red", size=0.25)
   }
   else ggempty()
