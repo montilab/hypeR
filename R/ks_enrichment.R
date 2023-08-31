@@ -22,6 +22,7 @@
 {
   n.y <- length(y)
   err = list(score=0, pval=1, leading_edge=NULL, leading_hits=NA, plot=ggempty())
+
   if (n.y < 1 ) return(err)
   if (any(y > n.x)) return(err)
   if (any(y < 1)) return(err)
@@ -56,7 +57,7 @@
     D[y.match] <- (1:n.y)
     zero <- which(D == 0)[-1]
     D[zero] <- D[zero-1]
-    
+
     z <- D*hit-Y*mis
     
     score <- if (absolute) max(z)-min(z) else z[leading_edge <- which.max(abs(z))]
@@ -121,7 +122,7 @@
     
     ranks <- match(geneset, signature)
     ranks <- ranks[!is.na(ranks)]
-    
+
     ## Run ks-test
     results <- .kstest(n.x=length(signature), 
                          y=ranks,
@@ -163,6 +164,7 @@
     dplyr::relocate(signature,.after=geneset) %>%
     dplyr::relocate(label)
   plots <- results[,"plot"]
+
   return(list(data=data, 
               plots=plots))
 }
