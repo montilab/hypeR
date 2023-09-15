@@ -21,17 +21,15 @@
                     plot.title="") 
 {
   n.y <- length(y)
-  err = list(score=0, pval=1, leading_edge=NULL, leading_hits=NA, plot=ggempty())
-
-  if (n.y < 1 ) return(err)
-  if (any(y > n.x)) return(err)
-  if (any(y < 1)) return(err)
-  
+  err <- list(score = 0, pval = 1, leading_edge = NULL, leading_hits = NULL, plot = ggempty())
+  if (n.y < 1 || any(y > n.x) || any(y < 1) ) {
+    return(err)
+  }
   x.axis <- y.axis <- NULL
   leading_edge <- NULL # recording the x corresponding to the highest y value
   
-  # If weights are provided
-  if (!is.null(weights)) {
+  ## If weights are provided
+  if ( !is.null(weights) ) {
     weights <- abs(weights[y])^weights.pwr
     
     Pmis <- rep(1, n.x); Pmis[y] <- 0; Pmis <- cumsum(Pmis); Pmis <- Pmis/(n.x-n.y)
@@ -42,9 +40,9 @@
     
     x.axis <- 1:n.x
     y.axis <- z
-    
-    # Without weights
-  } else {
+  } 
+  ## Without weights
+  else {
     y <- sort(y)
     n <- n.x*n.y/(n.x + n.y)
     hit <- 1/n.y
@@ -57,7 +55,7 @@
     D[y.match] <- (1:n.y)
     zero <- which(D == 0)[-1]
     D[zero] <- D[zero-1]
-
+    
     z <- D*hit-Y*mis
     
     score <- if (absolute) max(z)-min(z) else z[leading_edge <- which.max(abs(z))]
@@ -75,24 +73,26 @@
     }    
   }
   leading_edge <- x.axis[leading_edge]
-  leading_hits <- intersect(x.axis[x.axis<=leading_edge],y)
+  leading_hits <- intersect(x.axis[x.axis <= leading_edge], y)
   
-  # One-sided Kolmogorov–Smirnov test
+  ## One-sided Kolmogorov–Smirnov test
   results <- suppressWarnings(ks.test(1:n.x, y, alternative="less"))
   results$statistic <- score  # Use the signed statistic
   
-  # Enrichment plot
-  p <- if (plotting) {
-    ggeplot(n.x, y, x.axis, y.axis, plot.title) + 
-      geom_vline(xintercept=leading_edge, linetype="dotted", color="red", size=0.25)
+  ## Enrichment plot
+  p <- if (plotting && n.y > 0) {
+    ggeplot(n.x, y, x.axis, y.axis, plot.title) +
+      geom_vline(xintercept = leading_edge, linetype = "dotted", color = "red", size = 0.25)
+  } else {
+    ggempty()
   }
-  else ggempty()
-  
-  return(list(score=as.numeric(results$statistic), 
-              pval=results$p.value, 
-              leading_edge=leading_edge,
-              leading_hits=leading_hits,
-              plot=p))
+  return(list(
+    score = as.numeric(results$statistic),
+    pval = results$p.value,
+    leading_edge = leading_edge,
+    leading_hits = leading_hits,
+    plot = p
+  ))
 }
 #' Enrichment test via one-sided Kolmogorov–Smirnov test
 #' 
@@ -105,66 +105,62 @@
 #' @return A list of data and plots
 #' 
 #' @keywords internal
-.ks_enrichment <- function(signature,
-                           genesets,
-                           weights=NULL,
-                           weights.pwr=1,
-                           absolute=FALSE,
-                           plotting=TRUE) 
+.ks_enrichment <- function(
+    signature,
+    genesets,
+    weights = NULL,
+    weights.pwr = 1,
+    absolute = FALSE,
+    plotting = TRUE) 
 {
   if (!is(genesets, "list")) stop("Error: Expected genesets to be a list of gene sets\n")
   if (!is.null(weights)) stopifnot(length(signature) == length(weights))
-  
+
   signature <- unique(signature)
   genesets <- lapply(genesets, unique)
-  
-  results <- mapply(function(geneset, title) {
-    
+
+  results <- mapply( function(geneset, title) {
     ranks <- match(geneset, signature)
     ranks <- ranks[!is.na(ranks)]
 
     ## Run ks-test
-    results <- .kstest(n.x=length(signature), 
-                         y=ranks,
-                         weights=weights,
-                         weights.pwr=weights.pwr,
-                         absolute=absolute, 
-                         plotting=plotting,
-                         plot.title=title)
-    
-    results[['geneset']] <- length(geneset)
-    edge_idx <- results[['leading_edge']]
+    results_in <- .kstest(
+      n.x = length(signature),
+      y = ranks,
+      weights = weights,
+      weights.pwr = weights.pwr,
+      absolute = absolute,
+      plotting = plotting,
+      plot.title = title
+    )
+    #results_in[["geneset"]] <- length(geneset)
+    results_in[["geneset"]] <- length(intersect(geneset, signature))
+    results_in[["overlap"]] <- length(results_in$leading_hits)
+    return(results_in)
+  }, genesets, names(genesets), USE.NAMES = TRUE, SIMPLIFY = FALSE)
 
-    if(is.null(edge_idx)) {
-      results[['hits']] <- NA
-      results[['overlap']] <- 0
-    } else if (!is.null(edge_idx) & edge_idx == 0) {
-      results[['hits']] <- NA
-      results[['overlap']] <- 0
-    } else {
-      results[['hits']] <- paste0("'", signature[results[['leading_hits']]], "'", collapse=',')
-      results[['overlap']] <- edge_idx
-    }
-    return(results)
-    
-  }, genesets, names(genesets), USE.NAMES=TRUE, SIMPLIFY=FALSE)
-  
   results <- do.call(rbind, results)
-  data <- data.frame(apply(results[,c("score", "pval", "geneset", "overlap")], 2, unlist), 
-                     stringsAsFactors = FALSE)
+  data <- data.frame(apply(results[, c("score", "pval", "geneset", "overlap")], 2, unlist),
+    stringsAsFactors = FALSE
+  )
   ## add list of genes in the leading edge
-  data$hits <- results[,"hits"]
+  data <- data %>%
+    dplyr::mutate(hits = sapply(results[, "leading_hits"], function(x) paste(signature[x], collapse = ",")))
   data$score <- signif(data$score, 2)
   data$pval <- signif(data$pval, 2)
   data$label <- names(genesets)
   data$signature <- length(signature)
-  data$fdr <- signif(p.adjust(data$pval, method="fdr"), 2)
+  data$fdr <- signif(p.adjust(data$pval, method = "fdr"), 2)
   data <- data %>%
-    dplyr::relocate(fdr,.after=pval) %>%
-    dplyr::relocate(signature,.after=geneset) %>%
-    dplyr::relocate(label)
-  plots <- results[,"plot"]
+    dplyr::relocate(fdr, .after = pval) %>%
+    dplyr::relocate(signature, .after = geneset) %>%
+    dplyr::relocate(label) |>
+    tibble::remove_rownames() # make sure this is OK
+  plots <- results[, "plot"]
 
-  return(list(data=data, 
-              plots=plots))
+  return(list(
+    data = data,
+    plots = plots,
+    leading_hits = sapply(results[, "leading_hits"], function(x) signature[x])
+  ))
 }
