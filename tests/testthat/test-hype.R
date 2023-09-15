@@ -15,23 +15,23 @@ hyp_tests <- function(hyp_obj, test_plots=FALSE, return_obj=FALSE) {
 hypeR_tests <- function(test, signature, experiment, genesets, gsets_obj, rgsets_obj) {
 
     # Basic
-    hypeR(signature, genesets, test=test, background=2520) |>
+    hypeR(signature, genesets, test=test, background=2520) %>%
     hyp_tests()    
             
     # Basic
-    hypeR(signature, gsets_obj, test=test, background=2520) |>
+    hypeR(signature, gsets_obj, test=test, background=2520) %>%
     hyp_tests()
     
     # Basic with plots
-    hypeR(signature, gsets_obj, test=test, background=2520, plotting=TRUE) |>
+    hypeR(signature, gsets_obj, test=test, background=2520, plotting=TRUE) %>%
     hyp_tests(test_plots=TRUE)
     
     # Test pval_cutoff
-    hypeR(signature, gsets_obj, test=test, background=100, pval=0.0001) |>
+    hypeR(signature, gsets_obj, test=test, background=100, pval=0.0001) %>%
     hyp_tests()
     
     # Test fdr_cutoff
-    hyp_obj <- hypeR(signature, gsets_obj, test=test, background=100, fdr=0.0001) |>
+    hyp_obj <- hypeR(signature, gsets_obj, test=test, background=100, fdr=0.0001) %>%
                hyp_tests(return_obj=TRUE)
     
     expect_equal(hyp_obj$args$genesets, gsets_obj)
@@ -39,7 +39,7 @@ hypeR_tests <- function(test, signature, experiment, genesets, gsets_obj, rgsets
     expect_equal(hyp_obj$args$fdr, 0.0001)
     
     # Test relational gsets
-    hyp_obj <- hypeR(signature, rgsets_obj, test=test, background=80, pval=0.01) |>
+    hyp_obj <- hypeR(signature, rgsets_obj, test=test, background=80, pval=0.01) %>%
                hyp_tests(return_obj=TRUE)
     expect_is(hyp_obj$args$genesets, "rgsets")
     expect_is(hyp_obj$args$genesets, "R6")
@@ -51,17 +51,17 @@ hypeR_tests <- function(test, signature, experiment, genesets, gsets_obj, rgsets
     expect_equal(names(multihyp_obj$data), c("Signature 1", "Signature 2", "Signature 3"))
     
     # Extracting hyp objects
-    multihyp_obj$data[["Signature 1"]] |>
+    multihyp_obj$data[["Signature 1"]] %>%
     hyp_tests()
     
     # Extracting hyp objects with plots
     multihyp_obj <- hypeR(experiment, gsets_obj, test=test, background=100, plotting=TRUE)
-    multihyp_obj$data[["Signature 1"]] |>
+    multihyp_obj$data[["Signature 1"]] %>%
     hyp_tests(test_plots=TRUE)
     
     # Test relational gsets
     multihyp_obj <- hypeR(experiment, rgsets_obj, test=test, background=100, pval=0.05)
-    multihyp_obj$data[["Signature 2"]] |>
+    multihyp_obj$data[["Signature 2"]] %>%
     hyp_tests()
 }
 
@@ -89,48 +89,48 @@ test_that("Hypergeometric is working", {
     
     # Hypergeometric
     hyp_obj <- hypeR(s, gs, background=length(bg))
-    expect_equal(filter(hyp_obj$data, label == "G1") |> pull(pval), fisher(s, gs$G1, length(bg)))
-    expect_equal(filter(hyp_obj$data, label == "G2") |> pull(pval), fisher(s, gs$G2, length(bg)))
-    expect_equal(filter(hyp_obj$data, label == "G3") |> pull(pval), fisher(s, gs$G3, length(bg)))
+    expect_equal(filter(hyp_obj$data, label == "G1") %>% pull(pval), fisher(s, gs$G1, length(bg)))
+    expect_equal(filter(hyp_obj$data, label == "G2") %>% pull(pval), fisher(s, gs$G2, length(bg)))
+    expect_equal(filter(hyp_obj$data, label == "G3") %>% pull(pval), fisher(s, gs$G3, length(bg)))
     
     # Hypergeometric - Restrict Genesets to Background
     hyp_obj <- hypeR(s, gs, background=bg[1:18])
-    expect_equal(filter(hyp_obj$data, label == "G1") |> pull(pval), fisher(s, intersect(gs$G1, bg[1:18]), length(bg[1:18])))
-    expect_equal(filter(hyp_obj$data, label == "G2") |> pull(pval), fisher(s, intersect(gs$G2, bg[1:18]), length(bg[1:18])))
-    expect_equal(filter(hyp_obj$data, label == "G3") |> pull(pval), fisher(s, intersect(gs$G3, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp_obj$data, label == "G1") %>% pull(pval), fisher(s, intersect(gs$G1, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp_obj$data, label == "G2") %>% pull(pval), fisher(s, intersect(gs$G2, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp_obj$data, label == "G3") %>% pull(pval), fisher(s, intersect(gs$G3, bg[1:18]), length(bg[1:18])))
     
     gsets_obj <- gsets$new(gs, quiet=TRUE)   
     hyp_obj <- hypeR(s, gsets_obj, background=bg[1:18])
-    expect_equal(filter(hyp_obj$data, label == "G1") |> pull(pval), fisher(s, intersect(gs$G1, bg[1:18]), length(bg[1:18])))
-    expect_equal(filter(hyp_obj$data, label == "G2") |> pull(pval), fisher(s, intersect(gs$G2, bg[1:18]), length(bg[1:18])))
-    expect_equal(filter(hyp_obj$data, label == "G3") |> pull(pval), fisher(s, intersect(gs$G3, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp_obj$data, label == "G1") %>% pull(pval), fisher(s, intersect(gs$G1, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp_obj$data, label == "G2") %>% pull(pval), fisher(s, intersect(gs$G2, bg[1:18]), length(bg[1:18])))
+    expect_equal(filter(hyp_obj$data, label == "G3") %>% pull(pval), fisher(s, intersect(gs$G3, bg[1:18]), length(bg[1:18])))
 })
 
 test_that("KS Test is working", {
 
   genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
-  all_genes <- genesets |> unlist(use.names = FALSE)
+  all_genes <- genesets %>% unlist(use.names = FALSE)
   genesets_names <- names(genesets)
 
   # Geneset 1 is top skewed
   experiment <- c(head(genesets[[1]], 5), LETTERS, tail(genesets[[1]], 1))
   hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
-  #expect_equal(hyp_obj$data[genesets_names[[1]], "hits"] |> unlist(use.names=FALSE), paste0("'", genesets[[1]][1:5], "'",collapse=","))
-  expect_equal(filter(hyp_obj$data, label == genesets_names[[1]]) |> dplyr::pull(hits) |> unname(), 
+  #expect_equal(hyp_obj$data[genesets_names[[1]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[1]][1:5], "'",collapse=","))
+  expect_equal(filter(hyp_obj$data, label == genesets_names[[1]]) %>% dplyr::pull(hits) %>% unname(), 
                paste(genesets[[1]][1:5], collapse = " , "))
   
   # Geneset 2 is mixed
   experiment <- c(head(genesets[[2]], 8), LETTERS, tail(genesets[[2]], 10))
   hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
-  #expect_equal(hyp_obj$data[genesets_names[[2]], "hits"] |> unlist(use.names=FALSE), paste0("'", genesets[[2]][1:8], "'",collapse=","))
-  expect_equal(filter(hyp_obj$data, label == genesets_names[[2]]) |> dplyr::pull(hits) |> unname(), 
+  #expect_equal(hyp_obj$data[genesets_names[[2]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[2]][1:8], "'",collapse=","))
+  expect_equal(filter(hyp_obj$data, label == genesets_names[[2]]) %>% dplyr::pull(hits) %>% unname(), 
                paste(genesets[[2]][1:8], collapse = " , "))
   
   # Geneset 3 is bottom skewed
   experiment <- c(head(genesets[[3]], 1), LETTERS, tail(genesets[[3]], 8))
   hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
-  #expect_equal(hyp_obj$data[genesets_names[[3]], "hits"] |> unlist(use.names=FALSE), paste0("'", genesets[[3]][1], "'",collapse=","))
-  expect_equal(filter(hyp_obj$data, label == genesets_names[[3]]) |> dplyr::pull(hits) |> unname(), 
+  #expect_equal(hyp_obj$data[genesets_names[[3]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[3]][1], "'",collapse=","))
+  expect_equal(filter(hyp_obj$data, label == genesets_names[[3]]) %>% dplyr::pull(hits) %>% unname(), 
                paste(genesets[[3]][1], collapse = " , "))
 })
 

@@ -155,7 +155,7 @@
   data <- data %>%
     dplyr::relocate(fdr, .after = pval) %>%
     dplyr::relocate(signature, .after = geneset) %>%
-    dplyr::relocate(label) |>
+    dplyr::relocate(label) %>%
     tibble::remove_rownames() # make sure this is OK
   plots <- results[, "plot"]
 
