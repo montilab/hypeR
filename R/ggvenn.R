@@ -37,7 +37,7 @@ ggvenn <- function(a, b, ga, gb, title="") {
                         paste(gb, " (", x.b, ")", sep=""))) %>%
         
     ggplot(aes(x0=x, y0=y, r=c(r.a, r.b), fill=groups)) +
-    geom_circle(alpha=0.3, size=0.5) +
+    geom_circle(alpha=0.3, linewidth=0.5) +
     coord_fixed() +
     theme_void() +
     theme(plot.title=element_text(hjust=0.5),
