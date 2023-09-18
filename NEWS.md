@@ -1,3 +1,6 @@
+# hypeR 2.0.1
+* Dots plots are now explicitly sized with `size_by=c("genesets", "significance", "none")` 
+
 # hypeR 2.0.0
 * Version bump for bioconductor
 

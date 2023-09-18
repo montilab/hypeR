@@ -8,7 +8,7 @@
   hyp_df,
   top = 20,
   abrv = 50,
-  sizes = TRUE,
+  size_by = c("genesets", "significance", "none"),
   pval_cutoff = 1,
   fdr_cutoff = 1,
   val = c("fdr", "pval"),
@@ -22,7 +22,7 @@
 
 \item{abrv}{Abbreviation length of genesetlabels}
 
-\item{sizes}{Size dots by geneset sizes}
+\item{size_by}{Size dots by e.g. c("genesets", "significance", "none")}
 
 \item{pval_cutoff}{Filter results to be less than pval cutoff}
 

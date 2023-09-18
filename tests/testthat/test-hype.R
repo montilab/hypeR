@@ -106,6 +106,34 @@ test_that("Hypergeometric is working", {
     expect_equal(filter(hyp_obj$data, label == "G3") %>% pull(pval), fisher(s, intersect(gs$G3, bg[1:18]), length(bg[1:18])))
 })
 
+test_that("KS Test is working", {
+
+  genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+  all_genes <- genesets %>% unlist(use.names = FALSE)
+  genesets_names <- names(genesets)
+
+  # Geneset 1 is top skewed
+  experiment <- c(head(genesets[[1]], 5), LETTERS, tail(genesets[[1]], 1))
+  hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
+  #expect_equal(hyp_obj$data[genesets_names[[1]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[1]][1:5], "'",collapse=","))
+  expect_equal(filter(hyp_obj$data, label == genesets_names[[1]]) %>% dplyr::pull(hits) %>% unname(), 
+               paste(genesets[[1]][1:5], collapse = " , "))
+  
+  # Geneset 2 is mixed
+  experiment <- c(head(genesets[[2]], 8), LETTERS, tail(genesets[[2]], 10))
+  hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
+  #expect_equal(hyp_obj$data[genesets_names[[2]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[2]][1:8], "'",collapse=","))
+  expect_equal(filter(hyp_obj$data, label == genesets_names[[2]]) %>% dplyr::pull(hits) %>% unname(), 
+               paste(genesets[[2]][1:8], collapse = " , "))
+  
+  # Geneset 3 is bottom skewed
+  experiment <- c(head(genesets[[3]], 1), LETTERS, tail(genesets[[3]], 8))
+  hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
+  #expect_equal(hyp_obj$data[genesets_names[[3]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[3]][1], "'",collapse=","))
+  expect_equal(filter(hyp_obj$data, label == genesets_names[[3]]) %>% dplyr::pull(hits) %>% unname(), 
+               paste(genesets[[3]][1], collapse = " , "))
+})
+
 test_that("hypeR() is working", {
     # Testing data
     testdat <- readRDS(file.path(system.file("extdata", package="hypeR"), "testdat.rds"))
