@@ -3,6 +3,8 @@ Title: An R Package For Geneset Enrichment Workflows
 Version: 2.0.1
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
              role=c("aut", "cre")),
+             person(given="Andrew", family="Chen", email="andrewdr@bu.edu", 
+             role=c("aut")),
              person(given="Stefano", family="Monti", email="smonti@bu.edu", 
              role=c("aut")))
 Description: An R Package for Geneset Enrichment Workflows.
@@ -33,7 +35,8 @@ Imports:
     rmarkdown,
     igraph,
     visNetwork,
-    shiny
+    shiny,
+    BiocStyle
 Suggests:
     tidyverse,
     devtools,

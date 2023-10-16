@@ -4,7 +4,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: bioconductor/bioconductor_docker:RELEASE_3_12
+    container: bioconductor/bioconductor_docker:RELEASE_3_17
     steps:
       - uses: actions/checkout@v1
 
@@ -32,5 +32,5 @@ jobs:
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
