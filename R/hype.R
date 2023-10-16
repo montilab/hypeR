@@ -117,8 +117,8 @@ hypeR <- function(signature,
           weights <- NULL
           signature.type <- "ranked"
         }
-        data <- data.frame(matrix(ncol=7, nrow=0))
-        colnames(data) <- c("label", "pval", "fdr", "signature", "geneset", "overlap", "score")
+        data <- data.frame(matrix(ncol=8, nrow=0))
+        colnames(data) <- c("label", "score", "pval", "fdr", "geneset", "signature", "overlap", "hits")
         results <- .ks_enrichment(signature=signature, 
                                   genesets=gsets.obj$genesets,
                                   weights=weights, 
