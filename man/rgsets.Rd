@@ -32,17 +32,17 @@ A relational genesets object
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{rgsets$new()}}
-\item \href{#method-print}{\code{rgsets$print()}}
-\item \href{#method-info}{\code{rgsets$info()}}
-\item \href{#method-reduce}{\code{rgsets$reduce()}}
-\item \href{#method-subset}{\code{rgsets$subset()}}
-\item \href{#method-clone}{\code{rgsets$clone()}}
+\item \href{#method-rgsets-new}{\code{rgsets$new()}}
+\item \href{#method-rgsets-print}{\code{rgsets$print()}}
+\item \href{#method-rgsets-info}{\code{rgsets$info()}}
+\item \href{#method-rgsets-reduce}{\code{rgsets$reduce()}}
+\item \href{#method-rgsets-subset}{\code{rgsets$subset()}}
+\item \href{#method-rgsets-clone}{\code{rgsets$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-rgsets-new"></a>}}
+\if{latex}{\out{\hypertarget{method-rgsets-new}{}}}
 \subsection{Method \code{new()}}{
 Create a rgsets object
 \subsection{Usage}{
@@ -78,8 +78,8 @@ A new rgsets object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-rgsets-print"></a>}}
+\if{latex}{\out{\hypertarget{method-rgsets-print}{}}}
 \subsection{Method \code{print()}}{
 Print relational genesets information
 \subsection{Usage}{
@@ -91,8 +91,8 @@ NULL
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-info"></a>}}
-\if{latex}{\out{\hypertarget{method-info}{}}}
+\if{html}{\out{<a id="method-rgsets-info"></a>}}
+\if{latex}{\out{\hypertarget{method-rgsets-info}{}}}
 \subsection{Method \code{info()}}{
 Returns versioning information
 \subsection{Usage}{
@@ -104,8 +104,8 @@ A character vector with name and version
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reduce"></a>}}
-\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\if{html}{\out{<a id="method-rgsets-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-rgsets-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Reduces genesets to a background distribution of symbols
 \subsection{Usage}{
@@ -124,8 +124,8 @@ A rgsets object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-subset"></a>}}
-\if{latex}{\out{\hypertarget{method-subset}{}}}
+\if{html}{\out{<a id="method-rgsets-subset"></a>}}
+\if{latex}{\out{\hypertarget{method-rgsets-subset}{}}}
 \subsection{Method \code{subset()}}{
 Subsets genesets on a character vector of labels
 \subsection{Usage}{
@@ -144,8 +144,8 @@ A rgsets object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-rgsets-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-rgsets-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -37,17 +37,17 @@ print(gsets_obj)
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{gsets$new()}}
-\item \href{#method-print}{\code{gsets$print()}}
-\item \href{#method-list}{\code{gsets$list()}}
-\item \href{#method-info}{\code{gsets$info()}}
-\item \href{#method-reduce}{\code{gsets$reduce()}}
-\item \href{#method-clone}{\code{gsets$clone()}}
+\item \href{#method-gsets-new}{\code{gsets$new()}}
+\item \href{#method-gsets-print}{\code{gsets$print()}}
+\item \href{#method-gsets-list}{\code{gsets$list()}}
+\item \href{#method-gsets-info}{\code{gsets$info()}}
+\item \href{#method-gsets-reduce}{\code{gsets$reduce()}}
+\item \href{#method-gsets-clone}{\code{gsets$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-gsets-new"></a>}}
+\if{latex}{\out{\hypertarget{method-gsets-new}{}}}
 \subsection{Method \code{new()}}{
 Create a gsets object
 \subsection{Usage}{
@@ -80,8 +80,8 @@ A new gsets object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-gsets-print"></a>}}
+\if{latex}{\out{\hypertarget{method-gsets-print}{}}}
 \subsection{Method \code{print()}}{
 Print genesets information
 \subsection{Usage}{
@@ -93,8 +93,8 @@ NULL
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list"></a>}}
-\if{latex}{\out{\hypertarget{method-list}{}}}
+\if{html}{\out{<a id="method-gsets-list"></a>}}
+\if{latex}{\out{\hypertarget{method-gsets-list}{}}}
 \subsection{Method \code{list()}}{
 Return genesets as a list
 \subsection{Usage}{
@@ -106,8 +106,8 @@ A list of genesets
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-info"></a>}}
-\if{latex}{\out{\hypertarget{method-info}{}}}
+\if{html}{\out{<a id="method-gsets-info"></a>}}
+\if{latex}{\out{\hypertarget{method-gsets-info}{}}}
 \subsection{Method \code{info()}}{
 Returns versioning information
 \subsection{Usage}{
@@ -119,8 +119,8 @@ A character vector with name and version
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reduce"></a>}}
-\if{latex}{\out{\hypertarget{method-reduce}{}}}
+\if{html}{\out{<a id="method-gsets-reduce"></a>}}
+\if{latex}{\out{\hypertarget{method-gsets-reduce}{}}}
 \subsection{Method \code{reduce()}}{
 Reduces genesets to a background distribution of symbols
 \subsection{Usage}{
@@ -139,8 +139,8 @@ A gsets object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-gsets-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-gsets-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

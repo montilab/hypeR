@@ -19,17 +19,17 @@ A push/pop capable vector
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{pvector$new()}}
-\item \href{#method-print}{\code{pvector$print()}}
-\item \href{#method-length}{\code{pvector$length()}}
-\item \href{#method-pop}{\code{pvector$pop()}}
-\item \href{#method-push}{\code{pvector$push()}}
-\item \href{#method-clone}{\code{pvector$clone()}}
+\item \href{#method-pvector-new}{\code{pvector$new()}}
+\item \href{#method-pvector-print}{\code{pvector$print()}}
+\item \href{#method-pvector-length}{\code{pvector$length()}}
+\item \href{#method-pvector-pop}{\code{pvector$pop()}}
+\item \href{#method-pvector-push}{\code{pvector$push()}}
+\item \href{#method-pvector-clone}{\code{pvector$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-pvector-new"></a>}}
+\if{latex}{\out{\hypertarget{method-pvector-new}{}}}
 \subsection{Method \code{new()}}{
 Create a pvector
 \subsection{Usage}{
@@ -48,8 +48,8 @@ A new pvector
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-pvector-print"></a>}}
+\if{latex}{\out{\hypertarget{method-pvector-print}{}}}
 \subsection{Method \code{print()}}{
 Print pvector
 \subsection{Usage}{
@@ -61,8 +61,8 @@ NULL
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-length"></a>}}
-\if{latex}{\out{\hypertarget{method-length}{}}}
+\if{html}{\out{<a id="method-pvector-length"></a>}}
+\if{latex}{\out{\hypertarget{method-pvector-length}{}}}
 \subsection{Method \code{length()}}{
 Get length of pvector
 \subsection{Usage}{
@@ -74,8 +74,8 @@ An integer
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-pop"></a>}}
-\if{latex}{\out{\hypertarget{method-pop}{}}}
+\if{html}{\out{<a id="method-pvector-pop"></a>}}
+\if{latex}{\out{\hypertarget{method-pvector-pop}{}}}
 \subsection{Method \code{pop()}}{
 Pop vector
 \subsection{Usage}{
@@ -87,8 +87,8 @@ Popped value
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-push"></a>}}
-\if{latex}{\out{\hypertarget{method-push}{}}}
+\if{html}{\out{<a id="method-pvector-push"></a>}}
+\if{latex}{\out{\hypertarget{method-pvector-push}{}}}
 \subsection{Method \code{push()}}{
 Push values
 \subsection{Usage}{
@@ -107,8 +107,8 @@ NULL
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-pvector-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-pvector-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
