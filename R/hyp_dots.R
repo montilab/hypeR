@@ -24,8 +24,8 @@
                              pval_cutoff=1, 
                              fdr_cutoff=1,
                              val=c("fdr", "pval"),
-                             title="") {
-    
+                             title="") 
+{
     # Default arguments
     val <- match.arg(val)
     size_by <- match.arg(size_by)
@@ -37,7 +37,6 @@
         dplyr::filter(fdr <= fdr_cutoff) %>%
         dplyr::select(label)
     })
-    
     # Take top genesets
     labels <- names(sort(table(unlist(multihyp_dfs)), decreasing=TRUE))
     if (!is.null(top)) labels <- head(labels, top)
@@ -50,7 +49,7 @@
         hyp_df <- hyp_obj$data
         hyp_df[hyp_df$label %in% labels, c("label", val), drop=FALSE]
     })
-    
+    # merge dataframes ('cbind')
     df <- suppressWarnings(Reduce(function(x, y) merge(x, y, by="label", all=TRUE), dfs))
     colnames(df) <- c("label", names(dfs))
     rownames(df) <- df$label
@@ -63,7 +62,6 @@
     } else {
         rownames(df) <- factor(label.abrv, levels=label.abrv)   
     }
-    
     if (val == "pval") {
         cutoff <- pval_cutoff
         color.label <- "P-Value"
@@ -72,7 +70,6 @@
         cutoff <- fdr_cutoff
         color.label <- "FDR"
     }
-    
     df.melted <- reshape2::melt(as.matrix(df))
     colnames(df.melted) <- c("label", "signature", "significance")
     df.melted$size <- 1
@@ -80,7 +77,6 @@
     if (size_by == "significance") {
         df.melted$size <- df.melted$significance
     }
-    
     if (size_by == "genesets") {
         geneset.sizes <- lapply(multihyp_data, function(hyp_obj) {
                 hyp_obj$data[, c("label", "geneset")]
@@ -88,20 +84,22 @@
             do.call(rbind, .) %>%
             dplyr::distinct(label, .keep_all=TRUE) %>%
             dplyr::pull(geneset, label)
-        df.melted$size <- geneset.sizes[df.melted$label]
+        #df.melted$size <- geneset.sizes[df.melted$label]
+        names(geneset.sizes) <- substr(names(geneset.sizes), 1, abrv)
+        df.melted$size <- geneset.sizes[match(df.melted$label,names(geneset.sizes))]
     }
-
     p <- df.melted %>%
-    dplyr::filter(significance <= cutoff) %>%
-    ggplot(aes(x=signature, y=label, color=significance, size=size)) +
-    geom_point() +
-    scale_color_continuous(low="#114357", high="#E53935", trans=.reverselog_trans(10)) +
-    labs(title=title, color=color.label) +  
-    theme(plot.title=element_text(hjust=0.5),
-          axis.title.y=element_blank(),
-          axis.title.x=element_blank(),
-          axis.text.x=element_text(angle=45, hjust=1))
-    
+      dplyr::filter(significance <= cutoff) %>%
+      ggplot(aes(x = signature, y = label, color = significance, size = size)) +
+      geom_point() +
+      scale_color_continuous(low = "#114357", high = "#E53935", trans = .reverselog_trans(10)) +
+      labs(title = title, color = color.label) +
+      theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1)
+      )
     if (size_by == "none") {
         p <- p + guides(size="none")
     }
