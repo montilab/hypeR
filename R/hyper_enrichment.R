@@ -42,7 +42,8 @@
                        geneset=n.genesets,
                        overlap=n.hits,
                        background=background,
-                       hits=sapply(genesets, function(x, y) paste(intersect(x, y), collapse=','), signature.found),
+                       #hits=sapply(genesets, function(x, y) paste(intersect(x, y), collapse=','), signature.found),
+                       hits=sapply(genesets, function(x, y) paste(intersect(x, y), collapse=' , '), signature.found),
                        stringsAsFactors=FALSE)
     
     # Handle plots
