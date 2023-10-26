@@ -20,7 +20,7 @@
 .dots_multi_plot <- function(multihyp_data,
                              top=20,
                              abrv=50,
-                             size_by=c("genesets", "significance", "none"),
+                             size_by=c("genesets", "significance", "overlap", "none"),
                              pval_cutoff=1, 
                              fdr_cutoff=1,
                              val=c("fdr", "pval"),
@@ -79,16 +79,29 @@
     
     if (size_by == "significance") {
         df.melted$size <- df.melted$significance
-    }
-    
-    if (size_by == "genesets") {
+    } else if (size_by == "genesets") {
         geneset.sizes <- lapply(multihyp_data, function(hyp_obj) {
                 hyp_obj$data[, c("label", "geneset")]
             }) %>%
             do.call(rbind, .) %>%
             dplyr::distinct(label, .keep_all=TRUE) %>%
             dplyr::pull(geneset, label)
-        df.melted$size <- geneset.sizes[df.melted$label]
+        #df.melted$size <- geneset.sizes[df.melted$label]
+        names(geneset.sizes) <- substr(names(geneset.sizes), 1, abrv)
+        stopifnot( all(!is.na(match_idx <- match(df.melted$label,names(geneset.sizes)))) )
+        df.melted$size <- geneset.sizes[match_idx]
+    } else if (size == "overlap") {
+      stop( "size_by overlap not implemented yet")
+      overlap.sizes <- lapply(multihyp_data, function(hyp_obj) {
+        hyp_obj$data[, c("label", "overlap")]
+      }) %>%
+        do.call(rbind, .) %>%
+        dplyr::distinct(label, .keep_all=TRUE) %>%
+        dplyr::pull(overlap, label)
+      #df.melted$size <- overlap.sizes[df.melted$label]
+      names(overlap.sizes) <- substr(names(overlap.sizes), 1, abrv)
+      stopifnot( all(!is.na(match_idx <- match(df.melted$label,names(overlap.sizes)))) )
+      df.melted$size <- overlap.sizes[match_idx]
     }
 
     p <- df.melted %>%
@@ -104,14 +117,15 @@
     
     if (size_by == "none") {
         p <- p + guides(size="none")
-    }
-    if (size_by == "significance") {
+    } else if (size_by == "significance") {
         p <- p + scale_size_continuous(trans=.reverselog_trans(10)) + labs(size="Significance")
-    }
-    if (size_by == "genesets") {
+    } else if (size_by == "genesets" ) {
         p <- p + scale_size_continuous(trans=scales::log10_trans()) + labs(size="Genesets\nSize")
+    } else if (size_by == "overlap" ) {
+      p <- p + scale_size_continuous(trans=scales::log10_trans()) + labs(size="Overlap\nSize")
+    } else {
+      stop("unrecognized 'size_by':", size_by)
     }
-    
     return(p)
 }
 
