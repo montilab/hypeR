@@ -110,7 +110,7 @@
     # p <- p + scale_color_continuous(
     #   high = "#114357", low = "#E53935", trans = scales::log10_trans(),
     #   guide = guide_colorbar(reverse = TRUE)
-    )
+    #)
   }
   return(p)
 }
