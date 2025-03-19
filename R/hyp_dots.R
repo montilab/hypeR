@@ -74,7 +74,12 @@
   df.melted <- reshape2::melt(as.matrix(df))
   colnames(df.melted) <- c("label", "signature", "significance")
   df.melted$size <- 1
-
+  
+  ## threshold zero p-values/fdr 
+  df.melted <- df.melted %>%
+    dplyr::mutate(significance = ifelse(
+      significance < .Machine$double.eps, .Machine$double.base, significance)
+    )
   if (size_by == "significance") {
     df.melted$size <- df.melted$significance
   }
@@ -102,8 +107,9 @@
   if (size_by == "none") {
     p <- p + guides(size = "none")
   } else if (size_by == "significance") {
-    p <- p + scale_size_continuous(trans = .reverselog_trans(10)) + labs(size = "Significance")
-      } else if (size_by == "genesets") {
+    #p <- p + scale_size_continuous(trans = .reverselog_trans(10)) + labs(size = "Significance")
+    p <- p + scale_size_continuous(trans = c("log10", "reverse")) + labs(size = "Significance")
+  } else if (size_by == "genesets") {
     p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Genesets\nSize")
   }
   return(p)
@@ -159,7 +165,6 @@
     if (size_by == "genesets") {
         df$size <- df$geneset
     }
-
     # Order by significance value
     df <- df[order(-df[,val]),]
     
@@ -170,34 +175,34 @@
     } else {
         df$label.abrv <- factor(label.abrv, levels=label.abrv)   
     }
-
     if (val == "pval") {
         color.label <- "P-Value"
     }
     if (val == "fdr") {
         color.label <- "FDR"
     }
-
-    p <- ggplot(df, aes(x=label.abrv, y=significance, color=significance, size=size)) +
-    geom_point() +
-    labs(title=title, y=color.label, color=color.label) +
-    scale_color_continuous(low="#E53935", high="#114357", guide=guide_colorbar(reverse=TRUE)) +
-    coord_flip() +
-    scale_y_continuous(trans=.reverselog_trans(10)) +
-    geom_hline(yintercept=0.05, linetype="dotted") +
-    theme(plot.title=element_text(hjust=0.5),
-          axis.title.y=element_blank())
-    
+    p <- ggplot(df, aes(x = label.abrv, y = significance, color = significance, size = size)) +
+      geom_point() +
+      labs(title = title, y = color.label, color = color.label) +
+      scale_color_continuous(low = "#E53935", high = "#114357", guide = guide_colorbar(reverse = TRUE)) +
+      coord_flip() +
+      #scale_y_continuous(trans = .reverselog_trans(10)) +
+      scale_y_continuous(trans = c("log10", "reverse")) +
+      geom_hline(yintercept = 0.05, linetype = "dotted") +
+      theme(
+        plot.title = element_text(hjust = 0.5),
+        axis.title.y = element_blank()
+      )
     if (size_by == "none") {
-        p <- p + guides(size="none")
+      p <- p + guides(size = "none")
     }
     if (size_by == "significance") {
-        p <- p + scale_size_continuous(trans=.reverselog_trans(10)) + labs(size="Significance")
+      #p <- p + scale_size_continuous(trans = .reverselog_trans(10)) + labs(size = "Significance")
+      p <- p + scale_size_continuous(trans = c("log10", "reverse")) + labs(size = "Significance")
     }
     if (size_by == "genesets") {
-        p <- p + scale_size_continuous(trans=scales::log10_trans()) + labs(size="Genesets\nSize")
+      p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Genesets\nSize")
     }
-    
     return(p)
 }
 
@@ -226,47 +231,46 @@
 #' hyp_dots(hyp_obj, val="fdr")
 #'
 #' @export
-hyp_dots <- function(hyp_obj,
-                     top=20,
-                     abrv=50,
-                     size_by=c("genesets", "significance", "none"),
-                     pval=1, 
-                     fdr=1,
-                     val=c("fdr", "pval"), 
-                     title="",
-                     merge=FALSE) {
+hyp_dots <- function(
+    hyp_obj,
+    top=20,
+    abrv=50,
+    size_by=c("genesets", "significance", "none"),
+    pval=1, 
+    fdr=1,
+    val=c("fdr", "pval"), 
+    title="",
+    merge=FALSE) 
+{
+  stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
-    stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
-
-    # Default arguments
-    val <- match.arg(val)
-    size_by <- match.arg(size_by)
+  # Default arguments
+  val <- match.arg(val)
+  size_by <- match.arg(size_by)
+  
+  # Handling of multiple signatures
+  if (is(hyp_obj, "multihyp")) {
+    multihyp_obj <- hyp_obj
     
-    # Handling of multiple signatures
-    if (is(hyp_obj, "multihyp")) {
-        multihyp_obj <- hyp_obj
-
-        # Merge multiple signatures into a single plot
-        if (merge) {
-            .dots_multi_plot(multihyp_obj$data, top, abrv, size_by, pval, fdr, val, title)
-        } 
-        # Return a list of plots for each signature
-        else {
-            mapply(function(hyp_obj, title) {
-
-                hyp_dots(hyp_obj,
-                         top=top,
-                         abrv=abrv,
-                         size_by=size_by,
-                         pval=pval,
-                         fdr=fdr,
-                         val=val,
-                         title=title)
-
-            }, multihyp_obj$data, names(multihyp_obj$data), USE.NAMES=TRUE, SIMPLIFY=FALSE)
-        }
+    # Merge multiple signatures into a single plot
+    if (merge) {
+      .dots_multi_plot(multihyp_obj$data, top, abrv, size_by, pval, fdr, val, title)
     } 
+    # Return a list of plots for each signature
     else {
-        .dots_plot(hyp_obj$data, top, abrv, size_by, pval, fdr, val, title)
+      mapply(function(hyp_obj, title) {
+        hyp_dots(hyp_obj,
+                 top=top,
+                 abrv=abrv,
+                 size_by=size_by,
+                 pval=pval,
+                 fdr=fdr,
+                 val=val,
+                 title=title)
+      }, multihyp_obj$data, names(multihyp_obj$data), USE.NAMES=TRUE, SIMPLIFY=FALSE)
     }
+  } 
+  else {
+    .dots_plot(hyp_obj$data, top, abrv, size_by, pval, fdr, val, title)
+  }
 }
