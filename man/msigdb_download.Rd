@@ -4,14 +4,14 @@
 \alias{msigdb_download}
 \title{Download data from msigdb in the form of a named list}
 \usage{
-msigdb_download(species, category, subcategory = "")
+msigdb_download(species, collection, subcollection = "")
 }
 \arguments{
 \item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}
 
-\item{category}{Geneset category (refer to ?msigdbr::msigdbr for avilable categories)}
+\item{collection}{Geneset collection (previous argument "category" is deprecated. refer to ?msigdbr::msigdbr for avilable collections)}
 
-\item{subcategory}{Geneset subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)}
+\item{subcollection}{Geneset subcollection (previous argument "subcategory" is deprecated. refer to ?msigdbr::msigdbr for avilable subcollections)}
 }
 \value{
 A list of genesets
