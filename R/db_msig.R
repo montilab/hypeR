@@ -17,7 +17,7 @@ msigdb_version <- function() {
 #' @examples
 #' msigdb_species()
 #'
-#' @importFrom msigdbr msigdbr_show_species
+#' @importFrom msigdbr msigdbr_species
 #' @export
 msigdb_species <- function() {
     msigdbr::msigdbr_species()$species_name
