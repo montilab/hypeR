@@ -138,14 +138,17 @@ msigdb_download <- function(species, collection, subcollection="") {
     
     # Check species
     msigdb_check_species(species)
-    
-    response <- msigdbr(species, collection, subcollection)
+	  
+	  # leave subcollection as "" no longer works in msigdbr::msigdbr(), must be NULL
+	  if (subcollection == "") subcollection <- NULL
+	  
+    response <- msigdbr(species = species, collection = collection, subcollection = subcollection)
     if (nrow(response) == 0) {
         stop("No data found: Please review available species and genesets\n", msigdb_info())
     }
     
     # Download genesets
-    mdf <- msigdbr(species, collection, subcollection) %>%
+    mdf <- msigdbr(species = species, collection = collection, subcollection = subcollection) %>%
         dplyr::select(gs_name, gene_symbol) %>%
         dplyr::distinct()
     
