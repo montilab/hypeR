@@ -76,10 +76,10 @@
   df.melted$size <- 1
   
   ## threshold zero p-values/fdr 
-  df.melted <- df.melted %>%
-    dplyr::mutate(significance = ifelse(
-      significance < .Machine$double.eps, .Machine$double.base, significance)
-    )
+  # df.melted <- df.melted %>%
+  #    dplyr::mutate(significance = ifelse(
+  #    significance < .Machine$double.eps, .Machine$double.base, significance)
+  # )
   if (size_by == "significance") {
     df.melted$size <- df.melted$significance
   }
@@ -96,7 +96,7 @@
     dplyr::filter(significance <= cutoff) %>%
     ggplot(aes(x = signature, y = label, color = significance, size = size)) +
     geom_point() +
-    scale_color_continuous(low = "#114357", high = "#E53935", trans = c("log10", "reverse")) +
+    scale_color_continuous(low = "#114357", high = "#E53935", trans = scales::log10_trans()) +
     labs(title = title, color = color.label) +
     theme(
       plot.title = element_text(hjust = 0.5),
@@ -108,7 +108,7 @@
     p <- p + guides(size = "none")
   } else if (size_by == "significance") {
     #p <- p + scale_size_continuous(trans = .reverselog_trans(10)) + labs(size = "Significance")
-    p <- p + scale_size_continuous(trans = c("log10", "reverse")) + labs(size = "Significance")
+    p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Significance")
   } else if (size_by == "genesets") {
     p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Genesets\nSize")
   }
@@ -187,7 +187,7 @@
       scale_color_continuous(low = "#E53935", high = "#114357", guide = guide_colorbar(reverse = TRUE)) +
       coord_flip() +
       #scale_y_continuous(trans = .reverselog_trans(10)) +
-      scale_y_continuous(trans = c("log10", "reverse")) +
+      scale_y_continuous(trans = scales::log10_trans()) +
       geom_hline(yintercept = 0.05, linetype = "dotted") +
       theme(
         plot.title = element_text(hjust = 0.5),
@@ -198,7 +198,7 @@
     }
     if (size_by == "significance") {
       #p <- p + scale_size_continuous(trans = .reverselog_trans(10)) + labs(size = "Significance")
-      p <- p + scale_size_continuous(trans = c("log10", "reverse")) + labs(size = "Significance")
+      p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Significance")
     }
     if (size_by == "genesets") {
       p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Genesets\nSize")
