@@ -90,7 +90,10 @@
       do.call(rbind, .) %>%
       dplyr::distinct(label, .keep_all = TRUE) %>%
       dplyr::pull(geneset, label)
-    df.melted$size <- geneset.sizes[df.melted$label]
+    #df.melted$size <- geneset.sizes[df.melted$label]
+    names(geneset.sizes) <- substr(names(geneset.sizes), 1, abrv)
+    stopifnot( all(!is.na(match_idx <- match(df.melted$label,names(geneset.sizes)))) )
+    df.melted$size <- geneset.sizes[match_idx]
   }
   p <- df.melted %>%
     dplyr::filter(significance <= cutoff) %>%
@@ -147,43 +150,44 @@
 
     # Subset results
     df <- hyp_df %>%
-          dplyr::filter(pval <= pval_cutoff) %>%
-          dplyr::filter(fdr <= fdr_cutoff) %>%
-          purrr::when(!is.null(top) ~ head(., top), ~ .)
+      dplyr::filter(pval <= pval_cutoff) %>%
+      dplyr::filter(fdr <= fdr_cutoff) %>%
+      purrr::when(!is.null(top) ~ head(., top), ~.)
 
     # Handle empty dataframes
-    if (nrow(df) == 0) return(ggempty())
-
+    if (nrow(df) == 0) {
+      return(ggempty())
+    }
     # Plotting variables
-    df$significance <- df[,val]
+    df$significance <- df[, val]
     df$size <- 1
-    
+
     if (size_by == "significance") {
-        df$size <- df$significance
+      df$size <- df$significance
     }
     if (size_by == "genesets") {
-        df$size <- df$geneset
+      df$size <- df$geneset
     }
     # Order by significance value
-    df <- df[order(-df[,val]),]
-    
+    df <- df[order(-df[, val]), ]
+
     # Abbreviate labels
     label.abrv <- substr(df$label, 1, abrv)
     if (any(duplicated(label.abrv))) {
-        stop("Non-unique labels after abbreviating")
+      stop("Non-unique labels after abbreviating")
     } else {
-        df$label.abrv <- factor(label.abrv, levels=label.abrv)   
+      df$label.abrv <- factor(label.abrv, levels = label.abrv)
     }
     if (val == "pval") {
-        color.label <- "P-Value"
+      color.label <- "P-Value"
     }
     if (val == "fdr") {
-        color.label <- "FDR"
+      color.label <- "FDR"
     }
     p <- ggplot(df, aes(x = label.abrv, y = significance, color = significance, size = size)) +
       geom_point() +
       labs(title = title, y = color.label, color = color.label) +
-      scale_color_continuous(high = "#114357", low = "#E53935", trans = scales::log10_trans(), guide = guide_colorbar(reverse = TRUE)) + 
+      scale_color_continuous(high = "#114357", low = "#E53935", trans = scales::log10_trans(), guide = guide_colorbar(reverse = TRUE)) +
       coord_flip() +
       scale_y_continuous(trans = scales::log10_trans()) +
       geom_hline(yintercept = 0.05, linetype = "dotted") +
@@ -195,7 +199,7 @@
       p <- p + guides(size = "none")
     }
     if (size_by == "significance") {
-      #p <- p + scale_size_continuous(trans = .reverselog_trans(10)) + labs(size = "Significance")
+      # p <- p + scale_size_continuous(trans = .reverselog_trans(10)) + labs(size = "Significance")
       p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Significance")
     }
     if (size_by == "genesets") {
@@ -240,7 +244,7 @@ hyp_dots <- function(
     title="",
     merge=FALSE) 
 {
-  stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
+  stopifnot(methods::is(hyp_obj, "hyp") | methods::is(hyp_obj, "multihyp"))
 
   # Default arguments
   val <- match.arg(val)
