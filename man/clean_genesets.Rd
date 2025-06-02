@@ -13,7 +13,7 @@ clean_genesets(x)
 Clean labels of genesets
 }
 \examples{
-HALLMARK <- msigdb_download("Homo sapiens", "H", "")
+HALLMARK <- msigdb_download("Homo sapiens", "H")
 names(HALLMARK) <- clean_genesets(names(HALLMARK))
 head(names(HALLMARK))
 

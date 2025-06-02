@@ -5,7 +5,7 @@
 #' @return A reactable table
 #'
 #' @examples
-#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY")
 #'
 #' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'                "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",

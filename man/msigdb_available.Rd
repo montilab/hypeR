@@ -7,7 +7,7 @@
 msigdb_available(species = "Homo sapiens")
 }
 \arguments{
-\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}
+\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for available species)}
 }
 \value{
 A dataframe of available genesets

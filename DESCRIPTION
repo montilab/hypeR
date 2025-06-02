@@ -12,7 +12,7 @@ Depends: R (>= 3.6.0)
 License: GPL-3 + file LICENSE
 URL: https://github.com/montilab/hypeR
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 LazyData: false
 Imports:
     ggplot2,

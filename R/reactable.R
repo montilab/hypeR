@@ -8,7 +8,7 @@
 #' @param hyp_hmap_args A list of keyword arguments passed to hyp_hmap
 #' 
 #' @examples
-#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY")$genesets[1:5]
 #'
 #' signature <- c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502",
 #'               "PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC",
@@ -76,7 +76,7 @@ rctbl_hyp <- function(hyp,
 #' @param hyp_hmap_args A list of keyword arguments passed to hyp_hmap
 #' 
 #' @examples
-#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY")$genesets[1:5]
 #'
 #' experiment <- list("S1"=c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502"),
 #'                    "S2"=c("PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC"))
@@ -132,7 +132,7 @@ rctbl_mhyp <- function(mhyp,
 #' @param ... Arguments passed to table generators 
 #' 
 #' @examples
-#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+#' genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY")$genesets[1:5]
 #'
 #' experiment <- list("S1"=c("IDH3B","DLST","PCK2","CS","PDHB","PCK1","PDHA1","LOC642502"),
 #'                    "S2"=c("PDHA2","LOC283398","FH","SDHD","OGDH","SDHB","IDH3A","SDHC"))

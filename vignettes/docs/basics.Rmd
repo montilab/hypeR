@@ -60,7 +60,7 @@ reactable(limma)
 We'll also import the latest genesets from [Kegg](https://www.kegg.jp) using another set of functions provided by __hypeR__ for downloading and loading hundreds of open source genesets. 
 
 ```{r}
-genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY")
 ```
 
 See [Downloading Genesets](https://montilab.github.io/hypeR-docs/articles/docs/data.html) for more information.

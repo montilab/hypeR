@@ -42,7 +42,7 @@ msigdb_check_species <- function(species="") {
 
 #' Get msigdbr available genesets
 #'
-#' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)
+#' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for available species)
 #' @return A dataframe of available genesets
 #'
 #' @examples
@@ -60,10 +60,10 @@ msigdb_available <- function(species="Homo sapiens") {
     
     # Gene set categories
     msigdbr(species=species) %>%
-    dplyr::select(gs_cat, gs_subcat) %>%
+    dplyr::select(gs_collection, gs_subcollection) %>%
     unique() %>%
-    dplyr::arrange(gs_cat, gs_subcat) %>%
-    magrittr::set_colnames(c("Category", "Subcategory"))
+    dplyr::arrange(gs_collection, gs_subcollection) %>%
+    magrittr::set_colnames(c("Collection", "Subcollection"))
 }
 
 #' Print msigdb gsets information
@@ -96,7 +96,7 @@ msigdb_info <- function() {
     cat("|------------------------------------------------------------------|\n")
     cat("| Available Genesets                                               |\n")
     cat("|------------------------------------------------------------------|\n")
-    cat("| Category Subcategory | Description                               |\n")    
+    cat("| Collection Subcollection | Description                               |\n")    
     cat("|------------------------------------------------------------------|\n")
     cat("| C1                   | Positional                                |\n")
     cat("| C2 CGP               | Chemical and Genetic Perturbations        |\n")
@@ -122,30 +122,46 @@ msigdb_info <- function() {
 
 #' Download data from msigdb in the form of a named list
 #'
-#' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)
-#' @param category Geneset category (refer to ?msigdbr::msigdbr for avilable categories)
-#' @param subcategory Geneset subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)
+#' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for available species)
+#' @param collection Geneset collection (refer to ?msigdbr::msigdbr_collections for available categories)
+#' @param subcollection Geneset subcollection (refer to ?msigdbr::msigdbr_collections for available subcategories)
 #' @return A list of genesets
 #'
 #' @examples
-#' HALLMARK <- msigdb_download("Homo sapiens", "H", "")
+#' HALLMARK_HUMAN <- msigdb_download("Homo sapiens", "H")
+#' HALLMARK_MOUSE <- msigdb_download("Mus musculus", "MH")
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select
 #' @importFrom msigdbr msigdbr
 #' @export
-msigdb_download <- function(species, category, subcategory="") {
+msigdb_download <- function(species, collection, subcollection=NULL) {
     
     # Check species
     msigdb_check_species(species)
     
-    response <- msigdbr(species, category, subcategory)
+    if(species == "Homo sapiens") {
+      db_species = "HS"
+    } else if (species == "Mus musculus") {
+      db_species = "MM"
+    } else {
+      # For non-human species msigdb will use gene orthologs from the human database.
+      db_species == "HS"
+    }
+    
+    response <- msigdbr(species = species, 
+                        db_species = db_species, 
+                        collection = collection, 
+                        subcollection = subcollection)
     if (nrow(response) == 0) {
         stop("No data found: Please review available species and genesets\n", msigdb_info())
     }
     
     # Download genesets
-    mdf <- msigdbr(species, category, subcategory) %>%
+    mdf <- msigdbr(species = species, 
+                   collection = collection, 
+                   db_species = db_species, 
+                   subcollection = subcollection) %>%
         dplyr::select(gs_name, gene_symbol) %>%
         dplyr::distinct()
     
@@ -156,19 +172,20 @@ msigdb_download <- function(species, category, subcategory="") {
 
 #' Download data from msigdb in the form of a gsets object
 #'
-#' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)
-#' @param category Geneset category (refer to ?msigdbr::msigdbr for avilable categories)
-#' @param subcategory Geneset subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)
+#' @param species A species to determine gene symbols (refer to ?msigdbr::msigdbr_species for available species)
+#' @param collection Geneset collection (refer to ?msigdbr::msigdbr_collections for available categories)
+#' @param subcollection Geneset subcollection (refer to ?msigdbr::msigdbr_collections for available subcategories)
 #' @param clean Use true to clean labels of genesets
 #' @return A gsets object
 #'
 #' @examples
-#' HALLMARK <- msigdb_gsets("Homo sapiens", "H", "")
+#' HALLMARK_HUMAN <- msigdb_gsets("Homo sapiens", "H")
+#' HALLMARK_MOUSE <- msigdb_gsets("Mus musculus", "MH")
 #'
 #' @export
-msigdb_gsets <- function(species, category, subcategory="", clean=FALSE) {
-    genesets <- msigdb_download(species, category, subcategory)
-    name <- ifelse(subcategory == "", category, paste(category, subcategory, sep="."))
+msigdb_gsets <- function(species, collection, subcollection=NULL, clean=FALSE) {
+    genesets <- msigdb_download(species, collection, subcollection)
+    name <- ifelse(is.null(subcollection), collection, paste(collection, subcollection, sep="."))
     version <- msigdb_version()
     gsets$new(genesets, name=name, version=version, clean=clean)
 }

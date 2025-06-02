@@ -8,7 +8,7 @@
   multihyp_data,
   top = 20,
   abrv = 50,
-  size_by = c("genesets", "significance", "none"),
+  size_by = c("genesets", "significance", "overlap", "none"),
   pval_cutoff = 1,
   fdr_cutoff = 1,
   val = c("fdr", "pval"),

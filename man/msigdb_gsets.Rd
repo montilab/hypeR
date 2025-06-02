@@ -4,14 +4,14 @@
 \alias{msigdb_gsets}
 \title{Download data from msigdb in the form of a gsets object}
 \usage{
-msigdb_gsets(species, category, subcategory = "", clean = FALSE)
+msigdb_gsets(species, collection, subcollection = NULL, clean = FALSE)
 }
 \arguments{
-\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}
+\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr_species for available species)}
 
-\item{category}{Geneset category (refer to ?msigdbr::msigdbr for avilable categories)}
+\item{collection}{Geneset collection (refer to ?msigdbr::msigdbr_collections for available categories)}
 
-\item{subcategory}{Geneset subcategory (refer to ?msigdbr::msigdbr for avilable subcategories)}
+\item{subcollection}{Geneset subcollection (refer to ?msigdbr::msigdbr_collections for available subcategories)}
 
 \item{clean}{Use true to clean labels of genesets}
 }
@@ -22,6 +22,7 @@ A gsets object
 Download data from msigdb in the form of a gsets object
 }
 \examples{
-HALLMARK <- msigdb_gsets("Homo sapiens", "H", "")
+HALLMARK_HUMAN <- msigdb_gsets("Homo sapiens", "H")
+HALLMARK_MOUSE <- msigdb_gsets("Mus musculus", "MH")
 
 }

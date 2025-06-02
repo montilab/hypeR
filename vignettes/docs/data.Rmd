@@ -63,14 +63,14 @@ msigdb_info()
 Here we download the Hallmarks genesets...
 
 ```{r}
-HALLMARK <- msigdb_gsets(species="Homo sapiens", category="H")
+HALLMARK <- msigdb_gsets(species="Homo sapiens", collection="H")
 print(HALLMARK)
 ```
 
 We can also clean them up by removing the first leading common substring...
 
 ```{r}
-HALLMARK <- msigdb_gsets(species="Homo sapiens", category="H", clean=TRUE)
+HALLMARK <- msigdb_gsets(species="Homo sapiens", collection="H", clean=TRUE)
 print(HALLMARK)
 ```
 
@@ -83,9 +83,9 @@ hypeR(signature, genesets=HALLMARK)
 Other commonly used genesets include Biocarta, Kegg, and Reactome...
 
 ```{r}
-BIOCARTA <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:BIOCARTA")
-KEGG     <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:KEGG")
-REACTOME <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:REACTOME")
+BIOCARTA <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:BIOCARTA")
+KEGG     <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:KEGG_LEGACY")
+REACTOME <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:REACTOME")
 ```
 
 # Downloading **enrichr** Genesets
