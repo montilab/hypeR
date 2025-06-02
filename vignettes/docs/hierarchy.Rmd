@@ -126,7 +126,7 @@ Genesets are often redundant, hard to parse, and lack relational structure. Thus
 What if we want to use the KEGG genesets from MSigDB - but we want to organize them into a hierarchy?
 
 ```{r}
-gsets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+gsets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY", clean=TRUE)
 genesets <- gsets$genesets
 length(genesets)
 ```

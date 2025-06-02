@@ -3,7 +3,7 @@
 #' @param x A vector of labels
 #' 
 #' @examples
-#' HALLMARK <- msigdb_download("Homo sapiens", "H", "")
+#' HALLMARK <- msigdb_download("Homo sapiens", "H")
 #' names(HALLMARK) <- clean_genesets(names(HALLMARK))
 #' head(names(HALLMARK))
 #' 

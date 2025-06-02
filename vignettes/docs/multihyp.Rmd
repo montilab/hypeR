@@ -27,7 +27,7 @@ str(signatures)
 The signatures will be processed together...
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
-genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY", clean=TRUE)
 
 mhyp <- hypeR(signatures, genesets, test="hypergeometric", background=50000, fdr=0.05)
 ```

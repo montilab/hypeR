@@ -4,14 +4,20 @@
 \alias{msigdb_download}
 \title{Download data from msigdb in the form of a named list}
 \usage{
-msigdb_download(species, collection, subcollection = "")
+msigdb_download(species, collection, subcollection = NULL)
 }
 \arguments{
-\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for avilable species)}
+\item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for available species)}
 
+<<<<<<< HEAD
 \item{collection}{Geneset collection (previous argument "category" is deprecated. refer to ?msigdbr::msigdbr for avilable collections)}
 
 \item{subcollection}{Geneset subcollection (previous argument "subcategory" is deprecated. refer to ?msigdbr::msigdbr for avilable subcollections)}
+=======
+\item{collection}{Geneset collection (refer to ?msigdbr::msigdbr_collections for available categories)}
+
+\item{subcollection}{Geneset subcollection (refer to ?msigdbr::msigdbr_collections for available subcategories)}
+>>>>>>> 5fbf99e (msigdb updates)
 }
 \value{
 A list of genesets
@@ -20,6 +26,7 @@ A list of genesets
 Download data from msigdb in the form of a named list
 }
 \examples{
-HALLMARK <- msigdb_download("Homo sapiens", "H", "")
+HALLMARK_HUMAN <- msigdb_download("Homo sapiens", "H")
+HALLMARK_MOUSE <- msigdb_download("Mus musculus", "MH")
 
 }

@@ -108,7 +108,7 @@ test_that("Hypergeometric is working", {
 
 test_that("KS Test is working", {
 
-  genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG")$genesets[1:5]
+  genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY")$genesets[1:5]
   all_genes <- genesets %>% unlist(use.names = FALSE)
   genesets_names <- names(genesets)
 
