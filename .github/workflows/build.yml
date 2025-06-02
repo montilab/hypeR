@@ -4,9 +4,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: bioconductor/bioconductor_docker:RELEASE_3_12
+    container: bioconductor/bioconductor_docker:RELEASE_3_19
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
