@@ -108,7 +108,7 @@
     dplyr::filter(significance <= cutoff) %>%
     ggplot(aes(x=signature, y=label, color=significance, size=size)) +
     geom_point() +
-    scale_color_continuous(low="#114357", high="#E53935", trans=.reverselog_trans(10)) +
+    scale_color_continuous(high = "#114357", low = "#E53935", trans = scales::log10_trans(), guide = guide_colorbar(reverse = TRUE)) +
     labs(title=title, color=color.label) +  
     theme(plot.title=element_text(hjust=0.5),
           axis.title.y=element_blank(),
@@ -118,7 +118,7 @@
     if (size_by == "none") {
         p <- p + guides(size="none")
     } else if (size_by == "significance") {
-        p <- p + scale_size_continuous(trans=.reverselog_trans(10)) + labs(size="Significance")
+        p <- p + scale_size_continuous(trans=scales::log10_trans()) + labs(size="Significance")
     } else if (size_by == "genesets" ) {
         p <- p + scale_size_continuous(trans=scales::log10_trans()) + labs(size="Genesets\nSize")
     } else if (size_by == "overlap" ) {
