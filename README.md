@@ -17,7 +17,7 @@ Please visit <https://montilab.github.io/hypeR-docs/>
 
 You can also try out our
 [web-application](https://hyper-shiny.shinyapps.io/wapp/) if you prefer
-an interface\!
+an interface!
 
 ## Requirements
 
@@ -102,11 +102,11 @@ str(signatures)
 
 ``` r
 # Access to hundreds of genesets
-genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY", clean=TRUE)
 print(genesets)
 ```
 
-    #> C2.CP:KEGG v7.4.1 
+    #> C2.CP:KEGG_LEGACY v24.1.0 
     #> Abc Transporters (44)
     #> Acute Myeloid Leukemia (57)
     #> Adherens Junction (73)
@@ -175,9 +175,9 @@ for detailed functionality. Below is a brief list of some methods.
 ##### Downloading genesets
 
 ``` r
-BIOCARTA <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:BIOCARTA")
-KEGG     <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:KEGG")
-REACTOME <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:REACTOME")
+BIOCARTA <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:BIOCARTA")
+KEGG     <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:KEGG_LEGACY")
+REACTOME <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:REACTOME")
 ```
 
 ##### Visualize results
@@ -218,16 +218,16 @@ hyp_to_rmd(hyp_obj,
 
 ## Related Repositories
 
-  - [hypeR-db](https://github.com/montilab/hypeR-db) *A repository for
-    commonly used open source genesets used by hypeR*
-  - [hypeR-shiny](https://github.com/montilab/hypeR-shiny) *Our Shiny
-    web application built on hypeR*
-  - [hypeR-modules](https://github.com/montilab/hypeR-modules)
-    *Integration of hypeR modules in custom Shiny applications*
-  - [hypeR-docs](https://github.com/montilab/hypeR-docs) *Landing site
-    for hosting documentation for hypeR*
-  - [hypeR-workshop](https://github.com/montilab/hypeR-workshop)
-    *Materials for a hypeR tutorial workshop*
+- [hypeR-db](https://github.com/montilab/hypeR-db) *A repository for
+  commonly used open source genesets used by hypeR*
+- [hypeR-shiny](https://github.com/montilab/hypeR-shiny) *Our Shiny web
+  application built on hypeR*
+- [hypeR-modules](https://github.com/montilab/hypeR-modules)
+  *Integration of hypeR modules in custom Shiny applications*
+- [hypeR-docs](https://github.com/montilab/hypeR-docs) *Landing site for
+  hosting documentation for hypeR*
+- [hypeR-workshop](https://github.com/montilab/hypeR-workshop)
+  *Materials for a hypeR tutorial workshop*
 
 ## Cite
 
@@ -235,7 +235,6 @@ hyp_to_rmd(hyp_obj,
 citation("hypeR")
 ```
 
-    #> 
     #> To cite hypeR in publications use:
     #> 
     #>   Federico, A. & Monti, S. hypeR: an R package for geneset enrichment

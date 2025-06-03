@@ -77,7 +77,7 @@ signatures <- wgcna[[1]]
 str(signatures)
 
 # Access to hundreds of genesets
-genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY", clean=TRUE)
 print(genesets)
 ```
 
@@ -124,9 +124,9 @@ Please visit the [documentation](https://montilab.github.io/hypeR-docs/) for det
 
 ##### Downloading genesets
 ```{r, eval=FALSE}
-BIOCARTA <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:BIOCARTA")
-KEGG     <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:KEGG")
-REACTOME <- msigdb_gsets(species="Homo sapiens", category="C2", subcategory="CP:REACTOME")
+BIOCARTA <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:BIOCARTA")
+KEGG     <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:KEGG_LEGACY")
+REACTOME <- msigdb_gsets(species="Homo sapiens", collection="C2", subcollection="CP:REACTOME")
 ```
 
 ##### Visualize results
