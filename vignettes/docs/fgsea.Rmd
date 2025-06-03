@@ -38,7 +38,7 @@ tail(signature)
 We will also need some genesets...
 
 ```{r}
-genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG", clean=TRUE)
+genesets <- msigdb_gsets("Homo sapiens", "C2", "CP:KEGG_LEGACY", clean=TRUE)
 ```
 
 #### Wrapper function
