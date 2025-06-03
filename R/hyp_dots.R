@@ -81,7 +81,6 @@
   #    significance < .Machine$double.eps, .Machine$double.base, significance)
   # )
   if (size_by == "significance") {
-    df.melted$size <- df.melted$significance
   }
   if (size_by == "genesets") {
     geneset.sizes <- lapply(multihyp_data, function(hyp_obj) {
@@ -99,7 +98,7 @@
     dplyr::filter(significance <= cutoff) %>%
     ggplot(aes(x = signature, y = label, color = significance, size = size)) +
     geom_point() +
-    scale_color_continuous(high = "#114357", low = "#E53935", trans = scales::log10_trans(), guide = guide_colorbar(reverse = TRUE)) + 
+    scale_color_continuous(high = "#114357", low = "#E53935", trans = scales::log10_trans(), guide = guide_colorbar(reverse = TRUE)) +
     labs(title = title, color = color.label) +
     theme(
       plot.title = element_text(hjust = 0.5),
