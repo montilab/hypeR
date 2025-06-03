@@ -33,7 +33,8 @@ Imports:
     rmarkdown,
     igraph,
     visNetwork,
-    shiny
+    shiny,
+    BiocStyle
 Suggests:
     tidyverse,
     devtools,

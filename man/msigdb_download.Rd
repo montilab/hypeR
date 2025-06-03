@@ -9,15 +9,9 @@ msigdb_download(species, collection, subcollection = NULL)
 \arguments{
 \item{species}{A species to determine gene symbols (refer to ?msigdbr::msigdbr for available species)}
 
-<<<<<<< HEAD
-\item{collection}{Geneset collection (previous argument "category" is deprecated. refer to ?msigdbr::msigdbr for avilable collections)}
-
-\item{subcollection}{Geneset subcollection (previous argument "subcategory" is deprecated. refer to ?msigdbr::msigdbr for avilable subcollections)}
-=======
 \item{collection}{Geneset collection (refer to ?msigdbr::msigdbr_collections for available categories)}
 
 \item{subcollection}{Geneset subcollection (refer to ?msigdbr::msigdbr_collections for available subcategories)}
->>>>>>> 5fbf99e (msigdb updates)
 }
 \value{
 A list of genesets

@@ -36,15 +36,15 @@ hyp_obj <- hyp$new(data, args=args)
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{hyp$new()}}
-\item \href{#method-print}{\code{hyp$print()}}
-\item \href{#method-as.data.frame}{\code{hyp$as.data.frame()}}
-\item \href{#method-clone}{\code{hyp$clone()}}
+\item \href{#method-hyp-new}{\code{hyp$new()}}
+\item \href{#method-hyp-print}{\code{hyp$print()}}
+\item \href{#method-hyp-as.data.frame}{\code{hyp$as.data.frame()}}
+\item \href{#method-hyp-clone}{\code{hyp$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-hyp-new"></a>}}
+\if{latex}{\out{\hypertarget{method-hyp-new}{}}}
 \subsection{Method \code{new()}}{
 Create a hyp object
 \subsection{Usage}{
@@ -69,8 +69,8 @@ A new hyp object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-hyp-print"></a>}}
+\if{latex}{\out{\hypertarget{method-hyp-print}{}}}
 \subsection{Method \code{print()}}{
 Print hyp obect
 \subsection{Usage}{
@@ -82,8 +82,8 @@ NULL
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-as.data.frame"></a>}}
-\if{latex}{\out{\hypertarget{method-as.data.frame}{}}}
+\if{html}{\out{<a id="method-hyp-as.data.frame"></a>}}
+\if{latex}{\out{\hypertarget{method-hyp-as.data.frame}{}}}
 \subsection{Method \code{as.data.frame()}}{
 Extract dataframe from hyp obect
 \subsection{Usage}{
@@ -95,8 +95,8 @@ NULL
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-hyp-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-hyp-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
