@@ -81,6 +81,7 @@
   #    significance < .Machine$double.eps, .Machine$double.base, significance)
   # )
   if (size_by == "significance") {
+    df.melted$size <- df.melted$significance
   }
   if (size_by == "genesets") {
     geneset.sizes <- lapply(multihyp_data, function(hyp_obj) {
