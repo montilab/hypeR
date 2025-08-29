@@ -76,10 +76,10 @@
   df.melted$size <- 1
   
   ## threshold zero p-values/fdr 
-  # df.melted <- df.melted %>%
-  #    dplyr::mutate(significance = ifelse(
-  #    significance < .Machine$double.eps, .Machine$double.base, significance)
-  # )
+  df.melted <- df.melted %>%
+    dplyr::mutate(significance = ifelse(
+      significance < .Machine$double.eps, .Machine$double.eps, significance)
+    )
   if (size_by == "significance") {
     df.melted$size <- df.melted$significance
   }
