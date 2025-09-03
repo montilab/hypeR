@@ -1,4 +1,4 @@
-#' Shiny interface module for geneset selection
+#' Shiny interface module for geneset selection upd
 #' 
 #' @param id A unique namespace identifier
 #' @return Shiny ui elements
@@ -58,8 +58,21 @@ genesets_Server <- function(id, clean=FALSE) {
                 validate(need(input$species, message=FALSE))
                 validate(need(input$genesets, message=FALSE))
                 if (input$db == "msigdb") {
-                    kwargs <- genesets[[input$db]][[input$species]][[input$genesets]]
-                    gs <- do.call(msigdb_download, kwargs)
+                  metadata <- genesets[[input$db]][[input$species]][[input$genesets]]
+                  
+                  # Assuming metadata includes: category, subcategory (optional), species, version
+                  category <- metadata$category
+                  subcategory <- metadata$subcategory
+                  species <- input$species
+                  version <- metadata$version %||% "latest"  # use rlang::`%||%` or define fallback
+                  
+                  # msigdb_download likely now needs at least: category, subcategory, species
+                  gs <- msigdb_download(
+                    category = category,
+                    subcategory = subcategory,
+                    species = species,
+                    version = version
+                  )
                 }   
                 else if (input$db == "enrichr") {
                     kwargs <- genesets[[input$db]][[input$species]][[input$genesets]]
@@ -76,12 +89,13 @@ genesets_Server <- function(id, clean=FALSE) {
             
             # Check status of loaded genesets
             output$status <- renderUI({
-                if (is.null(reactive.genesets())) {
-                    icon("times-circle fa-lg", lib="font-awesome")
-                } else {
-                    ic <- icon("check-circle fa-lg", lib="font-awesome")
-                }
+              if (is.null(reactive.genesets())) {
+                icon("times-circle", lib = "font-awesome", class = "fa-lg")
+              } else {
+                icon("check-circle", lib = "font-awesome", class = "fa-lg")
+              }
             })
+            
             
             return(reactive.genesets)
         }
