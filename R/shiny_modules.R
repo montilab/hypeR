@@ -67,6 +67,10 @@ genesets_Server <- function(id, clean = FALSE) {
           # Correct argument names for msigdb_download
           collection <- metadata$collection %||% metadata$category
           subcollection <- metadata$subcollection %||% metadata$subcategory
+          if (is.character(subcollection) && nchar(subcollection) == 0) {
+            subcollection <- NULL
+          }
+          
           species <- input$species
           
           # Correct usage
