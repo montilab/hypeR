@@ -22,82 +22,83 @@ genesets_UI <- function(id) {
 #' Shiny server module for geneset selection
 #' 
 #' @param id A unique namespace identifier matching to interface
-#' @param clean Use true to clean geneset names
-#' @return Shiny server code
+#' @param clean Use TRUE to clean geneset names
+#' @return A reactive genesets list
 #'
 #' @importFrom shiny moduleServer renderUI validate need icon selectizeInput eventReactive
 #' 
 #' @export
-genesets_Server <- function(id, clean=FALSE) {
-    genesets <- readRDS(file.path(system.file("extdata", package="hypeR"), "genesets.rds"))
-    
-    moduleServer(
-        id,
-        function(input, output, session) {
-            
-            # Build species selection
-            output$species <- renderUI({
-                ns <- session$ns
-                validate(need(input$db, message=FALSE))
-                choices <- names(genesets[[input$db]])
-                selectizeInput(ns("species"), label="Species", choices=choices)
-            })
-            
-            # Build genesets selection
-            output$genesets <- renderUI({
-                ns <- session$ns
-                validate(need(input$db, message=FALSE))
-                validate(need(input$species, message=FALSE))
-                choices <- names(genesets[[input$db]][[input$species]])
-                selectizeInput(ns("genesets"), label="Genesets", choices=choices)
-            })
-            
-            # Download selected geneset and put into a reactive expression
-            reactive.genesets <- eventReactive(input$fetch, {
-                validate(need(input$db, message=FALSE))
-                validate(need(input$species, message=FALSE))
-                validate(need(input$genesets, message=FALSE))
-                if (input$db == "msigdb") {
-                  metadata <- genesets[[input$db]][[input$species]][[input$genesets]]
-                  
-                  # Assuming metadata includes: category, subcategory (optional), species, version
-                  category <- metadata$category
-                  subcategory <- metadata$subcategory
-                  species <- input$species
-                  version <- metadata$version %||% "latest"  # use rlang::`%||%` or define fallback
-                  
-                  # msigdb_download likely now needs at least: category, subcategory, species
-                  gs <- msigdb_download(
-                    category = category,
-                    subcategory = subcategory,
-                    species = species,
-                    version = version
-                  )
-                }   
-                else if (input$db == "enrichr") {
-                    kwargs <- genesets[[input$db]][[input$species]][[input$genesets]]
-                    gs <- do.call(enrichr_download, kwargs)
-                }
-                else {
-                    gs <- NULL
-                }
-                if (!is.null(gs) & clean) {
-                    names(gs) <- clean_genesets(names(gs))
-                }
-                return(gs)
-            })
-            
-            # Check status of loaded genesets
-            output$status <- renderUI({
-              if (is.null(reactive.genesets())) {
-                icon("times-circle", lib = "font-awesome", class = "fa-lg")
-              } else {
-                icon("check-circle", lib = "font-awesome", class = "fa-lg")
-              }
-            })
-            
-            
-            return(reactive.genesets)
+genesets_Server <- function(id, clean = FALSE) {
+  # Load the genesets metadata (pre-generated list of options)
+  genesets <- readRDS(file.path(system.file("extdata", package = "hypeR"), "genesets.rds"))
+  
+  moduleServer(
+    id,
+    function(input, output, session) {
+      
+      # Build species selection dropdown
+      output$species <- renderUI({
+        ns <- session$ns
+        validate(need(input$db, message = FALSE))
+        choices <- names(genesets[[input$db]])
+        selectizeInput(ns("species"), label = "Species", choices = choices)
+      })
+      
+      # Build genesets selection dropdown
+      output$genesets <- renderUI({
+        ns <- session$ns
+        validate(need(input$db, message = FALSE))
+        validate(need(input$species, message = FALSE))
+        choices <- names(genesets[[input$db]][[input$species]])
+        selectizeInput(ns("genesets"), label = "Genesets", choices = choices)
+      })
+      
+      # Download selected geneset and put into a reactive expression
+      reactive.genesets <- eventReactive(input$fetch, {
+        validate(need(input$db, message = FALSE))
+        validate(need(input$species, message = FALSE))
+        validate(need(input$genesets, message = FALSE))
+        
+        gs <- NULL  # default value
+        
+        if (input$db == "msigdb") {
+          metadata <- genesets[[input$db]][[input$species]][[input$genesets]]
+          
+          # Correct argument names for msigdb_download
+          collection <- metadata$collection %||% metadata$category
+          subcollection <- metadata$subcollection %||% metadata$subcategory
+          species <- input$species
+          
+          # Correct usage
+          gs <- msigdb_download(
+            species = species,
+            collection = collection,
+            subcollection = subcollection
+          )
+          
+        } else if (input$db == "enrichr") {
+          metadata <- genesets[[input$db]][[input$species]][[input$genesets]]
+          gs <- do.call(enrichr_download, metadata)
         }
-    )
+        
+        # Optional cleaning
+        if (!is.null(gs) && clean) {
+          names(gs) <- clean_genesets(names(gs))
+        }
+        
+        return(gs)
+      })
+      
+      # Check status of loaded genesets and show an icon
+      output$status <- renderUI({
+        if (is.null(reactive.genesets())) {
+          icon("times-circle", lib = "font-awesome", class = "fa-lg", style = "color: red;")
+        } else {
+          icon("check-circle", lib = "font-awesome", class = "fa-lg", style = "color: green;")
+        }
+      })
+      
+      return(reactive.genesets)
+    }
+  )
 }
