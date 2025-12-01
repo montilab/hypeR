@@ -104,6 +104,8 @@
 #' @param plotting Use true to generate plot
 #' @return A list of data and plots
 #' 
+#' @importFrom tibble remove_rownames
+#' 
 #' @keywords internal
 .ks_enrichment <- function(
     signature,
