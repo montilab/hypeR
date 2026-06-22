@@ -113,6 +113,10 @@
     p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Significance")
   } else if (size_by == "genesets") {
     p <- p + scale_size_continuous(trans = scales::log10_trans()) + labs(size = "Genesets\nSize")
+  } else if (size_by == "overlap" ) {
+    p <- p + scale_size_continuous(trans=scales::log10_trans()) + labs(size="Overlap\nSize")
+  } else {
+    stop("unrecognized 'size_by':", size_by)
   }
   return(p)
 }
@@ -160,6 +164,11 @@
     }
     # Plotting variables
     df$significance <- df[, val]
+    ## threshold zero p-values/fdr 
+    df <- df |>
+      dplyr::mutate(significance = ifelse(
+        significance < .Machine$double.eps, .Machine$double.eps, significance)
+      )
     df$size <- 1
 
     if (size_by == "significance") {
