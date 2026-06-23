@@ -1,4 +1,5 @@
 hyp_emap_tests <- function(hyp_obj, return_obj=FALSE) {
+    expect_silent(hyp_emap(hyp_obj, top=NULL))
     expect_silent(hyp_emap(hyp_obj, top=5))
     expect_silent(hyp_emap(hyp_obj, val="pval", top=10))
     expect_silent(hyp_emap(hyp_obj, val="fdr", top=10))
