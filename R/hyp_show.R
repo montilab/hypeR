@@ -32,7 +32,7 @@ hyp_show <- function(hyp_obj, simple=FALSE) {
     cols[lower_cols == "es"] <- "ES"
     cols[lower_cols == "pval"] <- "P-Value"
     cols[lower_cols == "fdr"] <- "FDR"
-    remaining <- !(cols %in% c("Label", "ES", "P-Value", "FDR"))
+    remaining <- !(lower_cols %in% c("label", "es", "pval", "fdr"))
     cols[remaining] <- str_to_title(cols[remaining])
     colnames(df) <- cols
 
