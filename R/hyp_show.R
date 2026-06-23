@@ -32,7 +32,8 @@ hyp_show <- function(hyp_obj, simple=FALSE) {
     cols[lower_cols == "es"] <- "ES"
     cols[lower_cols == "pval"] <- "P-Value"
     cols[lower_cols == "fdr"] <- "FDR"
-    cols <- ifelse(cols %in% c("Label", "ES", "P-Value", "FDR"), cols, str_to_title(cols))
+    remaining <- !(cols %in% c("Label", "ES", "P-Value", "FDR"))
+    cols[remaining] <- str_to_title(cols[remaining])
     colnames(df) <- cols
 
     cols <- if(simple) c(1,2,3) else seq_len(ncol(df))
