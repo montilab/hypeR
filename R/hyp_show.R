@@ -27,10 +27,11 @@ hyp_show <- function(hyp_obj, simple=FALSE) {
 
     # Pretty column names
     cols <- colnames(df)
-    cols[tolower(cols) == "label"] <- "Label"
-    cols[tolower(cols) == "es"] <- "ES"
-    cols[tolower(cols) == "pval"] <- "P-Value"
-    cols[tolower(cols) == "fdr"] <- "FDR"
+    lower_cols <- tolower(cols)
+    cols[lower_cols == "label"] <- "Label"
+    cols[lower_cols == "es"] <- "ES"
+    cols[lower_cols == "pval"] <- "P-Value"
+    cols[lower_cols == "fdr"] <- "FDR"
     cols <- ifelse(cols %in% c("Label", "ES", "P-Value", "FDR"), cols, str_to_title(cols))
     colnames(df) <- cols
 
