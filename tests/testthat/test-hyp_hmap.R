@@ -1,4 +1,5 @@
 hyp_hmap_tests <- function(hyp_obj, return_obj=FALSE) {
+    expect_silent(hyp_hmap(hyp_obj, top=NULL))
     expect_silent(hyp_hmap(hyp_obj, top=5))
     expect_silent(hyp_hmap(hyp_obj, val="pval", top=10))
     expect_silent(hyp_hmap(hyp_obj, val="fdr", top=10))
@@ -51,4 +52,3 @@ test_that("hyp_hmap() is working", {
     expect_equal(names(p), c("Signature 1", "Signature 2", "Signature 3"))
     expect_is(p[["Signature 3"]], "visNetwork")
 })
-
