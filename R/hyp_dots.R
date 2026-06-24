@@ -75,6 +75,12 @@
     
     df.melted <- reshape2::melt(as.matrix(df))
     colnames(df.melted) <- c("label", "signature", "significance")
+    
+    ## threshold zero p-values/fdr 
+    df.melted <- df.melted %>%
+      dplyr::mutate(significance = ifelse(
+        significance < .Machine$double.eps, .Machine$double.eps, significance)
+      )
     df.melted$size <- 1
     
     if (size_by == "significance") {
@@ -172,6 +178,11 @@
 
     # Plotting variables
     df$significance <- df[,val]
+    
+    # threshold zero p-values/fdr 
+    df$significance <- ifelse(
+      df$significance < .Machine$double.eps, .Machine$double.eps, df$significance)
+
     df$size <- 1
     
     if (size_by == "significance") {
