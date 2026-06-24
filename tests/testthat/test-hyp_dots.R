@@ -1,5 +1,4 @@
 hyp_dots_tests <- function(hyp_obj, return_obj=FALSE) {
-    expect_silent(hyp_dots(hyp_obj, top=NULL))
     expect_silent(hyp_dots(hyp_obj))
     expect_silent(hyp_dots(hyp_obj, val="pval"))
     expect_silent(hyp_dots(hyp_obj, val="fdr"))

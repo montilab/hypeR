@@ -75,12 +75,6 @@
     
     df.melted <- reshape2::melt(as.matrix(df))
     colnames(df.melted) <- c("label", "signature", "significance")
-    
-    ## threshold zero p-values/fdr 
-    df.melted <- df.melted %>%
-      dplyr::mutate(significance = ifelse(
-        significance < .Machine$double.eps, .Machine$double.eps, significance)
-      )
     df.melted$size <- 1
     
     if (size_by == "significance") {
@@ -147,6 +141,7 @@
 #' @param title Plot title
 #' @return A ggplot object
 #'
+#' @importFrom purrr when
 #' @importFrom dplyr filter
 #' @importFrom scales log10_trans
 #' @importFrom ggplot2 ggplot aes geom_point labs scale_color_continuous scale_y_continuous guide_colorbar coord_flip geom_hline guides theme element_text element_blank
@@ -168,21 +163,14 @@
     # Subset results
     df <- hyp_df %>%
           dplyr::filter(pval <= pval_cutoff) %>%
-          dplyr::filter(fdr <= fdr_cutoff)
-    if (!is.null(top)) {
-        df <- head(df, top)
-    }
+          dplyr::filter(fdr <= fdr_cutoff) %>%
+          purrr::when(!is.null(top) ~ head(., top), ~ .)
 
     # Handle empty dataframes
     if (nrow(df) == 0) return(ggempty())
 
     # Plotting variables
     df$significance <- df[,val]
-    
-    # threshold zero p-values/fdr 
-    df$significance <- ifelse(
-      df$significance < .Machine$double.eps, .Machine$double.eps, df$significance)
-
     df$size <- 1
     
     if (size_by == "significance") {

@@ -10,6 +10,7 @@
 #' @param graph Return an igraph object instead
 #' @return A visNetwork object
 #'
+#' @importFrom purrr when
 #' @importFrom dplyr filter
 #' @importFrom igraph graph_from_data_frame set_vertex_attr as_ids V E
 #' @importFrom visNetwork visNetwork visNodes visEdges visOptions visInteraction visIgraphLayout
@@ -27,10 +28,8 @@
     # Subset results
     hyp_df <- hyp_df %>%
               dplyr::filter(pval <= pval_cutoff) %>%
-              dplyr::filter(fdr <= fdr_cutoff)
-    if (!is.null(top)) {
-        hyp_df <- head(hyp_df, top)
-    }
+              dplyr::filter(fdr <= fdr_cutoff) %>%
+              purrr::when(!is.null(top) ~ head(., top), ~ .)
         
     # Handle empty dataframes
     if (nrow(hyp_df) == 0) return(NULL)
