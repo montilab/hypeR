@@ -92,6 +92,20 @@ test_that("Hypergeometric is working", {
     expect_equal(filter(hyp_obj$data, label == "G1") %>% pull(pval), fisher(s, gs$G1, length(bg)))
     expect_equal(filter(hyp_obj$data, label == "G2") %>% pull(pval), fisher(s, gs$G2, length(bg)))
     expect_equal(filter(hyp_obj$data, label == "G3") %>% pull(pval), fisher(s, gs$G3, length(bg)))
+    expect_equal(
+        filter(hyp_obj$data, label == "G1") %>% pull(hits),
+        paste0("\"", s, "\"", collapse=",")
+    )
+    comma_name <- "5alpha-pregnan-3beta,20alpha-diol disulfate"
+    hyp_obj_comma <- hypeR(
+        c(comma_name, "B"),
+        list(GX=c(comma_name, "B", "C")),
+        background=length(bg)
+    )
+    expect_equal(
+        filter(hyp_obj_comma$data, label == "GX") %>% pull(hits),
+        paste0("\"", c(comma_name, "B"), "\"", collapse=",")
+    )
     
     # Hypergeometric - Restrict Genesets to Background
     hyp_obj <- hypeR(s, gs, background=bg[1:18])
@@ -115,23 +129,20 @@ test_that("KS Test is working", {
   # Geneset 1 is top skewed
   experiment <- c(head(genesets[[1]], 5), LETTERS, tail(genesets[[1]], 1))
   hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
-  #expect_equal(hyp_obj$data[genesets_names[[1]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[1]][1:5], "'",collapse=","))
   expect_equal(filter(hyp_obj$data, label == genesets_names[[1]]) %>% dplyr::pull(hits) %>% unname(), 
-               paste(genesets[[1]][1:5], collapse = " , "))
+               paste0("\"", genesets[[1]][1:5], "\"", collapse = ","))
   
   # Geneset 2 is mixed
   experiment <- c(head(genesets[[2]], 8), LETTERS, tail(genesets[[2]], 10))
   hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
-  #expect_equal(hyp_obj$data[genesets_names[[2]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[2]][1:8], "'",collapse=","))
   expect_equal(filter(hyp_obj$data, label == genesets_names[[2]]) %>% dplyr::pull(hits) %>% unname(), 
-               paste(genesets[[2]][1:8], collapse = " , "))
+               paste0("\"", genesets[[2]][1:8], "\"", collapse = ","))
   
   # Geneset 3 is bottom skewed
   experiment <- c(head(genesets[[3]], 1), LETTERS, tail(genesets[[3]], 8))
   hyp_obj <- hypeR(experiment, genesets, background=2522, test="kstest")
-  #expect_equal(hyp_obj$data[genesets_names[[3]], "hits"] %>% unlist(use.names=FALSE), paste0("'", genesets[[3]][1], "'",collapse=","))
   expect_equal(filter(hyp_obj$data, label == genesets_names[[3]]) %>% dplyr::pull(hits) %>% unname(), 
-               paste(genesets[[3]][1], collapse = " , "))
+               paste0("\"", genesets[[3]][1], "\"", collapse = ","))
 })
 
 test_that("hypeR() is working", {
