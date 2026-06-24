@@ -75,6 +75,9 @@
     
     df.melted <- reshape2::melt(as.matrix(df))
     colnames(df.melted) <- c("label", "signature", "significance")
+    df.melted$significance <- ifelse(df.melted$significance < .Machine$double.eps,
+                                      .Machine$double.eps,
+                                      df.melted$significance)
     df.melted$size <- 1
     
     if (size_by == "significance") {
@@ -172,6 +175,9 @@
 
     # Plotting variables
     df$significance <- df[,val]
+    df$significance <- ifelse(df$significance < .Machine$double.eps,
+                              .Machine$double.eps,
+                              df$significance)
     df$size <- 1
     
     if (size_by == "significance") {
