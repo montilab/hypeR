@@ -83,3 +83,4 @@ rsconnect/
 .Rproj.user
 .Rprofile
 renv/activate.R
+.positai

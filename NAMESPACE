@@ -119,3 +119,4 @@ importFrom(visNetwork,visInteraction)
 importFrom(visNetwork,visNetwork)
 importFrom(visNetwork,visNodes)
 importFrom(visNetwork,visOptions)
+

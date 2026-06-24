@@ -14,3 +14,5 @@
 ^README_files$
 ^\.travis\.yml$
 ^Dockerfile
+^\.positai$
+^\.claude$
