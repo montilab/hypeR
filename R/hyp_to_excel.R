@@ -43,7 +43,9 @@ hyp_to_excel <- function(hyp_obj, file_path, cols=NULL, pval=1, fdr=1, versionin
         # Extract hyp dataframe
         hyp_obj <- multihyp_obj$data[[i]]
         df <- hyp_obj$data
-        df <- df[df$pval <= pval & df$fdr <= fdr, , drop=FALSE]
+        pval_cutoff <- pval
+        fdr_cutoff <- fdr
+        df <- dplyr::filter(df, pval <= pval_cutoff, fdr <= fdr_cutoff)
 
         if (is.null(cols)) {
             cols <- seq_len(ncol(df))
