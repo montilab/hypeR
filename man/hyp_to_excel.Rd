@@ -4,7 +4,7 @@
 \alias{hyp_to_excel}
 \title{Export hyp/multihyp object to excel}
 \usage{
-hyp_to_excel(hyp_obj, file_path, cols = NULL, versioning = TRUE)
+hyp_to_excel(hyp_obj, file_path, cols = NULL, pval = 1, fdr = 1, versioning = TRUE)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
@@ -12,6 +12,10 @@ hyp_to_excel(hyp_obj, file_path, cols = NULL, versioning = TRUE)
 \item{file_path}{A file path}
 
 \item{cols}{Dataframe columns to include}
+
+\item{pval}{Filter results to p-values less than or equal to this cutoff}
+
+\item{fdr}{Filter results to FDR values less than or equal to this cutoff}
 
 \item{versioning}{Add sheet with versioning information}
 }

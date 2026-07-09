@@ -3,6 +3,8 @@
 #' @param hyp_obj A hyp or multihyp object
 #' @param file_path A file path
 #' @param cols Dataframe columns to include
+#' @param pval Filter results to p-values less than or equal to this cutoff
+#' @param fdr Filter results to FDR values less than or equal to this cutoff
 #' @param versioning Add sheet with versioning information
 #' @return NULL
 #'
@@ -20,7 +22,7 @@
 #' @importFrom openxlsx createWorkbook addWorksheet writeData saveWorkbook
 #' 
 #' @export
-hyp_to_excel <- function(hyp_obj, file_path, cols=NULL, versioning=TRUE) {
+hyp_to_excel <- function(hyp_obj, file_path, cols=NULL, pval=1, fdr=1, versioning=TRUE) {
     
     stopifnot(is(hyp_obj, "hyp") | is(hyp_obj, "multihyp"))
 
@@ -41,6 +43,9 @@ hyp_to_excel <- function(hyp_obj, file_path, cols=NULL, versioning=TRUE) {
         # Extract hyp dataframe
         hyp_obj <- multihyp_obj$data[[i]]
         df <- hyp_obj$data
+        pval_cutoff <- pval
+        fdr_cutoff <- fdr
+        df <- dplyr::filter(df, pval <= pval_cutoff, fdr <= fdr_cutoff)
 
         if (is.null(cols)) {
             cols <- seq_len(ncol(df))
