@@ -26,16 +26,27 @@ hyp_show <- function(hyp_obj, simple=FALSE) {
     df <- hyp_obj$data
 
     # Pretty column names
-    colnames(df) <- c("Label", "P-Value", "FDR", str_to_title(colnames(df)[4:ncol(df)]))
+    col_names <- colnames(df)
+    fixed_cols <- c("label", "es", "pval", "fdr")
+    lower_cols <- tolower(col_names)
+    col_names[lower_cols == "label"] <- "Label"
+    col_names[lower_cols == "es"] <- "ES"
+    col_names[lower_cols == "pval"] <- "P-Value"
+    col_names[lower_cols == "fdr"] <- "FDR"
+    remaining <- !(lower_cols %in% fixed_cols)
+    col_names[remaining] <- str_to_title(col_names[remaining])
+    colnames(df) <- col_names
 
     cols <- if(simple) c(1,2,3) else seq_len(ncol(df))
-
-    reactable(data=df[,cols,drop=FALSE],
-              searchable=TRUE,
-              compact=TRUE, 
-              fullWidth=TRUE,
-              defaultPageSize=15,
-              pageSizeOptions=c(15, 25, 50, 100),
-              striped=TRUE,
-              showPageSizeOptions=TRUE)
+    table_data <- df[, cols, drop=FALSE]
+    table <- reactable(data=table_data,
+                       searchable=TRUE,
+                       compact=TRUE, 
+                       fullWidth=TRUE,
+                       defaultPageSize=15,
+                       pageSizeOptions=c(15, 25, 50, 100),
+                       striped=TRUE,
+                       showPageSizeOptions=TRUE)
+    table$data <- table_data
+    table
 }
