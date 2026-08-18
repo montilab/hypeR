@@ -1,6 +1,6 @@
 Package: hypeR
 Title: An R Package For Geneset Enrichment Workflows
-Version: 2.8.2
+Version: 2.11.1
 Authors@R: c(person(given="Anthony", family="Federico", email="anfed@bu.edu", 
              role=c("aut")),
              person(given="Andrew", family="Chen", email="andrewdr@bu.edu", 
