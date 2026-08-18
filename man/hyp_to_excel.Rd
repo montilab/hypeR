@@ -4,7 +4,14 @@
 \alias{hyp_to_excel}
 \title{Export hyp/multihyp object to excel}
 \usage{
-hyp_to_excel(hyp_obj, file_path, cols = NULL, pval = 1, fdr = 1, versioning = TRUE)
+hyp_to_excel(
+  hyp_obj,
+  file_path,
+  cols = NULL,
+  pval = 1,
+  fdr = 1,
+  versioning = TRUE
+)
 }
 \arguments{
 \item{hyp_obj}{A hyp or multihyp object}
