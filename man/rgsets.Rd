@@ -14,6 +14,19 @@ A relational genesets object
 \code{gsets}
 }
 
+\examples{
+genesets <- list("GSET1" = c("GENE1","GENE2","GENE3"),
+                 "GSET2" = c("GENE4","GENE5","GENE6"))
+
+nodes <- data.frame(label=c("GSET1","GSET2","PARENT"),
+                    row.names=c("N1","N2","N3"))
+
+edges <- data.frame(from=c("N3","N3"), to=c("N1","N2"))
+
+rgsets_obj <- rgsets$new(genesets, nodes, edges, name="example", version="v1.0")
+print(rgsets_obj)
+
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

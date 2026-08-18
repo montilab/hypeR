@@ -1,8 +1,21 @@
 #' @title A relational genesets object
+#'
+#' @examples
+#' genesets <- list("GSET1" = c("GENE1","GENE2","GENE3"),
+#'                  "GSET2" = c("GENE4","GENE5","GENE6"))
+#'
+#' nodes <- data.frame(label=c("GSET1","GSET2","PARENT"),
+#'                     row.names=c("N1","N2","N3"))
+#'
+#' edges <- data.frame(from=c("N3","N3"), to=c("N1","N2"))
+#'
+#' rgsets_obj <- rgsets$new(genesets, nodes, edges, name="example", version="v1.0")
+#' print(rgsets_obj)
+#'
 #' @section See Also:
-#' 
+#'
 #' \code{gsets}
-#' 
+#'
 #' @importFrom R6 R6Class
 #' @importFrom dplyr filter pull %>%
 #' 
@@ -123,8 +136,8 @@ rgsets <- R6Class("rgsets", list(
         }
         ids <- unique(ids.subset$values)
         genesets <- self$genesets[names(self$genesets) %in% labels]
-        nodes <- self$nodes[ids,,drop=F]
-        edges <- self$edges[self$edges$from %in% ids & self$edges$to %in% ids,,drop=F]
+        nodes <- self$nodes[ids,,drop=FALSE]
+        edges <- self$edges[self$edges$from %in% ids & self$edges$to %in% ids,,drop=FALSE]
         return(rgsets$new(genesets, nodes, edges, self$name, self$version, quiet=TRUE))
     }
 ))

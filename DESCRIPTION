@@ -23,6 +23,8 @@ Imports:
     tibble,
     purrr,
     stats,
+    methods,
+    utils,
     stringr,
     scales,
     rlang,

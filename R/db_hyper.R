@@ -41,7 +41,7 @@ hyperdb_available <- function() {
     url <- .format_str("{1}/git/trees/master?recursive=1", base)
     response <- httr::GET(url)
     httr::stop_for_status(response)
-    repo <- unlist(lapply(content(response)$tree, "[", "path"), use.names=F)
+    repo <- unlist(lapply(content(response)$tree, "[", "path"), use.names=FALSE)
     fl <- repo[grepl("^data/.", repo)]
     ll <- list()
     for (f in fl) {

@@ -2,7 +2,6 @@
 ^renv\.lock$
 ^docs$
 ^dev$
-^data$
 ^data-raw$
 ^pkgdown$
 ^media$
@@ -14,3 +13,5 @@
 ^README_files$
 ^\.travis\.yml$
 ^Dockerfile
+^.*\.Rcheck$
+^.*\.BiocCheck$

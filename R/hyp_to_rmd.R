@@ -104,6 +104,24 @@ sessionInfo()
 #' @param session_info Use true to include session info
 #' @return NULL
 #'
+#' @examples
+#' genesets <- list("GSET1" = c("GENE1","GENE2","GENE3"),
+#'                  "GSET2" = c("GENE4","GENE5","GENE6"))
+#'
+#' signature <- c("GENE1","GENE2","GENE7")
+#'
+#' hyp_obj <- hypeR(signature, genesets, background=20)
+#'
+#' rmd_path <- file.path(tempdir(), "report.rmd")
+#' hyp_to_rmd(hyp_obj,
+#'           file_path=rmd_path,
+#'           title="Example Report",
+#'           show_dots=FALSE,
+#'           show_emaps=FALSE,
+#'           show_hmaps=FALSE,
+#'           show_tables=TRUE,
+#'           versioning=FALSE)
+#'
 #' @import kableExtra
 #' @importFrom rmarkdown render
 #' @importFrom magrittr %>%
