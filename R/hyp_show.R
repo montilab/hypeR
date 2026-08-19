@@ -26,7 +26,16 @@ hyp_show <- function(hyp_obj, simple=FALSE) {
     df <- hyp_obj$data
 
     # Pretty column names
-    colnames(df) <- c("Label", "P-Value", "FDR", str_to_title(colnames(df)[4:ncol(df)]))
+    cols <- colnames(df)
+    fixed_cols <- c("label", "es", "pval", "fdr")
+    lower_cols <- tolower(cols)
+    cols[lower_cols == "label"] <- "Label"
+    cols[lower_cols == "es"] <- "ES"
+    cols[lower_cols == "pval"] <- "P-Value"
+    cols[lower_cols == "fdr"] <- "FDR"
+    remaining <- !(lower_cols %in% fixed_cols)
+    cols[remaining] <- str_to_title(cols[remaining])
+    colnames(df) <- cols
 
     cols <- if(simple) c(1,2,3) else seq_len(ncol(df))
 
