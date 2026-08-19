@@ -85,6 +85,18 @@ clean_genesets <- function(x) {
                 collapse=",")
 }
 
+#' Format feature hits for tabular output
+#'
+#' @param hits A vector of feature names
+#' @return Comma-delimited and quoted feature names
+#'
+#' @keywords internal
+.format_hits <- function(hits) {
+    if (length(hits) == 0) return("")
+    escaped <- gsub("\"", "\"\"", hits, fixed=TRUE)
+    paste0("\"", escaped, "\"", collapse=",")
+}
+
 #' Calculate jaccard similarity of two sets
 #'
 #' @param a A vector

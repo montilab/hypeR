@@ -147,8 +147,7 @@
   )
   ## add list of genes in the leading edge
   data <- data %>%
-    #dplyr::mutate(hits = sapply(results[, "leading_hits"], function(x) paste(signature[x], collapse = ",")))
-    dplyr::mutate(hits = sapply(results[, "leading_hits"], function(x) paste(signature[x], collapse = " , ")))
+    dplyr::mutate(hits = sapply(results[, "leading_hits"], function(x) .format_hits(signature[x])))
   data$score <- signif(data$score, 2)
   data$pval <- signif(data$pval, 2)
   data$label <- names(genesets)
